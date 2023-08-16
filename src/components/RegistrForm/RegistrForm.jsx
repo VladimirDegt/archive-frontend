@@ -6,9 +6,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from '@mui/material';
 import { useRegisterMutation } from 'utils/RTK-Query';
@@ -42,9 +39,9 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
   };
 
   const initialValues = {
+    name: '',
     email: '',
     password: '',
-    subscription: 'starter',
   };
 
   return (
@@ -57,6 +54,14 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
           <DialogContent>
             <Field
               autoFocus
+              as={TextField}
+              margin="dense"
+              name="name"
+              label="name"
+              type="text"
+              fullWidth
+            />
+            <Field
               as={TextField}
               margin="dense"
               name="email"
@@ -72,21 +77,6 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
               type="password"
               fullWidth
             />
-            <InputLabel id="subscription">Subscription</InputLabel>
-            <Field
-              as={Select}
-              margin="dense"
-              name="subscription"
-              labelId="subscription"
-              label="Subscription"
-              type="text"
-              fullWidth
-              defaultValue="starter"
-            >
-              <MenuItem value="starter">starter</MenuItem>
-              <MenuItem value="pro">pro</MenuItem>
-              <MenuItem value="business">business</MenuItem>
-            </Field>
           </DialogContent>
           <DialogActions
             sx={{

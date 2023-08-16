@@ -14,7 +14,7 @@ export const contactApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Users', 'Contacts'],
+  tagTypes: ['Users', 'Contacts', 'Files'],
   endpoints: builder => ({
     register: builder.mutation({
       query: newUser => ({
@@ -32,20 +32,12 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Users'],
     }),
-    currentUser: builder.query({
-      query: () => `/users/current`,
-      providesTags: ['Users'],
-    }),
     logout: builder.mutation({
       query: () => ({
         url: `/users/logout`,
         method: 'POST',
       }),
       invalidatesTags: ['Users'],
-    }),
-    getContacts: builder.query({
-      query: () => `/api/contacts`,
-      providesTags: ['Contacts'],
     }),
     changeAvatar: builder.mutation({
       query: file => {
@@ -59,14 +51,21 @@ export const contactApi = createApi({
         };
       },
     }),
+    loadFile: builder.mutation({
+      query: file => ({
+          url: '/files',
+          method: 'POST',
+          body: file,
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
 export const {
   useRegisterMutation,
   useLoginMutation,
-  useCurrentUserQuery,
   useLogoutMutation,
-  useGetContactsQuery,
   useChangeAvatarMutation,
+  useLoadFileMutation,
 } = contactApi;
