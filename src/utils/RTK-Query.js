@@ -14,7 +14,7 @@ export const contactApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Users', 'Contacts', 'Files'],
+  tagTypes: ['Users', 'Files'],
   endpoints: builder => ({
     register: builder.mutation({
       query: newUser => ({
@@ -40,24 +40,19 @@ export const contactApi = createApi({
       invalidatesTags: ['Users'],
     }),
     changeAvatar: builder.mutation({
-      query: file => {
-        const formData = new FormData();
-        formData.append('avatar', file);
-
-        return {
+      query: file => ({
           url: '/users/avatars',
           method: 'PATCH',
-          body: formData,
-        };
-      },
+          body: file,
+      }),
     }),
     loadFile: builder.mutation({
       query: file => ({
-          url: '/files',
+          url: '/api/file',
           method: 'POST',
           body: file,
       }),
-      invalidatesTags: ['Files'],
+  
     }),
   }),
 });

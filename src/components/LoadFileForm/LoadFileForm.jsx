@@ -12,7 +12,9 @@ import { useLoadFileMutation } from 'utils/RTK-Query';
 
 export const LoadFileForm = ({isOpen, handleClose}) => {
   const [selectedFile, setSelectedFile] = useState('');
-  const [nameFile, setNameFile] = useState('');
+  const [nameCustomer, setNameCustomer] = useState('');
+  const [typeDocument, setTypeDocument] = useState('');
+  const [numberDocument, setNumberDocument] = useState('');
   const [loadFile] = useLoadFileMutation();
 
   const handleFileChange = ({ target }) => {
@@ -20,8 +22,16 @@ export const LoadFileForm = ({isOpen, handleClose}) => {
     setSelectedFile(file);
   };
 
-  const handleNameFile = ({target}) => {
-    setNameFile(target.value)
+  const handleNameCustomer = ({target}) => {
+    setNameCustomer(target.value)
+  }
+
+  const handleTypeDocument = ({target}) => {
+    setTypeDocument(target.value)
+  }
+  
+  const handleNumberDocument = ({target}) => {
+    setNumberDocument(target.value)
   }
 
   const handleSubmit = async (e) => {
@@ -36,16 +46,18 @@ export const LoadFileForm = ({isOpen, handleClose}) => {
     }
 
     const formData = new FormData();
-    formData.append('dogovor', selectedFile);
-    formData.append('name', nameFile);
+    formData.append('nameCustomer', nameCustomer);
+    formData.append('typeDocument', typeDocument);
+    formData.append('numberDocument', numberDocument);
+    formData.append('fileURL', selectedFile);
 
     setSelectedFile('');
     handleClose();
 
     try {
-      const response = await loadFile(formData);
-      const fileURL = `http://localhost:3001/${response.data}`;
-      console.log(fileURL);
+      await loadFile(formData);
+      // const fileURL = `http://localhost:3001/${response.data}`;
+
     } catch (error) {
       console.log(error.message);
     }
@@ -59,13 +71,28 @@ export const LoadFileForm = ({isOpen, handleClose}) => {
           </DialogTitle>
           <DialogContent>
             <TextField
-              autoFocus
               margin="dense"
-              name="name"
-              label="Name"
+              name="customer"
+              label="Власник"
               type="text"
               fullWidth
-              onChange={handleNameFile}
+              onChange={handleNameCustomer}
+            />
+            <TextField
+              margin="dense"
+              name="typeDocument"
+              label="Тип документа"
+              type="text"
+              fullWidth
+              onChange={handleTypeDocument}
+            />
+            <TextField
+              margin="dense"
+              name="number"
+              label="Номер"
+              type="text"
+              fullWidth
+              onChange={handleNumberDocument}
             />
               <TextField
                 name='loadFile'

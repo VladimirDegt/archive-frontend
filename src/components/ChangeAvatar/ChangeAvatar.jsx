@@ -41,7 +41,9 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
       distance: '10px',
     });
     try {
-      const response = await changeAvatar(selectedFile);
+      const formData = new FormData();
+      formData.append('avatar', selectedFile);
+      const response = await changeAvatar(formData);
       const avatarURL = `http://localhost:3001/${response.data}`;
       dispatch(addAvatar(avatarURL));
     } catch (error) {
