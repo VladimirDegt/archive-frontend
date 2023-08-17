@@ -72,19 +72,19 @@ export const LoadFileForm = ({isOpen, handleClose}) => {
           <DialogContent>
             <TextField
               margin="dense"
-              name="customer"
-              label="Власник"
-              type="text"
-              fullWidth
-              onChange={handleNameCustomer}
-            />
-            <TextField
-              margin="dense"
               name="typeDocument"
               label="Тип документа"
               type="text"
               fullWidth
               onChange={handleTypeDocument}
+            />
+            <TextField
+              margin="dense"
+              name="customer"
+              label="Власник"
+              type="text"
+              fullWidth
+              onChange={handleNameCustomer}
             />
             <TextField
               margin="dense"
@@ -108,8 +108,8 @@ export const LoadFileForm = ({isOpen, handleClose}) => {
               justifyContent: 'center',
             }}
           >
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Load</Button>
+            <Button onClick={handleClose} variant="contained">Cancel</Button>
+            <Button type="submit" variant="contained">Load</Button>
           </DialogActions>
         </form>
     </Dialog>

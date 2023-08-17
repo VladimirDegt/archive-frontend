@@ -45,6 +45,7 @@ export const contactApi = createApi({
           method: 'PATCH',
           body: file,
       }),
+      invalidatesTags: ['Users'],
     }),
     loadFile: builder.mutation({
       query: file => ({
@@ -52,7 +53,11 @@ export const contactApi = createApi({
           method: 'POST',
           body: file,
       }),
-  
+      invalidatesTags: ['Files'],
+    }),
+    getFiles: builder.query({
+      query: () => '/api/file',
+      providesTags: ['Files'],
     }),
   }),
 });
@@ -63,4 +68,5 @@ export const {
   useLogoutMutation,
   useChangeAvatarMutation,
   useLoadFileMutation,
+  useGetFilesQuery
 } = contactApi;
