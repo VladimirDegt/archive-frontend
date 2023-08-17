@@ -9,7 +9,7 @@ import {
 import { Notify } from 'notiflix';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
-import { addToken, addAvatar } from 'redux/users/reducer';
+import { addToken, addAvatar, getNameUser } from 'redux/users/reducer';
 import { useLoginMutation } from 'utils/RTK-Query';
 
 export const LoginForm = ({ handleClose, isOpen }) => {
@@ -25,6 +25,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
 
       dispatch(addToken(response.data.token));
       dispatch(addAvatar(response.data.avatarURL));
+      dispatch(getNameUser(response.data.name));
 
       Notify.success('Login success!', {
         position: 'center-top',

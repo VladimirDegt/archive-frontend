@@ -17,6 +17,9 @@ const Reducer = createSlice({
     addAvatar: (state, { payload }) => {
       return { ...state, avatarURL: payload };
     },
+    getNameUser: (state, { payload }) => {
+      return { ...state, name: payload };
+    },
   },
 });
 
@@ -30,4 +33,4 @@ export const persistedUsersReducer = persistReducer(
   Reducer.reducer
 );
 export const usersReducer = Reducer.reducer;
-export const { addToken, deleteToken, addAvatar } = Reducer.actions;
+export const { addToken, deleteToken, addAvatar, getNameUser } = Reducer.actions;

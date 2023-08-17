@@ -1,16 +1,26 @@
-import { AppBar, Avatar, Box, Button, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RegisterForm } from 'components/RegistrForm/RegistrForm';
 import { LoginForm } from 'components/LoginForm/LoginForm';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
 import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
+import { useLogoutMutation } from 'utils/RTK-Query';
 import {
-  useLogoutMutation,
-} from 'utils/RTK-Query';
-import { selectAvatar, selectToken } from 'redux/users/selectors';
+  selectAvatar,
+  selectNameUser,
+  selectToken,
+} from 'redux/users/selectors';
 import { deleteToken } from 'redux/users/reducer';
 import { Notify } from 'notiflix';
+import logo from '../../img/logo.png'
 
 export const Header = () => {
   const dispatch = useDispatch();
@@ -20,6 +30,7 @@ export const Header = () => {
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
+  const nameUser = useSelector(selectNameUser);
 
   const [logout] = useLogoutMutation();
 
@@ -35,7 +46,7 @@ export const Header = () => {
     setIsOpenRegister(false);
     setIsOpenLogin(false);
     setIsOpenChangeAvatar(false);
-    setIsOpenLoadFile(false)
+    setIsOpenLoadFile(false);
   };
 
   const handleClickLogout = async () => {
@@ -51,10 +62,9 @@ export const Header = () => {
     } catch (error) {}
   };
 
-
   const handleClickLoadFile = () => {
-    setIsOpenLoadFile(true)
-  }
+    setIsOpenLoadFile(true);
+  };
 
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
@@ -64,22 +74,34 @@ export const Header = () => {
     <>
       <AppBar>
         <Toolbar>
+            
+ 
+        <a href="http://www.infocity.kharkov.ua/" target="_blank" rel="noopener noreferrer" style={{marginRight: 16}}>
+        <img src={logo} alt="Logo" />
+      </a>
+        
+          {token && <Typography variant="h6">Welcome, {nameUser}</Typography>}
           {token && (
-            <Box>
-              <Button color="inherit" onClick={handleClickChangeAvatar}>
-                <Avatar
-                  alt="avatar"
-                  src={avatarURL}
-                  sx={{ width: 30, height: 30 }}
-                />
-              </Button>
-              <Button color="inherit" onClick={handleClickLoadFile}>
-                <Typography>Load file</Typography>
-              </Button>
-            </Box>
+            <Button color="inherit" onClick={handleClickChangeAvatar}>
+              <Avatar
+                alt="avatar"
+                src={avatarURL}
+                sx={{ width: 30, height: 30 }}
+              />
+            </Button>
+          )}
+          {token && (
+            <Button
+              color="inherit"
+              onClick={handleClickLoadFile}
+              variant='text'
+              sx={{ marginLeft: 'auto', marginRight: 'auto' }}
+            >
+              <Typography>Завантажити файл</Typography>
+            </Button>
           )}
 
-          <Box ml={'auto'}>
+          <Box>
             {token ? (
               <Button color="inherit" onClick={handleClickLogout}>
                 Logout
@@ -109,10 +131,7 @@ export const Header = () => {
       )}
 
       {isOpenChangeAvatar && (
-        <ChangeAvatar
-          handleClose={handleClose}
-          isOpen={isOpenChangeAvatar}
-        />
+        <ChangeAvatar handleClose={handleClose} isOpen={isOpenChangeAvatar} />
       )}
 
       {isOpenLoadFile && (
