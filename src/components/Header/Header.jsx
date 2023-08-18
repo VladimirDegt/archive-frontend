@@ -22,7 +22,7 @@ import { deleteToken } from 'redux/users/reducer';
 import { Notify } from 'notiflix';
 import logo from '../../img/logo.png'
 
-export const Header = () => {
+export const Header = ({data}) => {
   const dispatch = useDispatch();
   const [isOpenRegister, setIsOpenRegister] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
@@ -135,7 +135,7 @@ export const Header = () => {
       )}
 
       {isOpenLoadFile && (
-        <LoadFileForm handleClose={handleClose} isOpen={isOpenLoadFile} />
+        <LoadFileForm handleClose={handleClose} isOpen={isOpenLoadFile} data={data}/>
       )}
     </>
   );
