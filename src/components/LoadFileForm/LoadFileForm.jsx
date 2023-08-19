@@ -9,6 +9,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { months } from 'db/months';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { useLoadFileMutation } from 'utils/RTK-Query';
@@ -18,8 +19,9 @@ export const LoadFileForm = ({ isOpen, handleClose, data }) => {
   const [selectedFileZip, setSelectedFileZip] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
   const [typeDocument, setTypeDocument] = useState('');
-  const [numberDogovir, setNumberDogovir] = useState('');
+  const [idDogovir, setNumberDogovir] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
+  const [nameMonth, setMonth] = useState('');
   const [loadFile] = useLoadFileMutation();
 
   const handleFileChange = ({ target }) => {
@@ -55,25 +57,32 @@ export const LoadFileForm = ({ isOpen, handleClose, data }) => {
     }
 
     const formData = new FormData();
+
     formData.append('nameCustomer', nameCustomer);
     formData.append('typeDocument', typeDocument);
     formData.append('numberDocument', numberDocument);
+    formData.append('nameMonth', nameMonth);
+    formData.append('idDogovir', idDogovir);
     formData.append('fileURL', selectedFile);
     formData.append('fileURLZip', selectedFileZip);
 
     setSelectedFile('');
     setSelectedFileZip('');
+    setNameCustomer('');
+    setTypeDocument('');
+    setNumberDocument('');
+    setMonth('');
     handleClose();
 
-    try {
-      await loadFile(formData);
-    } catch (error) {
-      console.log(error.message);
-    }
+    await loadFile(formData);
   };
 
   const handleSelectDogovir = ({ target }) => {
     setNumberDogovir(target.value);
+  };
+
+  const handleSelectMonth = ({ target }) => {
+    setMonth(target.value);
   };
 
   return (
@@ -97,52 +106,69 @@ export const LoadFileForm = ({ isOpen, handleClose, data }) => {
             required
           >
             <MenuItem value="Договір">Договір</MenuItem>
-            <MenuItem value="Акт">Акт</MenuItem>
+            <MenuItem value="Акт наданих послуг">Акт наданих послуг</MenuItem>
             <MenuItem value="Рахунок">Рахунок</MenuItem>
           </Select>
-          {typeDocument === 'Акт' ? (
+          {typeDocument === 'Акт наданих послуг' ? (
             <>
-                      <InputLabel id="number_dogovir">
-                      Номер договора
-                    </InputLabel>
-            <Select
-              labelId="number_dogovir"
-              value={numberDogovir}
-              margin="dense"
-              name="numberDogovir"
-              type="text"
-              fullWidth
-              onChange={handleSelectDogovir}
-              required
-            >
-              {data?.map(item => (
-                <MenuItem value={item.numberDocument} key={item._id}>
-                  {item.numberDocument}
-                </MenuItem>
-              ))}
-            </Select>
+              <InputLabel id="number_dogovir">Номер договора</InputLabel>
+              <Select
+                labelId="number_dogovir"
+                value={idDogovir}
+                margin="dense"
+                name="numberDogovir"
+                type="text"
+                fullWidth
+                onChange={handleSelectDogovir}
+                required
+              >
+                {data?.map(item => (
+                  <MenuItem value={item._id} key={item._id}>
+                    {item.numberDocument}
+                  </MenuItem>
+                ))}
+              </Select>
+              <InputLabel id="month">Місяць</InputLabel>
+              <Select
+                labelId="month"
+                value={nameMonth}
+                margin="dense"
+                name="month"
+                type="text"
+                fullWidth
+                onChange={handleSelectMonth}
+                required
+              >
+                {months.map(item => (
+                  <MenuItem value={item} key={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
             </>
           ) : (
-            <TextField
-              margin="dense"
-              name="customer"
-              label="Власник"
-              type="text"
-              fullWidth
-              onChange={handleNameCustomer}
-              required
-            />
+            <>
+              <TextField
+                margin="dense"
+                name="customer"
+                label="Власник"
+                type="text"
+                fullWidth
+                onChange={handleNameCustomer}
+                required
+              />
+              <TextField
+                margin="dense"
+                name="number"
+                label="Номер"
+                type="text"
+                fullWidth
+                onChange={handleNumberDocument}
+                required
+              />
+            </>
           )}
 
-          <TextField
-            margin="dense"
-            name="number"
-            label="Номер"
-            type="text"
-            fullWidth
-            onChange={handleNumberDocument}
-            required
-          />
           <InputLabel id="pdf_uploads">
             вибрати файл з розширенням .pdf
           </InputLabel>
