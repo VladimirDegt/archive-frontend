@@ -20,9 +20,9 @@ import {
 } from 'redux/users/selectors';
 import { deleteToken } from 'redux/users/reducer';
 import { Notify } from 'notiflix';
-import logo from '../../img/logo.png'
+import logo from '../../img/logo.png';
 
-export const Header = ({data}) => {
+export const Header = ({ data }) => {
   const dispatch = useDispatch();
   const [isOpenRegister, setIsOpenRegister] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
@@ -74,12 +74,24 @@ export const Header = ({data}) => {
     <>
       <AppBar>
         <Toolbar>
-            
- 
-        <a href="http://www.infocity.kharkov.ua/" target="_blank" rel="noopener noreferrer" style={{marginRight: 16}}>
-        <img src={logo} alt="Logo" />
-      </a>
-        
+          <Box
+            sx={{
+              width: 30,
+              height: 30,
+              borderRadius: '50%',
+              overflow: 'hidden',
+              marginRight: 2,
+            }}
+          >
+            <a
+              href="http://www.infocity.kharkov.ua/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginRight: 16 }}
+            >
+              <img src={logo} alt="Logo" width="30" height="30" />
+            </a>
+          </Box>
           {token && <Typography variant="h6">Welcome, {nameUser}</Typography>}
           {token && (
             <Button color="inherit" onClick={handleClickChangeAvatar}>
@@ -94,7 +106,7 @@ export const Header = ({data}) => {
             <Button
               color="inherit"
               onClick={handleClickLoadFile}
-              variant='text'
+              variant="text"
               sx={{ marginLeft: 'auto', marginRight: 'auto' }}
             >
               <Typography>Завантажити файл</Typography>
@@ -135,7 +147,11 @@ export const Header = ({data}) => {
       )}
 
       {isOpenLoadFile && (
-        <LoadFileForm handleClose={handleClose} isOpen={isOpenLoadFile} data={data}/>
+        <LoadFileForm
+          handleClose={handleClose}
+          isOpen={isOpenLoadFile}
+          data={data}
+        />
       )}
     </>
   );

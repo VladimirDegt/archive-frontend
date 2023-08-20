@@ -70,7 +70,7 @@ export const Main = ({ data, error, isLoading }) => {
           <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
             {isLoading && <Typography>Loading contacts...</Typography>}
             {error && (
-              <Typography paragraph>
+              <Typography paragraph align="center">
                 Упс, щось пішло не так. Спробуйте перезавантажити сторінку
               </Typography>
             )}
