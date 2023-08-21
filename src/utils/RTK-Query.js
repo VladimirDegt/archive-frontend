@@ -56,7 +56,7 @@ export const contactApi = createApi({
       invalidatesTags: ['Files'],
     }),
     getFiles: builder.query({
-      query: () => '/api/file',
+      query: ({page, limit}) => `/api/file?page=${page}&limit=${limit}`,
       providesTags: ['Files'],
     }),
   }),

@@ -20,8 +20,12 @@ import { useState } from 'react';
 import { selectToken } from 'redux/users/selectors';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { PaginationPage } from 'components/Pagination/Pagination';
 
-export const Main = ({ data, error, isLoading }) => {
+export const Main = ( ) => {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [openStates, setOpenStates] = useState(data?.map(() => false) || []);
   const { token } = useSelector(selectToken);
 
@@ -37,7 +41,6 @@ export const Main = ({ data, error, isLoading }) => {
         shortNameActZIP: item.fileURLZIP.slice(newActZIP + 1),
       };
     });
-    console.log(newActs);
     return {
       ...item,
       acts: newActs,
@@ -63,6 +66,12 @@ export const Main = ({ data, error, isLoading }) => {
     });
   };
 
+  const handleGetDocuments = (getDocuments, error, isLoading) => {
+    setData(getDocuments);
+    setError(error);
+    setIsLoading(isLoading);
+  }
+
   return (
     <main style={{ flexGrow: 1 }}>
       {token && (
@@ -71,7 +80,7 @@ export const Main = ({ data, error, isLoading }) => {
             {isLoading && <Typography>Loading contacts...</Typography>}
             {error && (
               <Typography paragraph align="center">
-                Упс, щось пішло не так. Спробуйте перезавантажити сторінку
+                Уупс, щось пішло не так. Спробуйте перезавантажити сторінку
               </Typography>
             )}
             <TableContainer component={Paper}>
@@ -194,28 +203,24 @@ export const Main = ({ data, error, isLoading }) => {
                               paddingBottom: 0,
                               paddingTop: 0,
                             }}
-                            colSpan={6}
+                            colSpan={9}
                           >
                             <Collapse
                               in={openStates[index]}
                               timeout="auto"
                               unmountOnExit
                             >
-                              <Box sx={{ margin: 1 }}>
-                                <Typography
-                                  variant="h6"
-                                  gutterBottom
-                                  component="div"
-                                >
-                                  Пов'язані документи:
-                                </Typography>
-                                <Table size="small" aria-label="purchases">
+                              <Box sx={{ margin: 1, backgroundColor: "rgba(0, 0, 0, 0.08)" }}>
+                                <Table size="medium" aria-label="purchases">
                                   <TableHead>
                                     <TableRow>
-                                      <TableCell>Тип документа</TableCell>
-                                      <TableCell>Місяць</TableCell>
-                                      <TableCell align="right">PDF</TableCell>
-                                      <TableCell align="right">ZIP</TableCell>
+                                    <TableCell />
+                                      <TableCell align="left">Тип документа</TableCell>
+                                      <TableCell align="left">Місяць</TableCell>
+                                      <TableCell align="left">Назва файлу</TableCell>
+                                      <TableCell align="left">ZIP архів</TableCell>
+                                      <TableCell align="center">Переглянути PDF</TableCell>
+                                      <TableCell align="center">Завантажити ZIP</TableCell>
                                     </TableRow>
                                   </TableHead>
                                   <TableBody>
@@ -226,18 +231,41 @@ export const Main = ({ data, error, isLoading }) => {
                                         nameMonth,
                                         shortNameActPDF,
                                         shortNameActZIP,
+                                        fileURLPDF,
+                                        fileURLZIP
                                       }) => (
                                         <TableRow key={id}>
+                                          <TableCell />
                                           <TableCell component="th" scope="row">
                                             {typeDocument}
                                           </TableCell>
                                           <TableCell>{nameMonth}</TableCell>
-                                          <TableCell align="right">
+                                          <TableCell align="left">
                                             {shortNameActPDF}
                                           </TableCell>
-                                          <TableCell align="right">
+                                          <TableCell align="left">
                                             {shortNameActZIP}
                                           </TableCell>
+                                                                    <TableCell align="center">
+                            <IconButton
+                              color="secondary"
+                              onClick={() =>
+                                handleOpenPDF(fileURLPDF, typeDocument)
+                              }
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              color="secondary"
+                              onClick={() =>
+                                handleOpenZIP(fileURLZIP, typeDocument)
+                              }
+                            >
+                              <FileDownloadIcon />
+                            </IconButton>
+                          </TableCell>
                                         </TableRow>
                                       )
                                     )}
@@ -254,6 +282,11 @@ export const Main = ({ data, error, isLoading }) => {
               </Table>
             </TableContainer>
           </Container>
+        </section>
+      )}
+      {token && (
+        <section>
+          <PaginationPage getDocuments={handleGetDocuments}/>
         </section>
       )}
     </main>
