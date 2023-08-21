@@ -14,7 +14,7 @@ import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { useLoadFileMutation } from 'utils/RTK-Query';
 
-export const LoadFileForm = ({ isOpen, handleClose, data }) => {
+export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
   const [selectedFile, setSelectedFile] = useState('');
   const [selectedFileZip, setSelectedFileZip] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
@@ -78,6 +78,7 @@ export const LoadFileForm = ({ isOpen, handleClose, data }) => {
   };
 
   const handleSelectDogovir = ({ target }) => {
+    console.log('target.value', target.value);
     setNumberDogovir(target.value);
   };
 
@@ -122,9 +123,9 @@ export const LoadFileForm = ({ isOpen, handleClose, data }) => {
                 onChange={handleSelectDogovir}
                 required
               >
-                {data?.map(item => (
-                  <MenuItem value={item._id} key={item._id}>
-                    {item.numberDocument}
+                {getAllNumberDocument.numberDocumentValues.map(({id,numberDocument }) => (
+                  <MenuItem value={id} key={id}>
+                    {numberDocument}
                   </MenuItem>
                 ))}
               </Select>

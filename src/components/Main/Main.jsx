@@ -22,7 +22,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { PaginationPage } from 'components/Pagination/Pagination';
 
-export const Main = ( ) => {
+export const Main = ({countDocumentDB}) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +77,7 @@ export const Main = ( ) => {
       {token && (
         <section>
           <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
-            {isLoading && <Typography>Loading contacts...</Typography>}
+            {isLoading && <Typography>Loading documents...</Typography>}
             {error && (
               <Typography paragraph align="center">
                 Уупс, щось пішло не так. Спробуйте перезавантажити сторінку
@@ -286,7 +286,7 @@ export const Main = ( ) => {
       )}
       {token && (
         <section>
-          <PaginationPage getDocuments={handleGetDocuments}/>
+          <PaginationPage getDocuments={handleGetDocuments} countDocumentDB={countDocumentDB}/>
         </section>
       )}
     </main>

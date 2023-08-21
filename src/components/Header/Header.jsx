@@ -6,13 +6,13 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RegisterForm } from 'components/RegistrForm/RegistrForm';
 import { LoginForm } from 'components/LoginForm/LoginForm';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
 import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
-import { useLogoutMutation } from 'utils/RTK-Query';
+import { useGetCountDocumentQuery, useLogoutMutation } from 'utils/RTK-Query';
 import {
   selectAvatar,
   selectNameUser,
@@ -22,7 +22,7 @@ import { deleteToken } from 'redux/users/reducer';
 import { Notify } from 'notiflix';
 import logo from '../../img/logo.png';
 
-export const Header = ({ data }) => {
+export const Header = ({countDocument}) => {
   const dispatch = useDispatch();
   const [isOpenRegister, setIsOpenRegister] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
@@ -33,6 +33,11 @@ export const Header = ({ data }) => {
   const nameUser = useSelector(selectNameUser);
 
   const [logout] = useLogoutMutation();
+  const {data: getAllNumberDocument} = useGetCountDocumentQuery();
+
+  useEffect(()=>{
+    countDocument(getAllNumberDocument)
+  },[getAllNumberDocument, countDocument])
 
   const handleClickOpenRegistrationForm = () => {
     setIsOpenRegister(true);
@@ -70,6 +75,8 @@ export const Header = ({ data }) => {
     setIsOpenChangeAvatar(true);
   };
 
+
+
   return (
     <>
       <AppBar>
@@ -92,7 +99,7 @@ export const Header = ({ data }) => {
               <img src={logo} alt="Logo" width="30" height="30" />
             </a>
           </Box>
-          {token && <Typography variant="h6">Welcome, {nameUser}</Typography>}
+          {token && <Typography variant="h6">Hi and welcome, {nameUser}!</Typography>}
           {token && (
             <Button color="inherit" onClick={handleClickChangeAvatar}>
               <Avatar
@@ -150,7 +157,7 @@ export const Header = ({ data }) => {
         <LoadFileForm
           handleClose={handleClose}
           isOpen={isOpenLoadFile}
-          data={data}
+          getAllNumberDocument={getAllNumberDocument}
         />
       )}
     </>

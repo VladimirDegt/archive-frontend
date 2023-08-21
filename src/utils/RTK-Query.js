@@ -59,6 +59,10 @@ export const contactApi = createApi({
       query: ({page, limit}) => `/api/file?page=${page}&limit=${limit}`,
       providesTags: ['Files'],
     }),
+    getCountDocument: builder.query({
+      query: () => `/api/file/document`,
+      providesTags: ['Files'],
+    }),
   }),
 });
 
@@ -69,4 +73,5 @@ export const {
   useChangeAvatarMutation,
   useLoadFileMutation,
   useGetFilesQuery,
+  useGetCountDocumentQuery,
 } = contactApi;
