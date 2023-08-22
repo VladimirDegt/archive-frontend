@@ -26,7 +26,9 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
     setSelectedFile(file);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!selectedFile) {
       Notify.warning('Please choose a file', {
         position: 'center-top',
@@ -34,28 +36,28 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
       });
       return;
     }
-    setSelectedFile('');
-    handleClose();
-    Notify.success('Avatar upgrade', {
-      position: 'center-top',
-      distance: '10px',
-    });
-    try {
+    // Notify.success('Avatar upgrade', {
+    //   position: 'center-top',
+    //   distance: '10px',
+    // });
+  
       const formData = new FormData();
+
       formData.append('avatar', selectedFile);
+
+      setSelectedFile('');
+      handleClose();
+      
       const response = await changeAvatar(formData);
       const avatarURL = `http://localhost:3001/${response.data}`;
       dispatch(addAvatar(avatarURL));
-    } catch (error) {
-      console.log(error.message);
-    }
   };
 
   return (
     <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
       <form onSubmit={handleSubmit}>
         <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
-          Change avatar
+          Змінити аватарку
         </DialogTitle>
         <Avatar
           alt="avatar"
@@ -70,7 +72,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
           }}
         />
         <DialogContent>
-          <InputLabel htmlFor="file-upload">Choose file</InputLabel>
+          <InputLabel htmlFor="file-upload">Вибірить аватарку</InputLabel>
           <TextField
             autoFocus
             margin="dense"
@@ -89,7 +91,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
           }}
         >
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Change</Button>
+          <Button type="submit">відправити</Button>
         </DialogActions>
       </form>
     </Dialog>

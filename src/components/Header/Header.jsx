@@ -3,11 +3,13 @@ import {
   Avatar,
   Box,
   Button,
+  IconButton,
   Toolbar,
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { RegisterForm } from 'components/RegistrForm/RegistrForm';
 import { LoginForm } from 'components/LoginForm/LoginForm';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
@@ -21,6 +23,8 @@ import {
 import { deleteToken } from 'redux/users/reducer';
 import { Notify } from 'notiflix';
 import logo from '../../img/logo.png';
+import LogoutIcon from '@mui/icons-material/Logout';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 export const Header = ({countDocument}) => {
   const dispatch = useDispatch();
@@ -31,6 +35,7 @@ export const Header = ({countDocument}) => {
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
+  const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
   const {data: getAllNumberDocument} = useGetCountDocumentQuery();
@@ -59,10 +64,11 @@ export const Header = ({countDocument}) => {
       const response = await logout();
       if (!response.data) {
         dispatch(deleteToken());
-        Notify.success('User logout', {
+        Notify.success('До зустрічі!', {
           position: 'center-top',
           distance: '10px',
         });
+        navigate("/", { replace: true });
       }
     } catch (error) {}
   };
@@ -74,9 +80,7 @@ export const Header = ({countDocument}) => {
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
   };
-
-
-
+  
   return (
     <>
       <AppBar>
@@ -116,15 +120,16 @@ export const Header = ({countDocument}) => {
               variant="text"
               sx={{ marginLeft: 'auto', marginRight: 'auto' }}
             >
-              <Typography>Завантажити файл</Typography>
+              <Typography variant='h6' mr={1} >додати до архіву</Typography>
+              <FileDownloadIcon/>
             </Button>
           )}
 
           <Box>
             {token ? (
-              <Button color="inherit" onClick={handleClickLogout}>
-                Logout
-              </Button>
+              <IconButton color="inherit" onClick={handleClickLogout}>
+                <LogoutIcon/>
+              </IconButton>
             ) : (
               <>
                 <Button color="inherit" onClick={handleClickOpenLoginForm}>

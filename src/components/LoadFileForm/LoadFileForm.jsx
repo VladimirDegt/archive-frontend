@@ -78,7 +78,6 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
   };
 
   const handleSelectDogovir = ({ target }) => {
-    console.log('target.value', target.value);
     setNumberDogovir(target.value);
   };
 

@@ -9,33 +9,33 @@ import {
 import { Notify } from 'notiflix';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
-import { addToken, addAvatar, getNameUser } from 'redux/users/reducer';
+import { addToken, getNameUser } from 'redux/users/reducer';
 import { useLoginMutation } from 'utils/RTK-Query';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginForm = ({ handleClose, isOpen }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [login] = useLoginMutation();
 
   const handleSubmit = async (values, { resetForm }) => {
-    resetForm();
-    handleClose();
 
     try {
       const response = await login(values);
 
       dispatch(addToken(response.data.token));
-      dispatch(addAvatar(response.data.avatarURL));
       dispatch(getNameUser(response.data.name));
 
-      Notify.success('Login success!', {
-        position: 'center-top',
-        distance: '10px',
-      });
+      navigate("/archive", { replace: true });
     } catch (error) {
-      Notify.failure(`${error.message}`, {
+      Notify.failure('Login not success!', {
         position: 'center-top',
         distance: '10px',
       });
+    }
+    finally {
+      resetForm();
+      handleClose();
     }
   };
 

@@ -210,17 +210,17 @@ export const Main = ({countDocumentDB}) => {
                               timeout="auto"
                               unmountOnExit
                             >
-                              <Box sx={{ margin: 1, backgroundColor: "rgba(0, 0, 0, 0.08)" }}>
+                              <Box sx={{ margin: 1, backgroundColor: "rgba(0, 0, 0, 0.08)" ,borderRadius: 2}}>
                                 <Table size="medium" aria-label="purchases">
                                   <TableHead>
                                     <TableRow>
                                     <TableCell />
-                                      <TableCell align="left">Тип документа</TableCell>
-                                      <TableCell align="left">Місяць</TableCell>
-                                      <TableCell align="left">Назва файлу</TableCell>
-                                      <TableCell align="left">ZIP архів</TableCell>
-                                      <TableCell align="center">Переглянути PDF</TableCell>
-                                      <TableCell align="center">Завантажити ZIP</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Тип документа</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Місяць</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Назва файлу</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>ZIP архів</TableCell>
+                                      <TableCell align="center" sx={{fontWeight:"bold"}}>Переглянути PDF</TableCell>
+                                      <TableCell align="center" sx={{fontWeight:"bold"}}>Завантажити ZIP</TableCell>
                                     </TableRow>
                                   </TableHead>
                                   <TableBody>
