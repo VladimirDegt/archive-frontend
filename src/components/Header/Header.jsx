@@ -10,8 +10,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RegisterForm } from 'components/RegistrForm/RegistrForm';
-import { LoginForm } from 'components/LoginForm/LoginForm';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
 import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
 import { useGetCountDocumentQuery, useLogoutMutation } from 'utils/RTK-Query';
@@ -25,38 +23,29 @@ import { Notify } from 'notiflix';
 import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 
-export const Header = ({countDocument}) => {
+export const Header = ({ countDocument }) => {
   const dispatch = useDispatch();
-  const [isOpenRegister, setIsOpenRegister] = useState(false);
-  const [isOpenLogin, setIsOpenLogin] = useState(false);
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
+  const [isOpenLoadCSV, setIsOpenLoadCSV] = useState(false);
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
-  const {data: getAllNumberDocument} = useGetCountDocumentQuery();
+  const { data: getAllNumberDocument } = useGetCountDocumentQuery();
 
-  useEffect(()=>{
-    countDocument(getAllNumberDocument)
-  },[getAllNumberDocument, countDocument])
-
-  const handleClickOpenRegistrationForm = () => {
-    setIsOpenRegister(true);
-  };
-
-  const handleClickOpenLoginForm = () => {
-    setIsOpenLogin(true);
-  };
+  useEffect(() => {
+    countDocument(getAllNumberDocument);
+  }, [getAllNumberDocument, countDocument]);
 
   const handleClose = () => {
-    setIsOpenRegister(false);
-    setIsOpenLogin(false);
     setIsOpenChangeAvatar(false);
     setIsOpenLoadFile(false);
+    setIsOpenLoadCSV(false);
   };
 
   const handleClickLogout = async () => {
@@ -68,7 +57,7 @@ export const Header = ({countDocument}) => {
           position: 'center-top',
           distance: '10px',
         });
-        navigate("/", { replace: true });
+        navigate('/', { replace: true });
       }
     } catch (error) {}
   };
@@ -76,11 +65,14 @@ export const Header = ({countDocument}) => {
   const handleClickLoadFile = () => {
     setIsOpenLoadFile(true);
   };
+  const handleClickCSV = () => {
+    setIsOpenLoadCSV(true);
+  };
 
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
   };
-  
+
   return (
     <>
       <AppBar>
@@ -103,7 +95,9 @@ export const Header = ({countDocument}) => {
               <img src={logo} alt="Logo" width="30" height="30" />
             </a>
           </Box>
-          {token && <Typography variant="h6">Hi and welcome, {nameUser}!</Typography>}
+          {token && (
+            <Typography variant="h6">Hi and welcome, {nameUser}!</Typography>
+          )}
           {token && (
             <Button color="inherit" onClick={handleClickChangeAvatar}>
               <Avatar
@@ -120,39 +114,32 @@ export const Header = ({countDocument}) => {
               variant="text"
               sx={{ marginLeft: 'auto', marginRight: 'auto' }}
             >
-              <Typography variant='h6' mr={1} >додати до архіву</Typography>
-              <FileDownloadIcon/>
+              <Typography variant="h6" mr={1}>
+                додати до архіву
+              </Typography>
+              <FileDownloadIcon />
             </Button>
           )}
-
-          <Box>
-            {token ? (
-              <IconButton color="inherit" onClick={handleClickLogout}>
-                <LogoutIcon/>
-              </IconButton>
-            ) : (
-              <>
-                <Button color="inherit" onClick={handleClickOpenLoginForm}>
-                  Log In
-                </Button>
-                <Button
-                  color="inherit"
-                  onClick={handleClickOpenRegistrationForm}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
-          </Box>
+          {token && (
+            <Button
+              color="inherit"
+              onClick={handleClickCSV}
+              variant="text"
+              sx={{ marginLeft: 'auto', marginRight: 'auto' }}
+            >
+              <Typography variant="h6" mr={1}>
+                робота з .csv
+              </Typography>
+              <FileDownloadIcon />
+            </Button>
+          )}
+          {token && (
+            <IconButton color="inherit" onClick={handleClickLogout}>
+              <LogoutIcon />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
-
-      {isOpenRegister && (
-        <RegisterForm handleClose={handleClose} isOpen={isOpenRegister} />
-      )}
-      {isOpenLogin && (
-        <LoginForm handleClose={handleClose} isOpen={isOpenLogin} />
-      )}
 
       {isOpenChangeAvatar && (
         <ChangeAvatar handleClose={handleClose} isOpen={isOpenChangeAvatar} />
@@ -163,6 +150,12 @@ export const Header = ({countDocument}) => {
           handleClose={handleClose}
           isOpen={isOpenLoadFile}
           getAllNumberDocument={getAllNumberDocument}
+        />
+      )}
+      {isOpenLoadCSV && (
+        <LoadFileCSV
+          handleClose={handleClose}
+          isOpen={isOpenLoadCSV}
         />
       )}
     </>
