@@ -1,0 +1,59 @@
+import { Box, Button, Paper} from '@mui/material';
+import { Footer } from 'components/Footer/Footer';
+import { LoginForm } from 'components/LoginForm/LoginForm';
+import { useState } from 'react';
+import backgroundImage from '../../img/backgroundimage-full.jpg'
+import { StyledContainer, StyledTypography } from './Home.styled';
+
+export const Home = () => {
+  const [isOpenLogin, setIsOpenLogin] = useState(false);
+
+  const handleOpenLogin = () => {
+    setIsOpenLogin(true)
+  };
+
+  const handleClose = () => {
+    setIsOpenLogin(false);
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        minHeight: '100vh',
+      }}
+    >
+      <main>
+        <section>
+          <Paper
+            square={false}
+            sx={{
+              backgroundImage:
+                `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(${backgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              height: `calc(100vh - 78px)`,
+            }}
+          >
+            <StyledContainer maxWidth="md" sx={{marginLeft: 10, paddingTop: 15}}>
+            <StyledTypography variant="h4" align="left" gutterBottom sx={{color: "#FAFAFA", marginBottom: 5}}>
+              "Архіви – це пам'ять нашого суспільства. Вони зберігають докази
+              минулого, надають свідоцтва про наші здобутки та навчають нас
+              наслідувати помилки. Архіви є спільним скарбом, який зберігається
+              для нас та передається майбутнім поколінням." - Джеймс Гленн,
+              архівіст
+            </StyledTypography>
+            <Button variant='contained' color='secondary' sx={{minWidth: 200, minHeight: 40}} onClick={handleOpenLogin}>вхід</Button>
+            </StyledContainer>
+          </Paper>
+      {isOpenLogin && <LoginForm handleClose={handleClose} isOpen={isOpenLogin}/>}
+        </section>
+      </main>
+      <Footer />
+
+    </Box>
+  );
+};
