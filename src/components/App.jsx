@@ -16,7 +16,7 @@ export const App = () => {
       }}
     >
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="frontend-backend" element={<Home />} />
         <Route path="/archive" element={<Archive />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
