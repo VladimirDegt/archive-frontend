@@ -63,6 +63,14 @@ export const contactApi = createApi({
       query: () => `/api/file/document`,
       providesTags: ['Files'],
     }),
+    parsePDF: builder.mutation({
+      query: file => ({
+        url: '/api/file/pdf',
+        method: 'POST',
+        body: file,
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
@@ -74,4 +82,5 @@ export const {
   useLoadFileMutation,
   useGetFilesQuery,
   useGetCountDocumentQuery,
+  useParsePDFMutation,
 } = contactApi;

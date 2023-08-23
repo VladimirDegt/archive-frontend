@@ -10,16 +10,18 @@ import {
 import { Notify } from 'notiflix';
 import { useState } from 'react';
 import Papa from 'papaparse';
+import { useParsePDFMutation } from 'utils/RTK-Query';
 
 export const LoadFileCSV = ({ isOpen, handleClose }) => {
   const [selectedFile, setSelectedFile] = useState('');
+  const [parsePDF] = useParsePDFMutation();
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
     setSelectedFile(file);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -29,22 +31,28 @@ export const LoadFileCSV = ({ isOpen, handleClose }) => {
       });
       return;
     }
-      setSelectedFile('');
-      handleClose();
-    
-    const res = []
 
-    await Papa.parse(selectedFile, {
-        complete: function(results) {
-          const arrayContacts = Object.values(results.data);
-          const set = new Set(arrayContacts.flatMap(item=> item));
-          set.forEach(item => res.push(item))
-          console.table(res);
-        }
-      });
+    const formData = new FormData();
+
+    formData.append('filePDF', selectedFile);
+
+    setSelectedFile('');
+    handleClose();
+
+    const response = await parsePDF(formData);
+
+    // ======== парсінг csv ==========
+    // const res = []
+
+    // await Papa.parse(selectedFile, {
+    //     complete: function(results) {
+    //       const arrayContacts = Object.values(results.data);
+    //       const set = new Set(arrayContacts.flatMap(item=> item));
+    //       set.forEach(item => res.push(item))
+    //       console.table(res);
+    //     }
+    //   });
   };
-
-  
 
   return (
     <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
