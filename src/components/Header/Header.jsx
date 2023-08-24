@@ -23,6 +23,7 @@ import { Notify } from 'notiflix';
 import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 
 export const Header = ({ countDocument }) => {
@@ -57,7 +58,7 @@ export const Header = ({ countDocument }) => {
           position: 'center-top',
           distance: '10px',
         });
-        navigate('/', { replace: true });
+        navigate('/frontend-backend', { replace: true });
       }
     } catch (error) {}
   };
@@ -108,17 +109,9 @@ export const Header = ({ countDocument }) => {
             </Button>
           )}
           {token && (
-            <Button
-              color="inherit"
-              onClick={handleClickLoadFile}
-              variant="text"
-              sx={{ marginLeft: 'auto', marginRight: 'auto' }}
-            >
-              <Typography variant="h6" mr={1}>
-                додати до архіву
-              </Typography>
-              <FileDownloadIcon />
-            </Button>
+            <IconButton color="inherit" aria-label="add file" onClick={handleClickLoadFile} sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
+            <CloudUploadIcon fontSize='large'/>
+          </IconButton>
           )}
           {token && (
             <Button
@@ -135,7 +128,7 @@ export const Header = ({ countDocument }) => {
           )}
           {token && (
             <IconButton color="inherit" onClick={handleClickLogout}>
-              <LogoutIcon />
+              <LogoutIcon fontSize='large' />
             </IconButton>
           )}
         </Toolbar>

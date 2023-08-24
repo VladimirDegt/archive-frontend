@@ -1,4 +1,4 @@
-export const numberDocument = [
+export const numberDogovir = [
   25,
   26,
   17,
@@ -79,4 +79,4 @@ export const numberDocument = [
   265,
   270,
   271,
-  ]
+  ].sort((a, b) => a - b);

@@ -15,46 +15,49 @@ import {
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { selectToken } from 'redux/users/selectors';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { PaginationPage } from 'components/Pagination/Pagination';
+import { formatDateTime } from 'utils/format-date-time';
 
 export const Main = ({countDocumentDB}) => {
-  const [data, setData] = useState([]);
+  const [getAllDocuments, setGetAllDocuments] = useState([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [openStates, setOpenStates] = useState(data?.map(() => false) || []);
+  const [openStates, setOpenStates] = useState(getAllDocuments?.map(() => false) || []);
   const { token } = useSelector(selectToken);
 
-  const updateResponce = data?.map(item => {
-    const newPDF = item.fileURLPDF.indexOf('_');
-    const newZIP = item.fileURLZIP.indexOf('_');
-    const newActs = item.acts.map(item => {
-      const newActPDF = item.fileURLPDF.indexOf('_');
-      const newActZIP = item.fileURLZIP.indexOf('_');
-      return {
-        ...item,
-        shortNameActPDF: item.fileURLPDF.slice(newActPDF + 1),
-        shortNameActZIP: item.fileURLZIP.slice(newActZIP + 1),
-      };
-    });
-    return {
-      ...item,
-      acts: newActs,
-      shortNamePDF: item.fileURLPDF.slice(newPDF + 1),
-      shortNameZIP: item.fileURLZIP.slice(newZIP + 1),
-    };
-  });
+  // const updateResponce = data?.map(item => {
+  //   const newPDF = item.fileURLPDF.indexOf('_');
+  //   const newZIP = item.fileURLZIP.indexOf('_');
+  //   const newActs = item.acts.map(item => {
+  //     const newActPDF = item.fileURLPDF.indexOf('_');
+  //     const newActZIP = item.fileURLZIP.indexOf('_');
+  //     return {
+  //       ...item,
+  //       shortNameActPDF: item.fileURLPDF.slice(newActPDF + 1),
+  //       shortNameActZIP: item.fileURLZIP.slice(newActZIP + 1),
+  //     };
+  //   });
+  //   return {
+  //     ...item,
+  //     acts: newActs,
+  //     shortNamePDF: item.fileURLPDF.slice(newPDF + 1),
+  //     shortNameZIP: item.fileURLZIP.slice(newZIP + 1),
+  //   };
+  // });
 
   const handleOpenPDF = (fileURL, typeDocument) => {
-    const pathFile = `http://localhost:3001/${fileURL}`;
+    // const pathFile = `http://localhost:3001/${fileURL}`;
+    const pathFile = `${fileURL}`;
     window.open(pathFile, '_blank', `title=${typeDocument}`);
   };
   const handleOpenZIP = (fileURL, typeDocument) => {
-    const pathFile = `http://localhost:3001/${fileURL}`;
+    // const pathFile = `http://localhost:3001/${fileURL}`;
+    const pathFile = `${fileURL}`;
     window.open(pathFile, '_blank', `title=${typeDocument}`);
   };
 
@@ -67,7 +70,7 @@ export const Main = ({countDocumentDB}) => {
   };
 
   const handleGetDocuments = (getDocuments, error, isLoading) => {
-    setData(getDocuments);
+    setGetAllDocuments(getDocuments);
     setError(error);
     setIsLoading(isLoading);
   }
@@ -107,13 +110,7 @@ export const Main = ({countDocumentDB}) => {
                       align="left"
                       style={{ fontWeight: 'bold', fontSize: '20px' }}
                     >
-                      Назва файлу
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
-                    >
-                      Zip архів
+                      Дата завантаження
                     </TableCell>
                     <TableCell
                       align="center"
@@ -136,7 +133,7 @@ export const Main = ({countDocumentDB}) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {updateResponce?.map(
+                  {getAllDocuments?.map(
                     (
                       {
                         nameCustomer,
@@ -146,9 +143,8 @@ export const Main = ({countDocumentDB}) => {
                         fileURLPDF,
                         fileURLZIP,
                         _id: id,
-                        shortNamePDF,
-                        shortNameZIP,
-                        acts,
+                        acts,                
+                      createdAt,
                       },
                       index
                     ) => (
@@ -172,8 +168,7 @@ export const Main = ({countDocumentDB}) => {
                           </TableCell>
                           <TableCell align="left">{typeDocument}</TableCell>
                           <TableCell align="left">{numberDocument}</TableCell>
-                          <TableCell align="left">{shortNamePDF}</TableCell>
-                          <TableCell align="left">{shortNameZIP}</TableCell>
+                          <TableCell align="left">{formatDateTime(createdAt)}</TableCell>
                           <TableCell align="center">
                             <IconButton
                               color="secondary"
@@ -217,8 +212,9 @@ export const Main = ({countDocumentDB}) => {
                                     <TableCell />
                                       <TableCell align="left" sx={{fontWeight:"bold"}}>Тип документа</TableCell>
                                       <TableCell align="left" sx={{fontWeight:"bold"}}>Місяць</TableCell>
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Назва файлу</TableCell>
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>ZIP архів</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Номер</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Дата</TableCell>
+                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Сума</TableCell>
                                       <TableCell align="center" sx={{fontWeight:"bold"}}>Переглянути PDF</TableCell>
                                       <TableCell align="center" sx={{fontWeight:"bold"}}>Завантажити ZIP</TableCell>
                                     </TableRow>
@@ -229,8 +225,6 @@ export const Main = ({countDocumentDB}) => {
                                         _id: id,
                                         typeDocument,
                                         nameMonth,
-                                        shortNameActPDF,
-                                        shortNameActZIP,
                                         fileURLPDF,
                                         fileURLZIP
                                       }) => (
@@ -241,10 +235,10 @@ export const Main = ({countDocumentDB}) => {
                                           </TableCell>
                                           <TableCell>{nameMonth}</TableCell>
                                           <TableCell align="left">
-                                            {shortNameActPDF}
+                                            {fileURLPDF}
                                           </TableCell>
                                           <TableCell align="left">
-                                            {shortNameActZIP}
+                                            {fileURLZIP}
                                           </TableCell>
                                                                     <TableCell align="center">
                             <IconButton

@@ -1,11 +1,11 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { useGetFilesQuery } from 'utils/RTK-Query';
 
 export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
-  const limit = 3;
+  const limit = 10;
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const { data, error, isLoading } = useGetFilesQuery({ page, limit });
@@ -34,12 +34,10 @@ export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
           Уупс, щось пішло не так. Спробуйте перезавантажити сторінку
         </Typography>
       )}
+      <Box sx={{display: "flex", justifyContent: "center"}}>
       <Stack
         spacing={2}
         sx={{
-          width: 350,
-          marginLeft: 'auto',
-          marginRight: 'auto',
           marginTop: 3,
           marginBottom: 3,
         }}
@@ -51,6 +49,7 @@ export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
           onChange={handleChange}
         />
       </Stack>
+      </Box>
     </>
   );
 };

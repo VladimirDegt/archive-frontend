@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -9,7 +10,8 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { months } from 'db/months';
+import { contacts } from 'db/contacts';
+import { numberDogovir } from 'db/number-dogovir';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { useLoadFileMutation } from 'utils/RTK-Query';
@@ -18,10 +20,9 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
   const [selectedFile, setSelectedFile] = useState('');
   const [selectedFileZip, setSelectedFileZip] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
-  const [typeDocument, setTypeDocument] = useState('');
+  const [typeDocument, setTypeDocument] = useState("Договір");
   const [idDogovir, setNumberDogovir] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
-  const [nameMonth, setMonth] = useState('');
   const [loadFile] = useLoadFileMutation();
 
   const handleFileChange = ({ target }) => {
@@ -33,8 +34,10 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
     setSelectedFileZip(file);
   };
 
-  const handleNameCustomer = ({ target }) => {
-    setNameCustomer(target.value);
+  const handleNameCustomer = (_, newValue) => {
+    if (newValue) {
+      setNameCustomer(newValue);
+    }
   };
 
   const handleTypeDocument = ({ target }) => {
@@ -42,7 +45,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
   };
 
   const handleNumberDocument = ({ target }) => {
-    setNumberDocument(target.value);
+      setNumberDocument(target.value);
   };
 
   const handleSubmit = async e => {
@@ -61,7 +64,6 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
     formData.append('nameCustomer', nameCustomer);
     formData.append('typeDocument', typeDocument);
     formData.append('numberDocument', numberDocument);
-    formData.append('nameMonth', nameMonth);
     formData.append('idDogovir', idDogovir);
     formData.append('fileURL', selectedFile);
     formData.append('fileURLZip', selectedFileZip);
@@ -71,18 +73,17 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
     setNameCustomer('');
     setTypeDocument('');
     setNumberDocument('');
-    setMonth('');
     handleClose();
 
     await loadFile(formData);
+    Notify.success('File is loaded', {
+      position: 'center-top',
+      distance: '10px',
+    });
   };
 
   const handleSelectDogovir = ({ target }) => {
     setNumberDogovir(target.value);
-  };
-
-  const handleSelectMonth = ({ target }) => {
-    setMonth(target.value);
   };
 
   return (
@@ -122,13 +123,15 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
                 onChange={handleSelectDogovir}
                 required
               >
-                {getAllNumberDocument.numberDocumentValues.map(({id,numberDocument }) => (
-                  <MenuItem value={id} key={id}>
-                    {numberDocument}
-                  </MenuItem>
-                ))}
+                {getAllNumberDocument.numberDocumentValues.map(
+                  ({ id, numberDocument }) => (
+                    <MenuItem value={id} key={id}>
+                      {numberDocument}
+                    </MenuItem>
+                  )
+                )}
               </Select>
-              <InputLabel id="month">Місяць</InputLabel>
+              {/* <InputLabel id="month">Місяць</InputLabel>
               <Select
                 labelId="month"
                 value={nameMonth}
@@ -144,28 +147,40 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
                     {item}
                   </MenuItem>
                 ))}
-              </Select>
+              </Select> */}
             </>
           ) : (
             <>
-              <TextField
+              <Autocomplete
+                disablePortal
+                value={nameCustomer}
+                options={contacts}
                 margin="dense"
-                name="customer"
-                label="Власник"
-                type="text"
                 fullWidth
+                renderInput={params => (
+                  <TextField {...params} label="Власник" />
+                )}
                 onChange={handleNameCustomer}
-                required
+                sx={{ marginTop: 2 }}
               />
-              <TextField
+
+              <InputLabel id="number">Номер</InputLabel>
+              <Select
+                labelId="number"
+                value={numberDocument}
                 margin="dense"
                 name="number"
-                label="Номер"
                 type="text"
                 fullWidth
                 onChange={handleNumberDocument}
                 required
-              />
+              >
+                {numberDogovir.map((item, index) => (
+                  <MenuItem value={item} key={index}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
             </>
           )}
 
