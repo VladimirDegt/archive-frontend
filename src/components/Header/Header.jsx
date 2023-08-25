@@ -22,15 +22,15 @@ import { deleteToken } from 'redux/users/reducer';
 import { Notify } from 'notiflix';
 import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
+import SearchIcon from '@mui/icons-material/Search';
+import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 
 export const Header = ({ countDocument }) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
-  const [isOpenLoadCSV, setIsOpenLoadCSV] = useState(false);
+  const [isOpenSearch, setIsOpenSearch] = useState(false);
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
@@ -46,7 +46,7 @@ export const Header = ({ countDocument }) => {
   const handleClose = () => {
     setIsOpenChangeAvatar(false);
     setIsOpenLoadFile(false);
-    setIsOpenLoadCSV(false);
+    setIsOpenSearch(false)
   };
 
   const handleClickLogout = async () => {
@@ -66,9 +66,10 @@ export const Header = ({ countDocument }) => {
   const handleClickLoadFile = () => {
     setIsOpenLoadFile(true);
   };
-  const handleClickCSV = () => {
-    setIsOpenLoadCSV(true);
-  };
+
+  const handleClickSearch = () => {
+    setIsOpenSearch(true)
+  }
 
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
@@ -108,27 +109,30 @@ export const Header = ({ countDocument }) => {
               />
             </Button>
           )}
+          <Box sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
           {token && (
-            <IconButton color="inherit" aria-label="add file" onClick={handleClickLoadFile} sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            <CloudUploadIcon fontSize='large'/>
-          </IconButton>
-          )}
-          {token && (
-            <Button
+            <IconButton
               color="inherit"
-              onClick={handleClickCSV}
-              variant="text"
-              sx={{ marginLeft: 'auto', marginRight: 'auto' }}
+              aria-label="add file"
+              onClick={handleClickLoadFile}             
             >
-              <Typography variant="h6" mr={1}>
-                робота з .csv
-              </Typography>
-              <FileDownloadIcon />
-            </Button>
+              <CloudUploadIcon fontSize="large" />
+            </IconButton>
           )}
           {token && (
-            <IconButton color="inherit" onClick={handleClickLogout}>
-              <LogoutIcon fontSize='large' />
+            <IconButton
+              color="inherit"
+              aria-label="add file"
+              onClick={handleClickSearch}
+              sx={{marginLeft: 2}}
+            >
+              <SearchIcon fontSize="large" />
+            </IconButton>
+          )}
+          </Box>
+          {token && (
+            <IconButton color="inherit" onClick={handleClickLogout} sx={{marginLeft: "auto"}}>
+              <LogoutIcon fontSize="large" />
             </IconButton>
           )}
         </Toolbar>
@@ -145,11 +149,13 @@ export const Header = ({ countDocument }) => {
           getAllNumberDocument={getAllNumberDocument}
         />
       )}
-      {isOpenLoadCSV && (
-        <LoadFileCSV
-          handleClose={handleClose}
-          isOpen={isOpenLoadCSV}
-        />
+
+      {isOpenSearch && (
+                <LoadSearchForm
+                handleClose={handleClose}
+                isOpen={isOpenSearch}
+                getAllNumberDocument={getAllNumberDocument}
+              />
       )}
     </>
   );

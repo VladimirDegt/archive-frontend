@@ -13,17 +13,27 @@ import {
 import { contacts } from 'db/contacts';
 import { numberDogovir } from 'db/number-dogovir';
 import { Notify } from 'notiflix';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLoadFileMutation } from 'utils/RTK-Query';
 
 export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
+
   const [selectedFile, setSelectedFile] = useState('');
   const [selectedFileZip, setSelectedFileZip] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
   const [typeDocument, setTypeDocument] = useState("Договір");
   const [idDogovir, setNumberDogovir] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
+  const [sortNumber, setSortNumber] = useState([]);
   const [loadFile] = useLoadFileMutation();
+
+  useEffect(()=>{
+    if(getAllNumberDocument){
+      const arr = [...(getAllNumberDocument?.numberDocumentValues || [])];
+      arr.sort((a, b) => Number(a.numberDocument) - Number(b.numberDocument))
+      setSortNumber(arr)
+    }
+  },[getAllNumberDocument])
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
@@ -123,7 +133,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
                 onChange={handleSelectDogovir}
                 required
               >
-                {getAllNumberDocument.numberDocumentValues.map(
+                {sortNumber.map(
                   ({ id, numberDocument }) => (
                     <MenuItem value={id} key={id}>
                       {numberDocument}
@@ -131,23 +141,6 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
                   )
                 )}
               </Select>
-              {/* <InputLabel id="month">Місяць</InputLabel>
-              <Select
-                labelId="month"
-                value={nameMonth}
-                margin="dense"
-                name="month"
-                type="text"
-                fullWidth
-                onChange={handleSelectMonth}
-                required
-              >
-                {months.map(item => (
-                  <MenuItem value={item} key={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select> */}
             </>
           ) : (
             <>

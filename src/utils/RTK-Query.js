@@ -71,6 +71,14 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
+    getSearch: builder.mutation({
+      query: fieldSearch => ({
+        url: '/api/file/search',
+        method: 'POST',
+        body: fieldSearch,
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
@@ -83,4 +91,5 @@ export const {
   useGetFilesQuery,
   useGetCountDocumentQuery,
   useParsePDFMutation,
+  useGetSearchMutation
 } = contactApi;

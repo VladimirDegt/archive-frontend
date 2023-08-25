@@ -23,11 +23,13 @@ import { selectToken } from 'redux/users/selectors';
 import { PaginationPage } from 'components/Pagination/Pagination';
 import { formatDateTime } from 'utils/format-date-time';
 
-export const Main = ({countDocumentDB}) => {
+export const Main = ({ countDocumentDB }) => {
   const [getAllDocuments, setGetAllDocuments] = useState([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [openStates, setOpenStates] = useState(getAllDocuments?.map(() => false) || []);
+  const [openStates, setOpenStates] = useState(
+    getAllDocuments?.map(() => false) || []
+  );
   const { token } = useSelector(selectToken);
 
   // const updateResponce = data?.map(item => {
@@ -73,7 +75,7 @@ export const Main = ({countDocumentDB}) => {
     setGetAllDocuments(getDocuments);
     setError(error);
     setIsLoading(isLoading);
-  }
+  };
 
   return (
     <main style={{ flexGrow: 1 }}>
@@ -143,8 +145,8 @@ export const Main = ({countDocumentDB}) => {
                         fileURLPDF,
                         fileURLZIP,
                         _id: id,
-                        acts,                
-                      createdAt,
+                        acts,
+                        createdAt,
                       },
                       index
                     ) => (
@@ -168,7 +170,9 @@ export const Main = ({countDocumentDB}) => {
                           </TableCell>
                           <TableCell align="left">{typeDocument}</TableCell>
                           <TableCell align="left">{numberDocument}</TableCell>
-                          <TableCell align="left">{formatDateTime(createdAt)}</TableCell>
+                          <TableCell align="left">
+                            {formatDateTime(createdAt)}
+                          </TableCell>
                           <TableCell align="center">
                             <IconButton
                               color="secondary"
@@ -205,18 +209,59 @@ export const Main = ({countDocumentDB}) => {
                               timeout="auto"
                               unmountOnExit
                             >
-                              <Box sx={{ margin: 1, backgroundColor: "rgba(0, 0, 0, 0.08)" ,borderRadius: 2}}>
+                              <Box
+                                sx={{
+                                  margin: 1,
+                                  backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                  borderRadius: 2,
+                                }}
+                              >
                                 <Table size="medium" aria-label="purchases">
                                   <TableHead>
                                     <TableRow>
-                                    <TableCell />
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Тип документа</TableCell>
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Місяць</TableCell>
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Номер</TableCell>
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Дата</TableCell>
-                                      <TableCell align="left" sx={{fontWeight:"bold"}}>Сума</TableCell>
-                                      <TableCell align="center" sx={{fontWeight:"bold"}}>Переглянути PDF</TableCell>
-                                      <TableCell align="center" sx={{fontWeight:"bold"}}>Завантажити ZIP</TableCell>
+                                      <TableCell />
+                                      <TableCell
+                                        align="left"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Тип документа
+                                      </TableCell>
+                                      <TableCell
+                                        align="left"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Місяць
+                                      </TableCell>
+                                      <TableCell
+                                        align="left"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Номер
+                                      </TableCell>
+                                      <TableCell
+                                        align="left"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Дата
+                                      </TableCell>
+                                      <TableCell
+                                        align="left"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Сума
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Переглянути PDF
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ fontWeight: 'bold' }}
+                                      >
+                                        Завантажити ZIP
+                                      </TableCell>
                                     </TableRow>
                                   </TableHead>
                                   <TableBody>
@@ -224,42 +269,49 @@ export const Main = ({countDocumentDB}) => {
                                       ({
                                         _id: id,
                                         typeDocument,
-                                        nameMonth,
                                         fileURLPDF,
-                                        fileURLZIP
+                                        fileURLZIP,
+                                        numberAct,
+                                        price,
+                                        date,
+                                        month,
                                       }) => (
                                         <TableRow key={id}>
                                           <TableCell />
                                           <TableCell component="th" scope="row">
                                             {typeDocument}
                                           </TableCell>
-                                          <TableCell>{nameMonth}</TableCell>
-                                          <TableCell align="left">
-                                            {fileURLPDF}
+                                          <TableCell>{month}</TableCell>
+                                          <TableCell>{numberAct}</TableCell>
+                                          <TableCell>{date}</TableCell>
+                                          <TableCell>{price}</TableCell>
+
+                                          <TableCell align="center">
+                                            <IconButton
+                                              color="secondary"
+                                              onClick={() =>
+                                                handleOpenPDF(
+                                                  fileURLPDF,
+                                                  typeDocument
+                                                )
+                                              }
+                                            >
+                                              <VisibilityIcon />
+                                            </IconButton>
                                           </TableCell>
-                                          <TableCell align="left">
-                                            {fileURLZIP}
+                                          <TableCell align="center">
+                                            <IconButton
+                                              color="secondary"
+                                              onClick={() =>
+                                                handleOpenZIP(
+                                                  fileURLZIP,
+                                                  typeDocument
+                                                )
+                                              }
+                                            >
+                                              <FileDownloadIcon />
+                                            </IconButton>
                                           </TableCell>
-                                                                    <TableCell align="center">
-                            <IconButton
-                              color="secondary"
-                              onClick={() =>
-                                handleOpenPDF(fileURLPDF, typeDocument)
-                              }
-                            >
-                              <VisibilityIcon />
-                            </IconButton>
-                          </TableCell>
-                          <TableCell align="center">
-                            <IconButton
-                              color="secondary"
-                              onClick={() =>
-                                handleOpenZIP(fileURLZIP, typeDocument)
-                              }
-                            >
-                              <FileDownloadIcon />
-                            </IconButton>
-                          </TableCell>
                                         </TableRow>
                                       )
                                     )}
@@ -280,7 +332,10 @@ export const Main = ({countDocumentDB}) => {
       )}
       {token && (
         <section>
-          <PaginationPage getDocuments={handleGetDocuments} countDocumentDB={countDocumentDB}/>
+          <PaginationPage
+            getDocuments={handleGetDocuments}
+            countDocumentDB={countDocumentDB}
+          />
         </section>
       )}
     </main>
