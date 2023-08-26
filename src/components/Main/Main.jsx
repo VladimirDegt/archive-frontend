@@ -17,21 +17,24 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { selectToken } from 'redux/users/selectors';
+import { useEffect } from 'react';
 import { PaginationPage } from 'components/Pagination/Pagination';
 import { formatDateTime } from 'utils/format-date-time';
-import { useEffect } from 'react';
+import { selectLoadingSkeleton, selectToken } from 'redux/users/selectors';
+import { SkeletonTable } from 'components/Skeleton/Skeleton';
+import { isLoadingSkeleton } from 'redux/users/reducer';
 
 export const Main = ({ countDocumentDB, searchDocumentDB }) => {
   const [getAllDocuments, setGetAllDocuments] = useState([]);
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [openStates, setOpenStates] = useState(
     getAllDocuments?.map(() => false) || []
   );
   const { token } = useSelector(selectToken);
+  const isLoading = useSelector(selectLoadingSkeleton);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (searchDocumentDB) {
@@ -39,11 +42,20 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     }
   }, [searchDocumentDB]);
 
+  useEffect(() => {
+    console.log('isLoading-->', isLoading);
+    if (getAllDocuments.length === 0) {
+    }
+    dispatch(isLoadingSkeleton(false));
+    console.log('isLoading-->', isLoading);
+  }, [getAllDocuments, dispatch]);
+
   const handleOpenPDF = (fileURL, typeDocument) => {
     // const pathFile = `http://localhost:3001/${fileURL}`;
     const pathFile = `${fileURL}`;
     window.open(pathFile, '_blank', `title=${typeDocument}`);
   };
+
   const handleOpenZIP = (fileURL, typeDocument) => {
     // const pathFile = `http://localhost:3001/${fileURL}`;
     const pathFile = `${fileURL}`;
@@ -58,11 +70,10 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     });
   };
 
-  const handleGetDocuments = (getDocuments, error, isLoading) => {
+  const handleGetDocuments = (getDocuments, error) => {
     if (!searchDocumentDB) {
       setGetAllDocuments(getDocuments);
       setError(error);
-      setIsLoading(isLoading);
     }
   };
 
@@ -70,8 +81,8 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     <main style={{ flexGrow: 1 }}>
       {token && (
         <section>
+          {isLoading && <SkeletonTable />}
           <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
-            {isLoading && <Typography>Loading documents...</Typography>}
             {error && (
               <Typography paragraph align="center">
                 Уупс, щось пішло не так. Спробуйте перезавантажити сторінку

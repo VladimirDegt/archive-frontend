@@ -8,13 +8,14 @@ export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
   const limit = 10;
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
-  const { data, error, isLoading } = useGetFilesQuery({ page, limit });
+
+  const { data, error } = useGetFilesQuery({ page, limit });
 
   useEffect(() => {
     if (data) {
-      getDocuments(data, error, isLoading);
+      getDocuments(data, error);
     }
-  }, [data, getDocuments, error, isLoading]);
+  }, [data, getDocuments, error]);
 
   useEffect(() => {
     if (countDocumentDB) {
@@ -22,33 +23,32 @@ export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
     }
   }, [countDocumentDB]);
 
-  const handleChange = (e, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
   return (
     <>
-      {isLoading && <Typography>Loading documents...</Typography>}
       {error && (
         <Typography paragraph align="center">
           Уупс, щось пішло не так. Спробуйте перезавантажити сторінку
         </Typography>
       )}
-      <Box sx={{display: "flex", justifyContent: "center"}}>
-      <Stack
-        spacing={2}
-        sx={{
-          marginTop: 3,
-          marginBottom: 3,
-        }}
-      >
-        <Pagination
-          count={maxPage}
-          color="primary"
-          page={page}
-          onChange={handleChange}
-        />
-      </Stack>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Stack
+          spacing={2}
+          sx={{
+            marginTop: 3,
+            marginBottom: 3,
+          }}
+        >
+          <Pagination
+            count={maxPage}
+            color="primary"
+            page={page}
+            onChange={handleChange}
+          />
+        </Stack>
       </Box>
     </>
   );

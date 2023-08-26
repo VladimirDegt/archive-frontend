@@ -20,12 +20,16 @@ const Reducer = createSlice({
     getNameUser: (state, { payload }) => {
       return { ...state, name: payload };
     },
+    isLoadingSkeleton: (state, { payload }) => {
+      return { ...state, isLoading: payload };
+    },
   },
 });
 
 const persistConfig = {
   key: 'users',
   storage,
+  blacklist: ['isLoading'],
 };
 
 export const persistedUsersReducer = persistReducer(
@@ -33,4 +37,10 @@ export const persistedUsersReducer = persistReducer(
   Reducer.reducer
 );
 export const usersReducer = Reducer.reducer;
-export const { addToken, deleteToken, addAvatar, getNameUser } = Reducer.actions;
+export const {
+  addToken,
+  deleteToken,
+  addAvatar,
+  getNameUser,
+  isLoadingSkeleton,
+} = Reducer.actions;
