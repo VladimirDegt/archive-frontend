@@ -201,6 +201,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
             onChange={handleFileZipChange}
             required
           />
+          <TextField type="hidden" name="langs" value="en,ru,ua" />
         </DialogContent>
         <DialogActions
           sx={{

@@ -26,7 +26,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 
-export const Header = ({ countDocument }) => {
+export const Header = ({ countDocument, searchDocument }) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
@@ -46,7 +46,7 @@ export const Header = ({ countDocument }) => {
   const handleClose = () => {
     setIsOpenChangeAvatar(false);
     setIsOpenLoadFile(false);
-    setIsOpenSearch(false)
+    setIsOpenSearch(false);
   };
 
   const handleClickLogout = async () => {
@@ -68,8 +68,8 @@ export const Header = ({ countDocument }) => {
   };
 
   const handleClickSearch = () => {
-    setIsOpenSearch(true)
-  }
+    setIsOpenSearch(true);
+  };
 
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
@@ -110,28 +110,32 @@ export const Header = ({ countDocument }) => {
             </Button>
           )}
           <Box sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
-          {token && (
-            <IconButton
-              color="inherit"
-              aria-label="add file"
-              onClick={handleClickLoadFile}             
-            >
-              <CloudUploadIcon fontSize="large" />
-            </IconButton>
-          )}
-          {token && (
-            <IconButton
-              color="inherit"
-              aria-label="add file"
-              onClick={handleClickSearch}
-              sx={{marginLeft: 2}}
-            >
-              <SearchIcon fontSize="large" />
-            </IconButton>
-          )}
+            {token && (
+              <IconButton
+                color="inherit"
+                aria-label="add file"
+                onClick={handleClickLoadFile}
+              >
+                <CloudUploadIcon fontSize="large" />
+              </IconButton>
+            )}
+            {token && (
+              <IconButton
+                color="inherit"
+                aria-label="add file"
+                onClick={handleClickSearch}
+                sx={{ marginLeft: 2 }}
+              >
+                <SearchIcon fontSize="large" />
+              </IconButton>
+            )}
           </Box>
           {token && (
-            <IconButton color="inherit" onClick={handleClickLogout} sx={{marginLeft: "auto"}}>
+            <IconButton
+              color="inherit"
+              onClick={handleClickLogout}
+              sx={{ marginLeft: 'auto' }}
+            >
               <LogoutIcon fontSize="large" />
             </IconButton>
           )}
@@ -151,11 +155,11 @@ export const Header = ({ countDocument }) => {
       )}
 
       {isOpenSearch && (
-                <LoadSearchForm
-                handleClose={handleClose}
-                isOpen={isOpenSearch}
-                getAllNumberDocument={getAllNumberDocument}
-              />
+        <LoadSearchForm
+          handleClose={handleClose}
+          isOpen={isOpenSearch}
+          searchDocument={searchDocument}
+        />
       )}
     </>
   );

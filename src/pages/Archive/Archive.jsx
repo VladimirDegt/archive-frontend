@@ -5,15 +5,22 @@ import { useState } from 'react';
 
 export const Archive = () => {
   const [countDocumentDB, setCountDocumentDB] = useState();
+  const [searchDocumentDB, setSearchDocumentDB] = useState();
 
   const countDocument = count => {
     setCountDocumentDB(count);
   };
+  const searchDocument = search => {
+    setSearchDocumentDB(search);
+  };
 
   return (
     <>
-      <Header countDocument={countDocument} />
-      <Main countDocumentDB={countDocumentDB} />
+      <Header countDocument={countDocument} searchDocument={searchDocument} />
+      <Main
+        countDocumentDB={countDocumentDB}
+        searchDocumentDB={searchDocumentDB}
+      />
       <Footer />
     </>
   );

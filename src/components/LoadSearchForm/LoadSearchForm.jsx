@@ -16,7 +16,7 @@ import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { useGetSearchMutation } from 'utils/RTK-Query';
 
-export const LoadSearchForm = ({ isOpen, handleClose }) => {
+export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const [fieldSearch, setFieldSearch] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
@@ -36,7 +36,7 @@ export const LoadSearchForm = ({ isOpen, handleClose }) => {
     setNumberDocument(target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (!nameCustomer && !numberDocument) {
@@ -47,27 +47,32 @@ export const LoadSearchForm = ({ isOpen, handleClose }) => {
       return;
     }
 
-    await getSearch({
+    const response = await getSearch({
       nameCustomer,
-      numberDocument
-    })
-  
-    setFieldSearch("");
-    setNameCustomer("");
-    setNumberDocument("");
+      numberDocument,
+    });
+    if (response.error) {
+      Notify.failure(response.error.data.message, {
+        position: 'center-top',
+        distance: '10px',
+      });
+    }
+
+    searchDocument([response.data]);
+
+    setFieldSearch('');
+    setNameCustomer('');
+    setNumberDocument('');
     handleClose();
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="search"  >
+    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="search">
       <form onSubmit={handleSubmit}>
-        <DialogTitle
-          id="search"
-          sx={{ textAlign: 'center', minWidth: 380 }}
-        >
+        <DialogTitle id="search" sx={{ textAlign: 'center', minWidth: 380 }}>
           Пошук
         </DialogTitle>
-        <DialogContent >
+        <DialogContent>
           <InputLabel id="demo-customized-select-label">Що шукаємо</InputLabel>
           <Select
             labelId="demo-customized-select-label"
@@ -91,14 +96,16 @@ export const LoadSearchForm = ({ isOpen, handleClose }) => {
               fullWidth
               renderInput={params => <TextField {...params} label="Власник" />}
               onChange={handleNameCustomer}
-              sx={{ marginTop: 3}}
+              sx={{ marginTop: 3 }}
               required
             />
           )}
-          
-          {fieldSearch === 'number' &&  (
+
+          {fieldSearch === 'number' && (
             <>
-              <InputLabel id="number" sx={{ marginTop: 3 }}>Номер</InputLabel>
+              <InputLabel id="number" sx={{ marginTop: 3 }}>
+                Номер
+              </InputLabel>
               <Select
                 labelId="number"
                 value={numberDocument}

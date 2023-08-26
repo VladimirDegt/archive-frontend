@@ -22,8 +22,9 @@ import { useState } from 'react';
 import { selectToken } from 'redux/users/selectors';
 import { PaginationPage } from 'components/Pagination/Pagination';
 import { formatDateTime } from 'utils/format-date-time';
+import { useEffect } from 'react';
 
-export const Main = ({ countDocumentDB }) => {
+export const Main = ({ countDocumentDB, searchDocumentDB }) => {
   const [getAllDocuments, setGetAllDocuments] = useState([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,25 +33,11 @@ export const Main = ({ countDocumentDB }) => {
   );
   const { token } = useSelector(selectToken);
 
-  // const updateResponce = data?.map(item => {
-  //   const newPDF = item.fileURLPDF.indexOf('_');
-  //   const newZIP = item.fileURLZIP.indexOf('_');
-  //   const newActs = item.acts.map(item => {
-  //     const newActPDF = item.fileURLPDF.indexOf('_');
-  //     const newActZIP = item.fileURLZIP.indexOf('_');
-  //     return {
-  //       ...item,
-  //       shortNameActPDF: item.fileURLPDF.slice(newActPDF + 1),
-  //       shortNameActZIP: item.fileURLZIP.slice(newActZIP + 1),
-  //     };
-  //   });
-  //   return {
-  //     ...item,
-  //     acts: newActs,
-  //     shortNamePDF: item.fileURLPDF.slice(newPDF + 1),
-  //     shortNameZIP: item.fileURLZIP.slice(newZIP + 1),
-  //   };
-  // });
+  useEffect(() => {
+    if (searchDocumentDB) {
+      setGetAllDocuments(searchDocumentDB);
+    }
+  }, [searchDocumentDB]);
 
   const handleOpenPDF = (fileURL, typeDocument) => {
     // const pathFile = `http://localhost:3001/${fileURL}`;
@@ -72,9 +59,11 @@ export const Main = ({ countDocumentDB }) => {
   };
 
   const handleGetDocuments = (getDocuments, error, isLoading) => {
-    setGetAllDocuments(getDocuments);
-    setError(error);
-    setIsLoading(isLoading);
+    if (!searchDocumentDB) {
+      setGetAllDocuments(getDocuments);
+      setError(error);
+      setIsLoading(isLoading);
+    }
   };
 
   return (
