@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter basename="/frontend-backend">
+        <BrowserRouter basename="/archive-frontend">
           <App />
         </BrowserRouter>
       </PersistGate>
