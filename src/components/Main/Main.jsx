@@ -43,11 +43,9 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
   }, [searchDocumentDB]);
 
   useEffect(() => {
-    console.log('isLoading-->', isLoading);
     if (getAllDocuments.length === 0) {
     }
     dispatch(isLoadingSkeleton(false));
-    console.log('isLoading-->', isLoading);
   }, [getAllDocuments, dispatch]);
 
   const handleOpenPDF = (fileURL, typeDocument) => {
