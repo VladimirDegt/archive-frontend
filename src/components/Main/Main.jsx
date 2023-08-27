@@ -282,7 +282,7 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
                                             <IconButton
                                               color="secondary"
                                               onClick={() =>
-                                                handleOpenPDF(
+                                                handleOpenFile(
                                                   fileURLPDF,
                                                   typeDocument
                                                 )
@@ -295,7 +295,7 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
                                             <IconButton
                                               color="secondary"
                                               onClick={() =>
-                                                handleOpenZIP(
+                                                handleOpenFile(
                                                   fileURLZIP,
                                                   typeDocument
                                                 )

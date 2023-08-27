@@ -1,5 +1,6 @@
 import logo from '../../img/logo.png';
-const { Box, Typography } = require('@mui/material');
+import { StyledTypography } from './Footer.styled';
+const { Box } = require('@mui/material');
 
 export const Footer = () => {
   return (
@@ -9,6 +10,8 @@ export const Footer = () => {
           backgroundColor: 'rgb(48, 56, 70)',
           paddingTop: 3,
           paddingBottom: 3,
+          paddingLeft: 1,
+          paddingRight: 1,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -32,14 +35,14 @@ export const Footer = () => {
             <img src={logo} alt="Logo" width="30" height="30" />
           </a>
         </Box>
-        <Typography
+        <StyledTypography
           paragraph
           align="center"
           color="#FAFAFA"
           sx={{ marginBottom: 0 }}
         >
           Copyright © 2023 КП "МІЦ". Created by Volodymyr Dehtiarev
-        </Typography>
+        </StyledTypography>
       </Box>
     </footer>
   );
