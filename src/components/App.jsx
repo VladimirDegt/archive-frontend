@@ -5,7 +5,6 @@ import { NotFound } from 'pages/NotFound/NotFound';
 import { Archive } from 'pages/Archive/Archive';
 
 export const App = () => {
-
   return (
     <Box
       sx={{
@@ -16,7 +15,7 @@ export const App = () => {
       }}
     >
       <Routes>
-        <Route path="frontend-backend" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/archive" element={<Archive />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

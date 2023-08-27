@@ -19,7 +19,6 @@ import {
   selectToken,
 } from 'redux/users/selectors';
 import { deleteToken } from 'redux/users/reducer';
-import { Notify } from 'notiflix';
 import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -54,11 +53,7 @@ export const Header = ({ countDocument, searchDocument }) => {
       const response = await logout();
       if (!response.data) {
         dispatch(deleteToken());
-        Notify.success('До зустрічі!', {
-          position: 'center-top',
-          distance: '10px',
-        });
-        navigate('/frontend-backend', { replace: true });
+        navigate('/', { replace: true });
       }
     } catch (error) {}
   };
