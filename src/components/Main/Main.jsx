@@ -48,13 +48,7 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     dispatch(isLoadingSkeleton(false));
   }, [getAllDocuments, dispatch]);
 
-  const handleOpenPDF = (fileURL, typeDocument) => {
-    // const pathFile = `http://localhost:3001/${fileURL}`;
-    const pathFile = `${fileURL}`;
-    window.open(pathFile, '_blank', `title=${typeDocument}`);
-  };
-
-  const handleOpenZIP = (fileURL, typeDocument) => {
+  const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `http://localhost:3001/${fileURL}`;
     const pathFile = `${fileURL}`;
     window.open(pathFile, '_blank', `title=${typeDocument}`);
@@ -175,7 +169,7 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
                             <IconButton
                               color="secondary"
                               onClick={() =>
-                                handleOpenPDF(fileURLPDF, typeDocument)
+                                handleOpenFile(fileURLPDF, typeDocument)
                               }
                             >
                               <VisibilityIcon />
@@ -185,7 +179,7 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
                             <IconButton
                               color="secondary"
                               onClick={() =>
-                                handleOpenZIP(fileURLZIP, typeDocument)
+                                handleOpenFile(fileURLZIP, typeDocument)
                               }
                             >
                               <FileDownloadIcon />
