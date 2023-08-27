@@ -26,7 +26,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
     setSelectedFile(file);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -37,16 +37,17 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
       return;
     }
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append('avatar', selectedFile);
+    formData.append('avatar', selectedFile);
 
-      setSelectedFile('');
-      handleClose();
+    setSelectedFile('');
+    handleClose();
 
-      const response = await changeAvatar(formData);
-      const avatarURL = `http://localhost:3001/${response.data}`;
-      dispatch(addAvatar(avatarURL));
+    const response = await changeAvatar(formData);
+    const avatarURL = `https://archive-men6.onrender.com/${response.data}`;
+    // const avatarURL = `http://localhost:3001/${response.data}`;
+    dispatch(addAvatar(avatarURL));
   };
 
   return (

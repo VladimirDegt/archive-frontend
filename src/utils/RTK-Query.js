@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const contactApi = createApi({
   reducerPath: 'users',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'https://contacts-api-3i4o.onrender.com',
-    baseUrl: 'http://localhost:3001',
+    baseUrl: 'https://archive-men6.onrender.com',
+    // baseUrl: 'http://localhost:3001',
 
     prepareHeaders(headers, { getState }) {
       const token = getState().token.token;
@@ -56,7 +56,7 @@ export const contactApi = createApi({
       invalidatesTags: ['Files'],
     }),
     getFiles: builder.query({
-      query: ({page, limit}) => `/api/file?page=${page}&limit=${limit}`,
+      query: ({ page, limit }) => `/api/file?page=${page}&limit=${limit}`,
       providesTags: ['Files'],
     }),
     getCountDocument: builder.query({
@@ -91,5 +91,5 @@ export const {
   useGetFilesQuery,
   useGetCountDocumentQuery,
   useParsePDFMutation,
-  useGetSearchMutation
+  useGetSearchMutation,
 } = contactApi;
