@@ -20,9 +20,6 @@ const Reducer = createSlice({
     getNameUser: (state, { payload }) => {
       return { ...state, name: payload };
     },
-    isLoadingSkeleton: (state, { payload }) => {
-      return { ...state, isLoading: payload };
-    },
   },
 });
 
@@ -42,5 +39,4 @@ export const {
   deleteToken,
   addAvatar,
   getNameUser,
-  isLoadingSkeleton,
 } = Reducer.actions;

@@ -15,8 +15,10 @@ import { numberDogovir } from 'db/number-dogovir';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { useGetSearchMutation } from 'utils/RTK-Query';
+import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [fieldSearch, setFieldSearch] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
@@ -47,27 +49,43 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
       return;
     }
 
-    const response = await getSearch({
-      nameCustomer,
-      numberDocument,
-    });
-    if (response.error) {
-      Notify.failure(response.error.data.message, {
-        position: 'center-top',
-        distance: '10px',
+    try {
+      setIsLoading(true);
+      const response = await getSearch({
+        nameCustomer,
+        numberDocument,
       });
+      setIsLoading(false);
+
+      if (response.error) {
+        Notify.failure(response.error.data.message, {
+          position: 'center-top',
+          distance: '10px',
+        });
+        return;
+      }
+
+      searchDocument([response.data]);
+
+      setFieldSearch('');
+      setNameCustomer('');
+      setNumberDocument('');
+      handleClose();
+    } catch (error) {
+      console.log('error', error.message);
     }
-
-    searchDocument([response.data]);
-
-    setFieldSearch('');
-    setNameCustomer('');
-    setNumberDocument('');
-    handleClose();
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="search">
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="search"
+      sx={{ overflow: 'visible' }}
+    >
+            {isLoading ? (
+        <SkeletonAuth totalRow={2} />
+      ) : (
       <form onSubmit={handleSubmit}>
         <DialogTitle id="search" sx={{ textAlign: 'center', minWidth: 380 }}>
           Пошук
@@ -136,6 +154,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
           <Button type="submit">Search</Button>
         </DialogActions>
       </form>
+      )}
     </Dialog>
   );
 };

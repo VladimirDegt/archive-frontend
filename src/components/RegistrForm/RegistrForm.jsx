@@ -7,10 +7,16 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useRegisterMutation } from 'utils/RTK-Query';
+import { SignupSchema } from 'schemas/validate-register';
+import { red } from '@mui/material/colors';
+import { useState } from 'react';
+import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const RegisterForm = ({ handleClose, isOpen }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [register] = useRegisterMutation();
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -18,7 +24,10 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
     handleClose();
 
     try {
+      setIsLoading(true);
       const response = await register(values);
+      setIsLoading(false);
+      
       if (response.data) {
         Notify.success('Registration success!', {
           position: 'center-top',
@@ -46,50 +55,75 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
 
   return (
     <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        <Form>
-          <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
-            Registration
-          </DialogTitle>
-          <DialogContent>
-            <Field
-              autoFocus
-              as={TextField}
-              margin="dense"
-              name="name"
-              label="name"
-              type="text"
-              fullWidth
-            />
-            <Field
-              as={TextField}
-              margin="dense"
-              name="email"
-              label="Email"
-              type="email"
-              fullWidth
-            />
-            <Field
-              as={TextField}
-              margin="dense"
-              name="password"
-              label="Password"
-              type="password"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions
-            sx={{
-              paddingRight: 3,
-              paddingLeft: 3,
-              justifyContent: 'center',
-            }}
-          >
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Sign Up</Button>
-          </DialogActions>
-        </Form>
-      </Formik>
+      {isLoading ? (
+        <SkeletonAuth totalRow={3} />
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={SignupSchema}
+        >
+          {({ errors, touched }) => (
+            <Form>
+              <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
+                Registration
+              </DialogTitle>
+              <DialogContent>
+                <Field
+                  autoFocus
+                  as={TextField}
+                  margin="dense"
+                  name="name"
+                  label="name"
+                  type="text"
+                  fullWidth
+                />
+                {errors.name && touched.name ? (
+                  <Typography paragraph sx={{ color: red[500] }}>
+                    {errors.name}
+                  </Typography>
+                ) : null}
+                <Field
+                  as={TextField}
+                  margin="dense"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  fullWidth
+                />
+                {errors.email && touched.email ? (
+                  <Typography paragraph sx={{ color: red[500] }}>
+                    {errors.email}
+                  </Typography>
+                ) : null}
+                <Field
+                  as={TextField}
+                  margin="dense"
+                  name="password"
+                  label="Password"
+                  type="password"
+                  fullWidth
+                />
+                {errors.password && touched.password ? (
+                  <Typography paragraph sx={{ color: red[500] }}>
+                    {errors.password}
+                  </Typography>
+                ) : null}
+              </DialogContent>
+              <DialogActions
+                sx={{
+                  paddingRight: 3,
+                  paddingLeft: 3,
+                  justifyContent: 'center',
+                }}
+              >
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button type="submit">Sign Up</Button>
+              </DialogActions>
+            </Form>
+          )}
+        </Formik>
+      )}
     </Dialog>
   );
 };

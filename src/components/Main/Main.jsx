@@ -17,14 +17,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { PaginationPage } from 'components/Pagination/Pagination';
 import { formatDateTime } from 'utils/format-date-time';
-import { selectLoadingSkeleton, selectToken } from 'redux/users/selectors';
-import { SkeletonTable } from 'components/Skeleton/Skeleton';
-import { isLoadingSkeleton } from 'redux/users/reducer';
+import { selectToken } from 'redux/users/selectors';
 
 export const Main = ({ countDocumentDB, searchDocumentDB }) => {
   const [getAllDocuments, setGetAllDocuments] = useState([]);
@@ -33,8 +31,6 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     getAllDocuments?.map(() => false) || []
   );
   const { token } = useSelector(selectToken);
-  const isLoading = useSelector(selectLoadingSkeleton);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (searchDocumentDB) {
@@ -42,11 +38,6 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     }
   }, [searchDocumentDB]);
 
-  useEffect(() => {
-    if (getAllDocuments.length === 0) {
-    }
-    dispatch(isLoadingSkeleton(false));
-  }, [getAllDocuments, dispatch]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `http://localhost:3001/${fileURL}`;
@@ -73,7 +64,6 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
     <main style={{ flexGrow: 1 }}>
       {token && (
         <section>
-          {isLoading && <SkeletonTable />}
           <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
             {error && (
               <Typography paragraph align="center">

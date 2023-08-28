@@ -8,6 +8,7 @@ import {
   InputLabel,
   TextField,
 } from '@mui/material';
+import { SkeletonAvatar } from 'components/Skeletons/SkeletonAvatar';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +17,7 @@ import { selectAvatar } from 'redux/users/selectors';
 import { useChangeAvatarMutation } from 'utils/RTK-Query';
 
 export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const avatar = useSelector(selectAvatar);
   const dispatch = useDispatch();
   const [changeAvatar] = useChangeAvatarMutation();
@@ -41,17 +43,42 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
 
     formData.append('avatar', selectedFile);
 
-    setSelectedFile('');
-    handleClose();
+    try {
+      setIsLoading(true);
+      const response = await changeAvatar(formData);
+      setIsLoading(false);
 
-    const response = await changeAvatar(formData);
-    const avatarURL = `https://archive-men6.onrender.com/${response.data}`;
-    // const avatarURL = `http://localhost:3001/${response.data}`;
-    dispatch(addAvatar(avatarURL));
+      if (response.error) {
+        Notify.failure(response.error.data.message, {
+          position: 'center-top',
+          distance: '10px',
+        });
+        return;
+      }
+
+      Notify.success('Avatar is update', {
+        position: 'center-top',
+        distance: '10px',
+      });
+
+      setSelectedFile('');
+      handleClose();
+
+      const avatarURL = `https://archive-men6.onrender.com/${response.data}`;
+      // const avatarURL = `http://localhost:3001/${response.data}`;
+      dispatch(addAvatar(avatarURL));
+
+    } catch (error) {
+      console.log('error', error.message);
+    }
+   
   };
 
   return (
     <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
+            {isLoading ? (
+        <SkeletonAvatar totalRow={6} />
+      ) : (
       <form onSubmit={handleSubmit}>
         <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
           Змінити аватарку
@@ -91,6 +118,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
           <Button type="submit">відправити</Button>
         </DialogActions>
       </form>
+      )}
     </Dialog>
   );
 };
