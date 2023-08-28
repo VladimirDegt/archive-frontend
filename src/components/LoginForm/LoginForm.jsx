@@ -51,9 +51,9 @@ export const LoginForm = ({ handleClose, isOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
+    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration" >
       {isLoading ? (
-        <SkeletonAuth totalRow={2} />
+        <SkeletonAuth totalRow={2} sx={{ minWidth: 444 }}/>
       ) : (
         <Formik
           initialValues={initialValues}
@@ -61,7 +61,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
           validationSchema={SigninSchema}
         >
           {({ errors, touched }) => (
-            <Form>
+            <Form >
               <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
                 Login
               </DialogTitle>
@@ -76,7 +76,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
                   fullWidth
                 />
                 {errors.email && touched.email ? (
-                  <Typography paragraph sx={{ color: red[500] }}>
+                  <Typography paragraph sx={{ color: red[500], minWidth: 444 }}>
                     {errors.email}
                   </Typography>
                 ) : null}

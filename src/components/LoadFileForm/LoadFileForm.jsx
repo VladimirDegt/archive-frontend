@@ -14,7 +14,7 @@ import { contacts } from 'db/contacts';
 import { numberDogovir } from 'db/number-dogovir';
 import { Notify } from 'notiflix';
 import { useEffect, useState } from 'react';
-import { useLoadFileMutation } from 'utils/RTK-Query';
+import { useLoadFormMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
@@ -26,7 +26,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
   const [idDogovir, setNumberDogovir] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
   const [sortNumber, setSortNumber] = useState([]);
-  const [loadFile] = useLoadFileMutation();
+  const [loadForm] = useLoadFormMutation();
 
   useEffect(() => {
     if (getAllNumberDocument) {
@@ -81,7 +81,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
 
     try {
       setIsLoading(true);
-      const response = await loadFile(formData);
+      const response = await loadForm(formData);
       setIsLoading(false);
 
       if (response.error) {
@@ -111,11 +111,11 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="loadFile">
+    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="loadFile" >
       {isLoading ? (
         <SkeletonAuth totalRow={5} />
       ) : (
-        <form encType="multipart/form-data" onSubmit={handleSubmit}>
+        <form encType="multipart/form-data" charSet="UTF-8" onSubmit={handleSubmit}>
           <DialogTitle id="loadFile" sx={{ textAlign: 'center' }}>
             Вибрати документ
           </DialogTitle>
@@ -163,13 +163,14 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
                   disablePortal
                   value={nameCustomer}
                   options={contacts}
+                  type="text"
                   margin="dense"
                   fullWidth
                   renderInput={params => (
                     <TextField {...params} label="Власник" />
                   )}
                   onChange={handleNameCustomer}
-                  sx={{ marginTop: 2 }}
+                  sx={{ marginTop: 2,  }}
                 />
 
                 <InputLabel id="number">Номер</InputLabel>

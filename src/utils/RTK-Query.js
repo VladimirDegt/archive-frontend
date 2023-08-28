@@ -47,7 +47,7 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Users'],
     }),
-    loadFile: builder.mutation({
+    loadForm: builder.mutation({
       query: file => ({
         url: '/api/file',
         method: 'POST',
@@ -87,7 +87,7 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useChangeAvatarMutation,
-  useLoadFileMutation,
+  useLoadFormMutation,
   useGetFilesQuery,
   useGetCountDocumentQuery,
   useParsePDFMutation,

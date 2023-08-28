@@ -77,7 +77,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
   return (
     <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
             {isLoading ? (
-        <SkeletonAvatar totalRow={6} />
+        <SkeletonAvatar totalRow={1} />
       ) : (
       <form onSubmit={handleSubmit}>
         <DialogTitle id="registration" sx={{ textAlign: 'center' }}>

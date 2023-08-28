@@ -54,9 +54,9 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
+    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration" >
       {isLoading ? (
-        <SkeletonAuth totalRow={3} />
+        <SkeletonAuth totalRow={3} sx={{ minWidth: 552 }}/>
       ) : (
         <Formik
           initialValues={initialValues}
@@ -79,7 +79,7 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
                   fullWidth
                 />
                 {errors.name && touched.name ? (
-                  <Typography paragraph sx={{ color: red[500] }}>
+                  <Typography paragraph sx={{ color: red[500], minWidth: 552 }}>
                     {errors.name}
                   </Typography>
                 ) : null}

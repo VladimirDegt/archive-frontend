@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useGetSearchMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
+// .css-1t1j96h-MuiPaper-root-MuiDialog-paper
 export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldSearch, setFieldSearch] = useState('');
@@ -81,7 +82,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="search"
-      sx={{ overflow: 'visible' }}
+      
     >
             {isLoading ? (
         <SkeletonAuth totalRow={2} />
