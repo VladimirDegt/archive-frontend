@@ -192,7 +192,7 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
                                   <FileDownloadIcon />
                                 </IconButton>
                               </TableCell>
-                              <TableCell align="left">{owner.name}</TableCell>
+                              <TableCell align="left">{owner?.name || ""}</TableCell>
                             </TableRow>
 
                             <TableRow>

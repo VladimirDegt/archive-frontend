@@ -20,8 +20,6 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
   const [register] = useRegisterMutation();
 
   const handleSubmit = async (values, { resetForm }) => {
-    resetForm();
-    handleClose();
 
     try {
       setIsLoading(true);
@@ -33,6 +31,8 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
           position: 'center-top',
           distance: '10px',
         });
+        resetForm();
+        handleClose();
         return;
       }
       Notify.failure(`${response.error.data.message}`, {

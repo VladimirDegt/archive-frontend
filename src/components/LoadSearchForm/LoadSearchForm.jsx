@@ -17,12 +17,12 @@ import { useState } from 'react';
 import { useGetSearchMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
-// .css-1t1j96h-MuiPaper-root-MuiDialog-paper
 export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldSearch, setFieldSearch] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
+  const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
   const [getSearch] = useGetSearchMutation();
 
   const handleFieldSearch = ({ target }) => {
@@ -32,11 +32,20 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const handleNameCustomer = (_, newValue) => {
     if (newValue) {
       setNameCustomer(newValue);
+      setIsAutocompleteFocused(false);
     }
   };
 
   const handleNumberDocument = ({ target }) => {
     setNumberDocument(target.value);
+  };
+
+  const handleAutocompleteFocus = () => {
+    setIsAutocompleteFocused(true);
+  };
+
+  const handleAutocompleteBlur = () => {
+    setIsAutocompleteFocused(false);
   };
 
   const handleSubmit = async e => {
@@ -82,7 +91,6 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="search"
-      
     >
             {isLoading ? (
         <SkeletonAuth totalRow={2} />
@@ -91,7 +99,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
         <DialogTitle id="search" sx={{ textAlign: 'center', minWidth: 380 }}>
           Пошук
         </DialogTitle>
-        <DialogContent>
+        <DialogContent  sx={{ height: isAutocompleteFocused ? 400 : 'auto' }}>
           <InputLabel id="demo-customized-select-label">Що шукаємо</InputLabel>
           <Select
             labelId="demo-customized-select-label"
@@ -115,6 +123,8 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
               fullWidth
               renderInput={params => <TextField {...params} label="Власник" />}
               onChange={handleNameCustomer}
+              onFocus={handleAutocompleteFocus}
+              onBlur={handleAutocompleteBlur}
               sx={{ marginTop: 3 }}
               required
             />
