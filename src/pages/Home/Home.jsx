@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import { Box, Button, Paper } from '@mui/material';
 import { Footer } from 'components/Footer/Footer';
 import { LoginForm } from 'components/LoginForm/LoginForm';
 import { RegisterForm } from 'components/RegistrForm/RegistrForm';
-import { useState } from 'react';
 import backgroundImage from '../../img/backgroundimage-full.jpg';
 import { StyledContainer, StyledTypography } from './Home.styled';
 

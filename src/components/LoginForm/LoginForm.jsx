@@ -12,7 +12,6 @@ import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
 import { addToken, getNameUser } from 'redux/users/reducer';
 import { useLoginMutation } from 'utils/RTK-Query';
-import { useNavigate } from 'react-router-dom';
 import { red } from '@mui/material/colors';
 import { SigninSchema } from 'schemas/validate-login';
 import { useState } from 'react';
@@ -21,7 +20,6 @@ import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 export const LoginForm = ({ handleClose, isOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [login] = useLoginMutation();
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -32,8 +30,6 @@ export const LoginForm = ({ handleClose, isOpen }) => {
 
       dispatch(addToken(response.data.token));
       dispatch(getNameUser(response.data.name));
-
-      navigate('/archive', { replace: true });
     } catch (error) {
       Notify.failure('Login not success!', {
         position: 'center-top',
@@ -51,9 +47,9 @@ export const LoginForm = ({ handleClose, isOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration" >
+    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
       {isLoading ? (
-        <SkeletonAuth totalRow={2} sx={{ minWidth: 444 }}/>
+        <SkeletonAuth totalRow={2} sx={{ minWidth: 444 }} />
       ) : (
         <Formik
           initialValues={initialValues}
@@ -61,7 +57,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
           validationSchema={SigninSchema}
         >
           {({ errors, touched }) => (
-            <Form >
+            <Form>
               <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
                 Login
               </DialogTitle>

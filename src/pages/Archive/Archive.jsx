@@ -1,8 +1,7 @@
+import { useState } from 'react';
 import { Footer } from 'components/Footer/Footer';
 import { Header } from 'components/Header/Header';
 import { Main } from 'components/Main/Main';
-import { SkeletonLoading } from 'components/Skeletons/SkeletonLoading';
-import { Suspense, useState } from 'react';
 
 const Archive = () => {
   const [countDocumentDB, setCountDocumentDB] = useState();
@@ -18,12 +17,10 @@ const Archive = () => {
   return (
     <>
       <Header countDocument={countDocument} searchDocument={searchDocument} />
-      <Suspense fallback={<SkeletonLoading>Loading...</SkeletonLoading>}>
       <Main
         countDocumentDB={countDocumentDB}
         searchDocumentDB={searchDocumentDB}
       />
-      </Suspense>
       <Footer />
     </>
   );
