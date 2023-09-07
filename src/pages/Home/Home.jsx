@@ -6,13 +6,13 @@ import { useState } from 'react';
 import backgroundImage from '../../img/backgroundimage-full.jpg';
 import { StyledContainer, StyledTypography } from './Home.styled';
 
-export const Home = () => {
+const Home = () => {
   const [isOpenRegister, setIsOpenRegister] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
 
-  const handleOpenRegistration = () => {
-    setIsOpenRegister(true);
-  };
+  // const handleOpenRegistration = () => {
+  //   setIsOpenRegister(true);
+  // };
 
   const handleOpenLogin = () => {
     setIsOpenLogin(true);
@@ -94,3 +94,5 @@ export const Home = () => {
     </Box>
   );
 };
+
+export default Home;
