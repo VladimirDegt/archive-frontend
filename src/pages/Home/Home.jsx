@@ -71,14 +71,14 @@ export const Home = () => {
                 >
                   вхід
                 </Button>
-                <Button
+                {/* <Button
                   variant="contained"
                   color="secondary"
                   sx={{ minWidth: 200, minHeight: 40 }}
                   onClick={handleOpenRegistration}
                 >
                   реєстрація
-                </Button>
+                </Button> */}
               </Box>
             </StyledContainer>
           </Paper>
