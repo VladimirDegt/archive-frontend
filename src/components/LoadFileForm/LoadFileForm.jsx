@@ -1,5 +1,5 @@
 import {
-  Autocomplete,
+  // Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -10,21 +10,21 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { contacts } from 'db/contacts';
-import { numberDogovir } from 'db/number-dogovir';
+// import { contacts } from 'db/contacts';
+// import { numberDogovir } from 'db/number-dogovir';
 import { Notify } from 'notiflix';
 import { useEffect, useState } from 'react';
 import { useLoadFormMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
+  // const [numberDocument, setNumberDocument] = useState('');
+  // const [nameCustomer, setNameCustomer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
   const [selectedFileZip, setSelectedFileZip] = useState('');
-  const [nameCustomer, setNameCustomer] = useState('');
   const [typeDocument, setTypeDocument] = useState('Договір');
   const [idDogovir, setNumberDogovir] = useState('');
-  const [numberDocument, setNumberDocument] = useState('');
   const [sortNumber, setSortNumber] = useState([]);
   const [loadForm] = useLoadFormMutation();
 
@@ -38,32 +38,46 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
+    if(!file.name.endsWith(".pdf")) {
+      Notify.warning('Вибрати файл з розширенням .pdf', {
+        position: 'center-top',
+        distance: '10px',
+      });
+      return
+    }
     setSelectedFile(file);
   };
   const handleFileZipChange = ({ target }) => {
     const file = target.files[0];
+    if(!file.name.endsWith(".zip")) {
+      Notify.warning('Вибрати файл з розширенням .zip', {
+        position: 'center-top',
+        distance: '10px',
+      });
+      return
+    }
     setSelectedFileZip(file);
   };
 
-  const handleNameCustomer = (_, newValue) => {
-    if (newValue) {
-      setNameCustomer(newValue);
-    }
-  };
+  // const handleNameCustomer = (_, newValue) => {
+  //   if (newValue) {
+  //     setNameCustomer(newValue);
+  //   }
+  // };
 
   const handleTypeDocument = ({ target }) => {
     setTypeDocument(target.value);
   };
 
-  const handleNumberDocument = ({ target }) => {
-    setNumberDocument(target.value);
-  };
+  // const handleNumberDocument = ({ target }) => {
+  //   setNumberDocument(target.value);
+  // };
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     if (!selectedFile || !selectedFileZip) {
-      Notify.warning('Please choose a file', {
+      Notify.failure('Невірний формат файлу', {
         position: 'center-top',
         distance: '10px',
       });
@@ -72,9 +86,9 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
 
     const formData = new FormData();
 
-    formData.append('nameCustomer', nameCustomer);
+    // formData.append('nameCustomer', nameCustomer);
+    // formData.append('numberDocument', numberDocument);
     formData.append('typeDocument', typeDocument);
-    formData.append('numberDocument', numberDocument);
     formData.append('idDogovir', idDogovir);
     formData.append('fileURL', selectedFile);
     formData.append('fileURLZip', selectedFileZip);
@@ -97,9 +111,9 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
       });
       setSelectedFile('');
       setSelectedFileZip('');
-      setNameCustomer('');
       setTypeDocument('');
-      setNumberDocument('');
+      // setNameCustomer('');
+      // setNumberDocument('');
       handleClose();
     } catch (error) {
       console.log('error', error.message);
@@ -159,7 +173,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
               </>
             ) : (
               <>
-                <Autocomplete
+                {/* <Autocomplete
                   disablePortal
                   value={nameCustomer}
                   options={contacts}
@@ -189,7 +203,7 @@ export const LoadFileForm = ({ isOpen, handleClose, getAllNumberDocument }) => {
                       {item}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
               </>
             )}
 

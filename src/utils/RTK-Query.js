@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const contactApi = createApi({
   reducerPath: 'users',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://archive-men6.onrender.com',
-    // baseUrl: 'http://localhost:3001',
+    // baseUrl: 'https://archive-men6.onrender.com',
+    baseUrl: 'http://localhost:3001',
 
     prepareHeaders(headers, { getState }) {
       const token = getState().token.token;

@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { PrivateRoute } from './PrivateRoute/PrivateRoute';
 import { SkeletonLoading } from './Skeletons/SkeletonLoading';
-import { PublicRoute } from './PublicRoute/PublicRoute';
+// import { PublicRoute } from './PublicRoute/PublicRoute';
 
 const Home = lazy(() => import('pages/Home/Home'));
 const NotFound = lazy(() => import('pages/NotFound/NotFound'));
@@ -24,9 +24,7 @@ export const App = () => {
           <Route
             path="/"
             element={
-              <PublicRoute>
                 <Home />
-              </PublicRoute>
             }
           />
           <Route
