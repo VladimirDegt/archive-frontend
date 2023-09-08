@@ -79,6 +79,13 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
+    getVchasno: builder.mutation({
+      query: id => ({
+        url: `/api/file/${id}`,
+        method: 'GET',
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
@@ -92,4 +99,5 @@ export const {
   useGetCountDocumentQuery,
   useParsePDFMutation,
   useGetSearchMutation,
+  useGetVchasnoMutation,
 } = contactApi;

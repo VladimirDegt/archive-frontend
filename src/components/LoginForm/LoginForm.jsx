@@ -10,17 +10,19 @@ import {
 import { Notify } from 'notiflix';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
+import { red } from '@mui/material/colors';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SigninSchema } from 'schemas/validate-login';
 import { addToken, getNameUser } from 'redux/users/reducer';
 import { useLoginMutation } from 'utils/RTK-Query';
-import { red } from '@mui/material/colors';
-import { SigninSchema } from 'schemas/validate-login';
-import { useState } from 'react';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const LoginForm = ({ handleClose, isOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [login] = useLoginMutation();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
@@ -30,6 +32,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
 
       dispatch(addToken(response.data.token));
       dispatch(getNameUser(response.data.name));
+      navigate('/archive', { replace: true });
     } catch (error) {
       Notify.failure('Login not success!', {
         position: 'center-top',

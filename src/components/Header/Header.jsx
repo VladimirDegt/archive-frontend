@@ -12,7 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
 import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
-import { useGetCountDocumentQuery, useLogoutMutation } from 'utils/RTK-Query';
+import {
+  useGetCountDocumentQuery,
+  useGetVchasnoMutation,
+  useLogoutMutation,
+} from 'utils/RTK-Query';
 import {
   selectAvatar,
   selectNameUser,
@@ -37,6 +41,7 @@ export const Header = ({ countDocument, searchDocument }) => {
 
   const [logout] = useLogoutMutation();
   const { data: getAllNumberDocument } = useGetCountDocumentQuery();
+  const [getVchasno] = useGetVchasnoMutation();
 
   useEffect(() => {
     countDocument(getAllNumberDocument);
@@ -68,6 +73,11 @@ export const Header = ({ countDocument, searchDocument }) => {
 
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
+  };
+
+  const handleClickVchasno = () => {
+    console.log('click');
+    getVchasno('186af131-148d-4b8b-a76b-b6b08a5325de');
   };
 
   return (
@@ -119,6 +129,16 @@ export const Header = ({ countDocument, searchDocument }) => {
                 color="inherit"
                 aria-label="add file"
                 onClick={handleClickSearch}
+                sx={{ marginLeft: 2 }}
+              >
+                <SearchIcon fontSize="large" />
+              </IconButton>
+            )}
+            {token && (
+              <IconButton
+                color="inherit"
+                aria-label="vchasno"
+                onClick={handleClickVchasno}
                 sx={{ marginLeft: 2 }}
               >
                 <SearchIcon fontSize="large" />
