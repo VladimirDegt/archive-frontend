@@ -11,12 +11,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
-import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
-import {
-  useGetCountDocumentQuery,
-  useGetVchasnoMutation,
-  useLogoutMutation,
-} from 'utils/RTK-Query';
+// import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
+import { useGetCountDocumentQuery, useLogoutMutation } from 'utils/RTK-Query';
 import {
   selectAvatar,
   selectNameUser,
@@ -27,13 +23,17 @@ import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
+import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
+import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 
 export const Header = ({ countDocument, searchDocument }) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
+  const [isOpenLoadCSV, setIsOpenLoadCSV] = useState(false);
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
@@ -41,7 +41,6 @@ export const Header = ({ countDocument, searchDocument }) => {
 
   const [logout] = useLogoutMutation();
   const { data: getAllNumberDocument } = useGetCountDocumentQuery();
-  const [getVchasno] = useGetVchasnoMutation();
 
   useEffect(() => {
     countDocument(getAllNumberDocument);
@@ -51,6 +50,7 @@ export const Header = ({ countDocument, searchDocument }) => {
     setIsOpenChangeAvatar(false);
     setIsOpenLoadFile(false);
     setIsOpenSearch(false);
+    setIsOpenLoadCSV(false);
   };
 
   const handleClickLogout = async () => {
@@ -63,7 +63,7 @@ export const Header = ({ countDocument, searchDocument }) => {
     } catch (error) {}
   };
 
-  const handleClickLoadFile = () => {
+  const handleClickLoadFileOld = () => {
     setIsOpenLoadFile(true);
   };
 
@@ -75,9 +75,12 @@ export const Header = ({ countDocument, searchDocument }) => {
     setIsOpenChangeAvatar(true);
   };
 
-  const handleClickVchasno = () => {
-    console.log('click');
-    getVchasno('186af131-148d-4b8b-a76b-b6b08a5325de');
+  const handleClickLoadFile = () => {
+    setIsOpenLoadFile(true);
+  };
+
+  const handleClickLoadCSV = () => {
+    setIsOpenLoadCSV(true);
   };
 
   return (
@@ -119,7 +122,7 @@ export const Header = ({ countDocument, searchDocument }) => {
               <IconButton
                 color="inherit"
                 aria-label="add file"
-                onClick={handleClickLoadFile}
+                onClick={handleClickLoadFileOld}
               >
                 <CloudUploadIcon fontSize="large" />
               </IconButton>
@@ -138,10 +141,20 @@ export const Header = ({ countDocument, searchDocument }) => {
               <IconButton
                 color="inherit"
                 aria-label="vchasno"
-                onClick={handleClickVchasno}
+                onClick={handleClickLoadFile}
                 sx={{ marginLeft: 2 }}
               >
-                <SearchIcon fontSize="large" />
+                <CloudUploadIcon fontSize="large" />
+              </IconButton>
+            )}
+            {token && (
+              <IconButton
+                color="inherit"
+                aria-label=".csv"
+                onClick={handleClickLoadCSV}
+                sx={{ marginLeft: 2 }}
+              >
+                <SaveAltIcon fontSize="large" />
               </IconButton>
             )}
           </Box>
@@ -161,13 +174,13 @@ export const Header = ({ countDocument, searchDocument }) => {
         <ChangeAvatar handleClose={handleClose} isOpen={isOpenChangeAvatar} />
       )}
 
-      {isOpenLoadFile && (
+      {/* {isOpenLoadFile && (
         <LoadFileForm
           handleClose={handleClose}
           isOpen={isOpenLoadFile}
           getAllNumberDocument={getAllNumberDocument}
         />
-      )}
+      )} */}
 
       {isOpenSearch && (
         <LoadSearchForm
@@ -175,6 +188,13 @@ export const Header = ({ countDocument, searchDocument }) => {
           isOpen={isOpenSearch}
           searchDocument={searchDocument}
         />
+      )}
+
+      {isOpenLoadFile && (
+        <FileUploadForm handleClose={handleClose} isOpen={isOpenLoadFile} />
+      )}
+      {isOpenLoadCSV && (
+        <LoadFileCSV handleClose={handleClose} isOpen={isOpenLoadCSV} />
       )}
     </>
   );

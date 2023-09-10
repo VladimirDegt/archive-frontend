@@ -10,9 +10,9 @@ const Home = () => {
   const [isOpenRegister, setIsOpenRegister] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
 
-  // const handleOpenRegistration = () => {
-  //   setIsOpenRegister(true);
-  // };
+  const handleOpenRegistration = () => {
+    setIsOpenRegister(true);
+  };
 
   const handleOpenLogin = () => {
     setIsOpenLogin(true);
@@ -71,14 +71,14 @@ const Home = () => {
                 >
                   вхід
                 </Button>
-                {/* <Button
+                <Button
                   variant="contained"
                   color="secondary"
                   sx={{ minWidth: 200, minHeight: 40 }}
                   onClick={handleOpenRegistration}
                 >
                   реєстрація
-                </Button> */}
+                </Button>
               </Box>
             </StyledContainer>
           </Paper>
