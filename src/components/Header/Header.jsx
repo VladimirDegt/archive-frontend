@@ -24,6 +24,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import CachedIcon from '@mui/icons-material/Cached';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
@@ -82,6 +83,10 @@ export const Header = ({ countDocument, searchDocument }) => {
   const handleClickLoadCSV = () => {
     setIsOpenLoadCSV(true);
   };
+
+  const handleClickReload = () => {
+    window.location.reload()
+  }
 
   return (
     <>
@@ -156,6 +161,16 @@ export const Header = ({ countDocument, searchDocument }) => {
                 sx={{ marginLeft: 2 }}
               >
                 <SearchIcon fontSize="large" />
+              </IconButton>
+            )}
+                        {token && (
+              <IconButton
+                color="inherit"
+                aria-label="reload"
+                onClick={handleClickReload}
+                sx={{ marginLeft: 2 }}
+              >
+                <CachedIcon fontSize="large" />
               </IconButton>
             )}
           </Box>

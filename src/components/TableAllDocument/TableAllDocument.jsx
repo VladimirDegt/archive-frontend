@@ -11,13 +11,17 @@ import {
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { useEffect, useState } from 'react';
-import { useGetAllDocumentsMutation, useGetLoadFileMutation } from 'utils/RTK-Query';
+import {
+  useGetAllDocumentsMutation,
+  useGetLoadFileMutation,
+} from 'utils/RTK-Query';
+import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const TableAllDocument = ({ countDocumentDB, searchDocumentDB }) => {
   const [allDocuments, setallDocuments] = useState([]);
-  const [isRerender, setIsRerender] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [getAllDocuments] = useGetAllDocumentsMutation();
   const [getLoadFile] = useGetLoadFileMutation();
 
@@ -29,17 +33,17 @@ export const TableAllDocument = ({ countDocumentDB, searchDocumentDB }) => {
     fetchData();
   }, [getAllDocuments]);
 
-  useEffect(()=>{},[isRerender])
-
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
     // window.open(pathFile, '_blank', `title=${typeDocument}`);
   };
 
-  const handleLoadFile = async (idDocument)=> {
-    await getLoadFile(idDocument)
-    setIsRerender((prevState)=>!prevState)
-  }
+  const handleLoadFile = async idDocument => {
+    setIsLoading(true);
+    await getLoadFile(idDocument);
+    setIsLoading(false);
+    window.location.reload()
+  };
 
   return (
     <main style={{ flexGrow: 1 }}>
@@ -99,69 +103,82 @@ export const TableAllDocument = ({ countDocumentDB, searchDocumentDB }) => {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {allDocuments?.map(
-                  ({
-                    idDocument,
-                    dateCreate,
-                    nameDocument,
-                    typeDocument,
-                    emailCustomer,
-                    nameCustomer,
-                    fileURLPDF,
-                    fileURLZIP,
-                    owner,
-                  }) => {
-                    return (
-                      <TableRow
-                        key={idDocument}
-                        sx={{ '& > *': { borderBottom: 'unset' } }}
-                      >
-                        <TableCell component="th" scope="row">
-                          {nameCustomer}
-                        </TableCell>
-                        <TableCell align="left">{emailCustomer}</TableCell>
-                        <TableCell align="left">{typeDocument}</TableCell>
-                        <TableCell align="left">{nameDocument}</TableCell>
-                        <TableCell align="left">{dateCreate}</TableCell>
-                        <TableCell align="center">
-                          {' '}
-                          <IconButton
-                            color={fileURLPDF === '' ? '#e8eaf6': "secondary"}
-                            onClick={() =>
-                              handleOpenFile(fileURLPDF, typeDocument)
-                            }
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                          {' '}
-                          <IconButton
-                            color={fileURLZIP === '' ? '#e8eaf6': "secondary"}
-                            onClick={() =>
-                              handleOpenFile(fileURLZIP, typeDocument)
-                            }
-                          >
-                            <FileDownloadIcon />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="left">{owner.name}</TableCell>
-                        <TableCell align="center">
-                          {' '}
-                          <IconButton
-                            color={fileURLZIP === '' ? "secondary" : '#e8eaf6'}
-                            disabled = {fileURLZIP !== ''}
-                            onClick={()=>handleLoadFile(idDocument)}
-                          >
-                            <RadioButtonCheckedIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                )}
-              </TableBody>
+              {isLoading ? (
+                <SkeletonAuth
+                  totalRow={10}
+                />
+              ) : (
+                <TableBody>
+                  {allDocuments?.map(
+                    ({
+                      idDocument,
+                      dateCreate,
+                      nameDocument,
+                      typeDocument,
+                      emailCustomer,
+                      nameCustomer,
+                      fileURLPDF,
+                      fileURLZIP,
+                      owner,
+                    }) => {
+                      return (
+                        <TableRow
+                          key={idDocument}
+                          sx={{ '& > *': { borderBottom: 'unset' } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {nameCustomer}
+                          </TableCell>
+                          <TableCell align="left">{emailCustomer}</TableCell>
+                          <TableCell align="left">{typeDocument}</TableCell>
+                          <TableCell align="left">{nameDocument}</TableCell>
+                          <TableCell align="left">{dateCreate}</TableCell>
+                          <TableCell align="center">
+                            {' '}
+                            <IconButton
+                              color={
+                                fileURLPDF === '' ? '#e8eaf6' : 'secondary'
+                              }
+                              onClick={() =>
+                                handleOpenFile(fileURLPDF, typeDocument)
+                              }
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            {' '}
+                            <IconButton
+                              color={
+                                fileURLZIP === '' ? '#e8eaf6' : 'secondary'
+                              }
+                              onClick={() =>
+                                handleOpenFile(fileURLZIP, typeDocument)
+                              }
+                            >
+                              <FileDownloadIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="left">{owner.name}</TableCell>
+                          <TableCell align="center">
+                            {' '}
+                            <IconButton
+                              color={
+                                fileURLZIP === '' ? 'primary' : '#e8eaf6'
+                              }
+                              disabled={fileURLZIP !== ''}
+                              onClick={() => handleLoadFile(idDocument)}
+                            >
+                              <CloudDownloadIcon />
+                            </IconButton>
+
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
         </Container>
