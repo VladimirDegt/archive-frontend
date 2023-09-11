@@ -94,6 +94,13 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
+    getAllDocuments: builder.mutation({
+      query: () => ({
+        url: '/api/archive',
+        method: 'POST',
+      }),
+      invalidatesTags: ['Archive'],
+    }),
   }),
 });
 
@@ -109,4 +116,5 @@ export const {
   useGetSearchMutation,
   useGetLoadFileMutation,
   useLoadFileCSVMutation,
+  useGetAllDocumentsMutation,
 } = contactApi;

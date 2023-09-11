@@ -63,9 +63,9 @@ export const Header = ({ countDocument, searchDocument }) => {
     } catch (error) {}
   };
 
-  const handleClickLoadFileOld = () => {
-    setIsOpenLoadFile(true);
-  };
+  // const handleClickLoadFileOld = () => {
+  //   setIsOpenLoadFile(true);
+  // };
 
   const handleClickSearch = () => {
     setIsOpenSearch(true);
@@ -118,7 +118,7 @@ export const Header = ({ countDocument, searchDocument }) => {
             </Button>
           )}
           <Box sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            {token && (
+            {/* {token && (
               <IconButton
                 color="inherit"
                 aria-label="add file"
@@ -126,17 +126,8 @@ export const Header = ({ countDocument, searchDocument }) => {
               >
                 <CloudUploadIcon fontSize="large" />
               </IconButton>
-            )}
-            {token && (
-              <IconButton
-                color="inherit"
-                aria-label="add file"
-                onClick={handleClickSearch}
-                sx={{ marginLeft: 2 }}
-              >
-                <SearchIcon fontSize="large" />
-              </IconButton>
-            )}
+            )} */}
+
             {token && (
               <IconButton
                 color="inherit"
@@ -155,6 +146,16 @@ export const Header = ({ countDocument, searchDocument }) => {
                 sx={{ marginLeft: 2 }}
               >
                 <SaveAltIcon fontSize="large" />
+              </IconButton>
+            )}
+                        {token && (
+              <IconButton
+                color="inherit"
+                aria-label="add file"
+                onClick={handleClickSearch}
+                sx={{ marginLeft: 2 }}
+              >
+                <SearchIcon fontSize="large" />
               </IconButton>
             )}
           </Box>

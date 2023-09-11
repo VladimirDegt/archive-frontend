@@ -57,7 +57,7 @@ export const LoadFileCSV = ({ isOpen, handleClose }) => {
         return;
       }
     } catch (error) {
-      console.log('error', error.message);
+      console.log('error', error);
     } finally {
       setSelectedFile('');
       handleClose();
