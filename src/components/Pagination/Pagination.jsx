@@ -1,36 +1,51 @@
 import { Box, Typography } from '@mui/material';
+import { red } from '@mui/material/colors';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
-import { useGetFilesQuery } from 'utils/RTK-Query';
+import { useGetAllDocumentsMutation } from 'utils/RTK-Query';
 
-export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
+export const PaginationPage = ({ getDocumentCurrentPage }) => {
   const limit = 10;
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
-
-  const { data, error } = useGetFilesQuery({ page, limit });
-
-  useEffect(() => {
-    if (data) {
-      getDocuments(data, error);
-    }
-  }, [data, getDocuments, error]);
+  const [allDocuments, setallDocuments] = useState([]);
+  const [totalDocuments, setTotalDocuments] = useState('');
+  const [isError, setIsError] = useState(false);
+  const [getAllDocuments] = useGetAllDocumentsMutation();
 
   useEffect(() => {
-    if (countDocumentDB) {
-      setMaxPage(Math.ceil(countDocumentDB.count / limit));
+    if (totalDocuments) {
+      setMaxPage(Math.ceil(totalDocuments / limit));
     }
-  }, [countDocumentDB]);
+  }, [totalDocuments]);
 
-  const handleChange = (_, value) => {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getAllDocuments(page, limit);
+        setIsError(false)
+        setallDocuments(response.data.getFiles);
+        setTotalDocuments(response.data.total)
+      } catch (error) {
+        setIsError(true)
+      }
+    }
+    fetchData();
+  }, [page, getAllDocuments]);
+
+  useEffect(() => {
+    getDocumentCurrentPage(allDocuments)
+  }, [allDocuments, getDocumentCurrentPage]);
+
+  const handleChange =  async (_, value) => {
     setPage(value);
   };
 
   return (
-    <>
-      {error && (
-        <Typography paragraph align="center">
+    <section>
+      {isError && (
+        <Typography paragraph align="center" sx={{ color: red[500] }}>
           Уупс, щось пішло не так. Спробуйте перезавантажити сторінку
         </Typography>
       )}
@@ -50,6 +65,6 @@ export const PaginationPage = ({ getDocuments, countDocumentDB }) => {
           />
         </Stack>
       </Box>
-    </>
+    </section>
   );
 };

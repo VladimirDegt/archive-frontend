@@ -14,24 +14,20 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { useEffect, useState } from 'react';
 import {
-  useGetAllDocumentsMutation,
   useGetLoadFileMutation,
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
-export const TableAllDocument = ({ countDocumentDB, searchDocumentDB }) => {
+export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [getAllDocuments] = useGetAllDocumentsMutation();
   const [getLoadFile] = useGetLoadFileMutation();
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getAllDocuments();
-      setallDocuments(response.data);
+  useEffect(()=>{
+    if(pageContent.length !==0 ){
+      setallDocuments(pageContent)
     }
-    fetchData();
-  }, [getAllDocuments]);
+  },[ pageContent])
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
@@ -42,7 +38,7 @@ export const TableAllDocument = ({ countDocumentDB, searchDocumentDB }) => {
     setIsLoading(true);
     await getLoadFile(idDocument);
     setIsLoading(false);
-    window.location.reload()
+
   };
 
   return (

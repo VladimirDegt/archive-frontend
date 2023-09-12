@@ -95,8 +95,8 @@ export const contactApi = createApi({
       invalidatesTags: ['Files'],
     }),
     getAllDocuments: builder.mutation({
-      query: () => ({
-        url: '/api/archive',
+      query: (page, limit=10 ) => ({
+        url: `/api/archive?page=${page}&limit=${limit}`,
         method: 'POST',
       }),
       invalidatesTags: ['Archive'],
@@ -116,5 +116,5 @@ export const {
   useGetSearchMutation,
   useGetLoadFileMutation,
   useLoadFileCSVMutation,
-  useGetAllDocumentsMutation,
+  useGetAllDocumentsMutation
 } = contactApi;

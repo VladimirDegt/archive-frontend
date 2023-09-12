@@ -43,9 +43,9 @@ export const Header = ({ countDocument, searchDocument }) => {
   const [logout] = useLogoutMutation();
   const { data: getAllNumberDocument } = useGetCountDocumentQuery();
 
-  useEffect(() => {
-    countDocument(getAllNumberDocument);
-  }, [getAllNumberDocument, countDocument]);
+  // useEffect(() => {
+  //   countDocument(getAllNumberDocument);
+  // }, [getAllNumberDocument, countDocument]);
 
   const handleClose = () => {
     setIsOpenChangeAvatar(false);

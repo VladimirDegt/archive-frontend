@@ -336,12 +336,10 @@ export const Main = ({ countDocumentDB, searchDocumentDB }) => {
       )}
 
       {token && (
-        <section>
           <PaginationPage
             getDocuments={handleGetDocuments}
             countDocumentDB={countDocumentDB}
           />
-        </section>
       )}
     </main>
   );
