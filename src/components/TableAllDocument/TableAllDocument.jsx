@@ -13,32 +13,41 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { useEffect, useState } from 'react';
-import {
-  useGetLoadFileMutation,
-} from 'utils/RTK-Query';
+import { useGetLoadFileMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
+import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 
 export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [getLoadFile] = useGetLoadFileMutation();
+  const [viewURLFile, setViewURLFile] = useState('');
+  const [isOpenCopyURL, setIsOpenCopyURL] = useState(false);
 
-  useEffect(()=>{
-    if(pageContent.length !==0 ){
-      setallDocuments(pageContent)
+  useEffect(() => {
+    if (pageContent.length !== 0) {
+      setallDocuments(pageContent);
     }
-  },[ pageContent])
+  }, [pageContent]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
     // window.open(pathFile, '_blank', `title=${typeDocument}`);
+    setViewURLFile(fileURL);
+    if(!fileURL){
+      return
+    }
+    setIsOpenCopyURL(true)
   };
 
   const handleLoadFile = async idDocument => {
     setIsLoading(true);
     await getLoadFile(idDocument);
     setIsLoading(false);
+  };
 
+  const handleClose = () => {
+    setIsOpenCopyURL(false)
   };
 
   return (
@@ -100,9 +109,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                 </TableRow>
               </TableHead>
               {isLoading ? (
-                <SkeletonAuth
-                  totalRow={10}
-                />
+                <SkeletonAuth totalRow={10} />
               ) : (
                 <TableBody>
                   {allDocuments?.map(
@@ -133,7 +140,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                             {' '}
                             <IconButton
                               color={
-                                fileURLPDF === '' ? '#e8eaf6' : 'secondary'
+                                fileURLPDF === '' ? 'disabled' : 'secondary'
                               }
                               onClick={() =>
                                 handleOpenFile(fileURLPDF, typeDocument)
@@ -141,12 +148,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                             >
                               <VisibilityIcon />
                             </IconButton>
+
                           </TableCell>
                           <TableCell align="center">
                             {' '}
                             <IconButton
                               color={
-                                fileURLZIP === '' ? '#e8eaf6' : 'secondary'
+                                fileURLZIP === '' ? 'disabled' : 'secondary'
                               }
                               onClick={() =>
                                 handleOpenFile(fileURLZIP, typeDocument)
@@ -154,20 +162,18 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                             >
                               <FileDownloadIcon />
                             </IconButton>
+
                           </TableCell>
                           <TableCell align="left">{owner.name}</TableCell>
                           <TableCell align="center">
                             {' '}
                             <IconButton
-                              color={
-                                fileURLZIP === '' ? 'primary' : '#e8eaf6'
-                              }
+                              color={fileURLZIP === '' ? 'primary' : 'disabled'}
                               disabled={fileURLZIP !== ''}
                               onClick={() => handleLoadFile(idDocument)}
                             >
                               <CloudDownloadIcon />
                             </IconButton>
-
                           </TableCell>
                         </TableRow>
                       );
@@ -179,6 +185,9 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
           </TableContainer>
         </Container>
       </section>
+      {isOpenCopyURL && (
+        <CopyURLFile handleClose={handleClose} isOpen={isOpenCopyURL} viewURLFile={viewURLFile}/>
+      )}
     </main>
   );
 };
