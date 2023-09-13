@@ -1,4 +1,5 @@
 import { Container } from '@mui/system';
+import { Notify } from 'notiflix';
 import {
   IconButton,
   Table,
@@ -51,6 +52,10 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
     setIsLoading(true);
     await getLoadFile(idDocument);
     setIsLoading(false);
+    Notify.success("Файлы завантажені у базу", {
+      position: 'center-top',
+      distance: '10px',
+    });
   };
 
   const handleClose = () => {
