@@ -10,11 +10,11 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { contacts } from 'db/contacts';
+// import { contacts } from 'db/contacts';
 import { numberDogovir } from 'db/number-dogovir';
 import { Notify } from 'notiflix';
-import { useState } from 'react';
-import { useGetSearchMutation } from 'utils/RTK-Query';
+import { useEffect, useState } from 'react';
+import { useGetCustomerFromDBMutation, useGetNameCustomerFromDBQuery, useGetSearchMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
@@ -23,7 +23,17 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const [nameCustomer, setNameCustomer] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
+  const [nameCustomerFromDB, setNameCustomerFromDB] = useState('');
   const [getSearch] = useGetSearchMutation();
+  const [getCustomerFromDB] = useGetCustomerFromDBMutation()
+  const {data} = useGetNameCustomerFromDBQuery();
+
+  useEffect(()=>{
+    if(!data){
+      return
+    }
+    setNameCustomerFromDB([...data.getNamesCustomer, ''])
+  },[data])
 
   const handleFieldSearch = ({ target }) => {
     setFieldSearch(target.value);
@@ -50,41 +60,54 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    if (!nameCustomer && !numberDocument) {
-      Notify.warning('Виберіть замовника', {
-        position: 'center-top',
-        distance: '10px',
-      });
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const response = await getSearch({
-        nameCustomer,
-        numberDocument,
-      });
-      setIsLoading(false);
-
-      if (response.error) {
-        Notify.failure(response.error.data.message, {
-          position: 'center-top',
-          distance: '10px',
-        });
-        return;
-      }
-
-      searchDocument([response.data]);
-
-      setFieldSearch('');
+    setIsLoading(true);
+    const responce = await getCustomerFromDB(nameCustomer);
+    setIsLoading(false);
+    
+          setFieldSearch('');
       setNameCustomer('');
       setNumberDocument('');
       handleClose();
-    } catch (error) {
-      console.log('error', error.message);
-    }
-  };
+      searchDocument(responce.data)
+  }
+
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+
+  //   if (!nameCustomer && !numberDocument) {
+  //     Notify.warning('Виберіть замовника', {
+  //       position: 'center-top',
+  //       distance: '10px',
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await getSearch({
+  //       nameCustomer,
+  //       numberDocument,
+  //     });
+  //     setIsLoading(false);
+
+  //     if (response.error) {
+  //       Notify.failure(response.error.data.message, {
+  //         position: 'center-top',
+  //         distance: '10px',
+  //       });
+  //       return;
+  //     }
+
+  //     searchDocument([response.data]);
+
+  //     setFieldSearch('');
+  //     setNameCustomer('');
+  //     setNumberDocument('');
+  //     handleClose();
+  //   } catch (error) {
+  //     console.log('error', error.message);
+  //   }
+  // };
 
   return (
     <Dialog
@@ -100,9 +123,9 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
           Пошук
         </DialogTitle>
         <DialogContent  sx={{ height: isAutocompleteFocused ? 400 : 'auto' }}>
-          <InputLabel id="demo-customized-select-label">Що шукаємо</InputLabel>
+          <InputLabel id="option-search">Що шукаємо</InputLabel>
           <Select
-            labelId="demo-customized-select-label"
+            labelId="option-search"
             value={fieldSearch}
             margin="dense"
             name="fieldSearch"
@@ -118,7 +141,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
             <Autocomplete
               disablePortal
               value={nameCustomer}
-              options={contacts}
+              options={nameCustomerFromDB}
               margin="dense"
               fullWidth
               renderInput={params => <TextField {...params} label="Власник" />}

@@ -30,6 +30,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
     }
   }, [pageContent]);
 
+  useEffect(()=>{
+    if(!searchDocumentDB){
+      return
+    }
+    setallDocuments(searchDocumentDB)
+  }, [searchDocumentDB])
+
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
     // window.open(pathFile, '_blank', `title=${typeDocument}`);

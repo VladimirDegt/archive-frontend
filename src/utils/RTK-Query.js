@@ -101,6 +101,17 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Archive'],
     }),
+    getNameCustomerFromDB: builder.query({
+      query: () => `/api/multiDataStore/customer`,
+      providesTags: ['multiDataStore'],
+    }),
+    getCustomerFromDB: builder.mutation({
+      query: (name ) => ({
+        url: `/api/archive/customer/${name}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Archive'],
+    }),
   }),
 });
 
@@ -116,5 +127,7 @@ export const {
   useGetSearchMutation,
   useGetLoadFileMutation,
   useLoadFileCSVMutation,
-  useGetAllDocumentsMutation
+  useGetAllDocumentsMutation,
+  useGetNameCustomerFromDBQuery,
+  useGetCustomerFromDBMutation
 } = contactApi;
