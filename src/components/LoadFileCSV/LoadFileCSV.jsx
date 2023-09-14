@@ -56,6 +56,10 @@ export const LoadFileCSV = ({ isOpen, handleClose }) => {
         });
         return;
       }
+      Notify.success('Дані з файлу .csv додані до БД', {
+        position: 'center-top',
+        distance: '10px',
+      });
     } catch (error) {
       console.log('error', error);
     } finally {

@@ -14,16 +14,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { useEffect, useState } from 'react';
-import { useGetLoadFileMutation } from 'utils/RTK-Query';
+import { useGetAllDocumentsMutation, useGetLoadFileMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 
 export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [getLoadFile] = useGetLoadFileMutation();
   const [viewURLFile, setViewURLFile] = useState('');
   const [isOpenCopyURL, setIsOpenCopyURL] = useState(false);
+  const [getLoadFile] = useGetLoadFileMutation();
+  const [getAllDocuments] = useGetAllDocumentsMutation();
+
 
   useEffect(() => {
     if (pageContent.length !== 0) {
@@ -56,6 +58,8 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
       position: 'center-top',
       distance: '10px',
     });
+    const response = await getAllDocuments(1);
+    setallDocuments(response.data.getFiles)
   };
 
   const handleClose = () => {
@@ -148,9 +152,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                           <TableCell align="left">{typeDocument}</TableCell>
                           <TableCell align="left">{nameDocument}</TableCell>
                           <TableCell align="left">{dateCreate}</TableCell>
-                          <TableCell align="center">
-                            {' '}
-                            <IconButton
+                          <TableCell align="center"><IconButton
                               color={
                                 fileURLPDF === '' ? 'disabled' : 'secondary'
                               }
@@ -160,10 +162,8 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                             >
                               <VisibilityIcon />
                             </IconButton>
-
                           </TableCell>
                           <TableCell align="center">
-                            {' '}
                             <IconButton
                               color={
                                 fileURLZIP === '' ? 'disabled' : 'secondary'
@@ -174,14 +174,11 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                             >
                               <FileDownloadIcon />
                             </IconButton>
-
                           </TableCell>
                           <TableCell align="left">{owner.name}</TableCell>
-                          <TableCell align="center">
-                            {' '}
-                            <IconButton
-                              color={fileURLZIP === '' ? 'primary' : 'disabled'}
-                              disabled={fileURLZIP !== ''}
+                          <TableCell align="center"><IconButton
+                              color={fileURLPDF === '' ? 'primary' : 'disabled'}
+                              disabled={fileURLPDF !== ''}
                               onClick={() => handleLoadFile(idDocument)}
                             >
                               <CloudDownloadIcon />
