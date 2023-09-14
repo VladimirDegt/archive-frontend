@@ -112,6 +112,13 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Archive'],
     }),
+    getDogovirFromDB: builder.mutation({
+      query: (number) => ({
+        url: `/api/archive/customer/dogovir/${number}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Archive'],
+    }),
   }),
 });
 
@@ -130,4 +137,5 @@ export const {
   useGetAllDocumentsMutation,
   useGetNameCustomerFromDBQuery,
   useGetCustomerFromDBMutation,
+  useGetDogovirFromDBMutation,
 } = contactApi;
