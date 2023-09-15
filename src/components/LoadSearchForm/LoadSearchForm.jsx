@@ -22,7 +22,7 @@ import {
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
-export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
+export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxPageAfterFilter }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldSearch, setFieldSearch] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
@@ -41,10 +41,13 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
       return;
     }
     setNameCustomerFromDB([...data.allNames, '']);
-    const updateNumbers = data.allNumbers.map(number => String(number));
+    const updateNumbers = [...data.allNumbers]
     const index = updateNumbers.findIndex(item => item === "null");
-    updateNumbers[index] = String(0);
-    setNumberDogovirFromDB([...updateNumbers, '']);
+    if(index !== -1) {
+      updateNumbers[index] = 0;
+    }
+    const sortUpdateNumbers = updateNumbers.sort((a, b) => a - b).map(number => String(number));
+    setNumberDogovirFromDB([...sortUpdateNumbers, '']);
   }, [data]);
 
   const handleFieldSearch = ({ target }) => {
@@ -131,6 +134,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
     setFieldSearch('');
     setNameCustomer('');
     setNumberDocument('');
+    changeMaxPageAfterFilter();
     handleClose();
   };
 

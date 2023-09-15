@@ -7,6 +7,7 @@ import { PaginationPage } from 'components/Pagination/Pagination';
 const Archive = () => {
   const [pageContent, setPageContent] = useState([]);
   const [searchDocumentDB, setSearchDocumentDB] = useState();
+  const [isFilterOn, setIsFilterOn] = useState(false);
 
   const searchDocument = search => {
     setSearchDocumentDB(search);
@@ -17,17 +18,22 @@ const Archive = () => {
   const getDocumentAfterLoadCSV = documents => {
     setPageContent(documents)
   }
+  const changeMaxPageAfterFilter = () => {
+    setIsFilterOn(true)
+  }
 
   return (
     <>
       <Header
       getDocumentAfterLoadCSV={getDocumentAfterLoadCSV}
-       searchDocument={searchDocument} />
+       searchDocument={searchDocument}
+       changeMaxPageAfterFilter={changeMaxPageAfterFilter}
+        />
       <TableAllDocument
         pageContent={pageContent}
         searchDocumentDB={searchDocumentDB}
         />
-        <PaginationPage getDocumentCurrentPage={getDocumentCurrentPage}/>
+        <PaginationPage getDocumentCurrentPage={getDocumentCurrentPage} isFilterOn={isFilterOn}/>
       <Footer />
     </>
   );

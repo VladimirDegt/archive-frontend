@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { useGetAllDocumentsMutation } from 'utils/RTK-Query';
 
-export const PaginationPage = ({ getDocumentCurrentPage }) => {
+export const PaginationPage = ({ getDocumentCurrentPage, isFilterOn }) => {
   const limit = 10;
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
@@ -37,6 +37,12 @@ export const PaginationPage = ({ getDocumentCurrentPage }) => {
   useEffect(() => {
     getDocumentCurrentPage(allDocuments)
   }, [allDocuments, getDocumentCurrentPage]);
+
+  useEffect(()=>{
+    if(isFilterOn){
+      setMaxPage(1)
+    }
+  },[isFilterOn])
 
   const handleChange =  async (_, value) => {
     setPage(value);

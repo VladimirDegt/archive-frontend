@@ -21,17 +21,17 @@ import { deleteToken } from 'redux/users/reducer';
 import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import SearchIcon from '@mui/icons-material/Search';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import CachedIcon from '@mui/icons-material/Cached';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 import { Analytics } from 'components/Analytics/Analytics';
 
 
-export const Header = ({ getDocumentAfterLoadCSV, searchDocument }) => {
+export const Header = ({ getDocumentAfterLoadCSV, searchDocument, changeMaxPageAfterFilter }) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
@@ -159,7 +159,7 @@ export const Header = ({ getDocumentAfterLoadCSV, searchDocument }) => {
                 onClick={handleClickSearch}
                 sx={{ marginLeft: 2 }}
               >
-                <SearchIcon fontSize="large" />
+                <FilterAltIcon fontSize="large" />
               </IconButton>
             )}
             {token && (
@@ -169,7 +169,7 @@ export const Header = ({ getDocumentAfterLoadCSV, searchDocument }) => {
                 onClick={handleClickReload}
                 sx={{ marginLeft: 2 }}
               >
-                <CachedIcon fontSize="large" />
+                <FilterAltOffIcon fontSize="large" />
               </IconButton>
             )}
             {token && (
@@ -204,6 +204,7 @@ export const Header = ({ getDocumentAfterLoadCSV, searchDocument }) => {
           handleClose={handleClose}
           isOpen={isOpenSearch}
           searchDocument={searchDocument}
+          changeMaxPageAfterFilter={changeMaxPageAfterFilter}
         />
       )}
 
