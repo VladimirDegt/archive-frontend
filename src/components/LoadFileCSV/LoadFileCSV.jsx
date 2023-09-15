@@ -10,12 +10,13 @@ import {
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
-import { useLoadFileCSVMutation } from 'utils/RTK-Query';
+import { useGetAllDocumentsMutation, useLoadFileCSVMutation } from 'utils/RTK-Query';
 
-export const LoadFileCSV = ({ isOpen, handleClose }) => {
+export const LoadFileCSV = ({ isOpen, handleClose, getDocumentAfterLoadCSV }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
   const [loadFileCSV] = useLoadFileCSVMutation();
+  const [getAllDocuments] = useGetAllDocumentsMutation();
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
@@ -60,6 +61,10 @@ export const LoadFileCSV = ({ isOpen, handleClose }) => {
         position: 'center-top',
         distance: '10px',
       });
+
+      const result = await getAllDocuments();
+      getDocumentAfterLoadCSV(result.data.getFiles);
+
     } catch (error) {
       console.log('error', error);
     } finally {

@@ -7,12 +7,11 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
-// import { LoadFileForm } from 'components/LoadFileForm/LoadFileForm';
-import { useGetCountDocumentQuery, useLogoutMutation } from 'utils/RTK-Query';
+import { useLogoutMutation } from 'utils/RTK-Query';
 import {
   selectAvatar,
   selectNameUser,
@@ -25,33 +24,33 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import CachedIcon from '@mui/icons-material/Cached';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
+import { Analytics } from 'components/Analytics/Analytics';
 
-export const Header = ({ countDocument, searchDocument }) => {
+
+export const Header = ({ getDocumentAfterLoadCSV, searchDocument }) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [isOpenLoadCSV, setIsOpenLoadCSV] = useState(false);
+  const [isOpenAnalytics, setIsOpenAnalytics] = useState(false);
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
-  const { data: getAllNumberDocument } = useGetCountDocumentQuery();
-
-  // useEffect(() => {
-  //   countDocument(getAllNumberDocument);
-  // }, [getAllNumberDocument, countDocument]);
 
   const handleClose = () => {
     setIsOpenChangeAvatar(false);
     setIsOpenLoadFile(false);
     setIsOpenSearch(false);
     setIsOpenLoadCSV(false);
+    setIsOpenAnalytics(false);
   };
 
   const handleClickLogout = async () => {
@@ -63,10 +62,6 @@ export const Header = ({ countDocument, searchDocument }) => {
       }
     } catch (error) {}
   };
-
-  // const handleClickLoadFileOld = () => {
-  //   setIsOpenLoadFile(true);
-  // };
 
   const handleClickSearch = () => {
     setIsOpenSearch(true);
@@ -85,8 +80,12 @@ export const Header = ({ countDocument, searchDocument }) => {
   };
 
   const handleClickReload = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
+
+  const handleClickAnalytics = () => {
+    setIsOpenAnalytics(true);
+  };
 
   return (
     <>
@@ -133,7 +132,7 @@ export const Header = ({ countDocument, searchDocument }) => {
               </IconButton>
             )} */}
 
-            {token && (
+            {/* {token && (
               <IconButton
                 color="inherit"
                 aria-label="vchasno"
@@ -142,7 +141,7 @@ export const Header = ({ countDocument, searchDocument }) => {
               >
                 <CloudUploadIcon fontSize="large" />
               </IconButton>
-            )}
+            )} */}
             {token && (
               <IconButton
                 color="inherit"
@@ -153,7 +152,7 @@ export const Header = ({ countDocument, searchDocument }) => {
                 <SaveAltIcon fontSize="large" />
               </IconButton>
             )}
-                        {token && (
+            {token && (
               <IconButton
                 color="inherit"
                 aria-label="add file"
@@ -163,7 +162,7 @@ export const Header = ({ countDocument, searchDocument }) => {
                 <SearchIcon fontSize="large" />
               </IconButton>
             )}
-                        {token && (
+            {token && (
               <IconButton
                 color="inherit"
                 aria-label="reload"
@@ -171,6 +170,16 @@ export const Header = ({ countDocument, searchDocument }) => {
                 sx={{ marginLeft: 2 }}
               >
                 <CachedIcon fontSize="large" />
+              </IconButton>
+            )}
+            {token && (
+              <IconButton
+                color="inherit"
+                aria-label="reload"
+                onClick={handleClickAnalytics}
+                sx={{ marginLeft: 2 }}
+              >
+                <AnalyticsIcon fontSize="large" />
               </IconButton>
             )}
           </Box>
@@ -190,14 +199,6 @@ export const Header = ({ countDocument, searchDocument }) => {
         <ChangeAvatar handleClose={handleClose} isOpen={isOpenChangeAvatar} />
       )}
 
-      {/* {isOpenLoadFile && (
-        <LoadFileForm
-          handleClose={handleClose}
-          isOpen={isOpenLoadFile}
-          getAllNumberDocument={getAllNumberDocument}
-        />
-      )} */}
-
       {isOpenSearch && (
         <LoadSearchForm
           handleClose={handleClose}
@@ -210,7 +211,17 @@ export const Header = ({ countDocument, searchDocument }) => {
         <FileUploadForm handleClose={handleClose} isOpen={isOpenLoadFile} />
       )}
       {isOpenLoadCSV && (
-        <LoadFileCSV handleClose={handleClose} isOpen={isOpenLoadCSV} />
+        <LoadFileCSV
+          handleClose={handleClose}
+          isOpen={isOpenLoadCSV}
+          getDocumentAfterLoadCSV={getDocumentAfterLoadCSV}
+        />
+      )}
+      {isOpenAnalytics && (
+        <Analytics
+          handleClose={handleClose}
+          isOpen={isOpenAnalytics}
+        />
       )}
     </>
   );

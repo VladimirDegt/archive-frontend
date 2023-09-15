@@ -14,6 +14,7 @@ import {
 import { Notify } from 'notiflix';
 import { useEffect, useState } from 'react';
 import {
+  useGetActFromDBMutation,
   useGetCustomerFromDBMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
@@ -32,6 +33,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const [getSearch] = useGetSearchMutation();
   const [getCustomerFromDB] = useGetCustomerFromDBMutation();
   const [getDogovirFromDB] = useGetDogovirFromDBMutation();
+  const [getActFromDB] = useGetActFromDBMutation();
   const { data } = useGetNameCustomerFromDBQuery();
 
   useEffect(() => {
@@ -40,6 +42,8 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
     }
     setNameCustomerFromDB([...data.allNames, '']);
     const updateNumbers = data.allNumbers.map(number => String(number));
+    const index = updateNumbers.findIndex(item => item === "null");
+    updateNumbers[index] = String(0);
     setNumberDogovirFromDB([...updateNumbers, '']);
   }, [data]);
 
@@ -72,18 +76,52 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (fieldSearch === 'name') {
+          if (!nameCustomer) {
+      Notify.failure('Виберіть замовника', {
+        position: 'center-right',
+        distance: '10px',
+      });
+      return;
+    }
       setIsLoading(true);
       const responce = await getCustomerFromDB(nameCustomer);
       setIsLoading(false);
       searchDocument(responce.data);
     }
     if (fieldSearch === 'numberDog') {
+      if (!numberDocument) {
+        Notify.failure('Виберіть номер', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
       setIsLoading(true);
       const responce = await getDogovirFromDB(numberDocument);
       setIsLoading(false);
       if (responce.data.length === 0) {
         Notify.failure('Договір з таким номером не знайдено', {
-          position: 'center-top',
+          position: 'center-right',
+          distance: '10px',
+        });
+      }
+      searchDocument(responce.data);
+    }
+
+    if (fieldSearch === 'numberAct') {
+      if (!numberDocument) {
+        Notify.failure('Виберіть номер', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
+      setIsLoading(true);
+      const responce = await getActFromDB(numberDocument);
+      setIsLoading(false);
+      if (responce.data.length === 0) {
+        Notify.failure('Акт з таким номером не знайдено', {
+          position: 'center-right',
           distance: '10px',
         });
       }

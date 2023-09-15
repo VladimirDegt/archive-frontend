@@ -24,7 +24,7 @@ export const CopyURLFile = ({ handleClose, isOpen, viewURLFile }) => {
         <Container sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography sx={{fontSize: 12}} align="left">{viewURLFile}</Typography>
         <IconButton onClick={handleSaveURL}>
-          <ContentCopyIcon />
+          <ContentCopyIcon color='primary'/>
         </IconButton>
         </Container>
         <Button onClick={handleCloseForm}>Cancel</Button>
