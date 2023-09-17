@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/archive-frontend/static/css/main.7acaea2f.css",
-    "main.js": "/archive-frontend/static/js/main.92435887.js",
-    "static/js/917.dc9d9d12.chunk.js": "/archive-frontend/static/js/917.dc9d9d12.chunk.js",
+    "main.js": "/archive-frontend/static/js/main.df2752b9.js",
+    "static/js/260.27303b3d.chunk.js": "/archive-frontend/static/js/260.27303b3d.chunk.js",
     "static/js/256.1418cb36.chunk.js": "/archive-frontend/static/js/256.1418cb36.chunk.js",
-    "static/js/562.7b57d2d9.chunk.js": "/archive-frontend/static/js/562.7b57d2d9.chunk.js",
-    "static/js/390.16eca49c.chunk.js": "/archive-frontend/static/js/390.16eca49c.chunk.js",
+    "static/js/66.854e31c0.chunk.js": "/archive-frontend/static/js/66.854e31c0.chunk.js",
+    "static/js/917.cc8f5fc1.chunk.js": "/archive-frontend/static/js/917.cc8f5fc1.chunk.js",
     "static/media/backgroundimage-full.jpg": "/archive-frontend/static/media/backgroundimage-full.947a8137181509afdc2c.jpg",
     "index.html": "/archive-frontend/index.html",
     "main.7acaea2f.css.map": "/archive-frontend/static/css/main.7acaea2f.css.map",
-    "main.92435887.js.map": "/archive-frontend/static/js/main.92435887.js.map",
-    "917.dc9d9d12.chunk.js.map": "/archive-frontend/static/js/917.dc9d9d12.chunk.js.map",
+    "main.df2752b9.js.map": "/archive-frontend/static/js/main.df2752b9.js.map",
+    "260.27303b3d.chunk.js.map": "/archive-frontend/static/js/260.27303b3d.chunk.js.map",
     "256.1418cb36.chunk.js.map": "/archive-frontend/static/js/256.1418cb36.chunk.js.map",
-    "562.7b57d2d9.chunk.js.map": "/archive-frontend/static/js/562.7b57d2d9.chunk.js.map",
-    "390.16eca49c.chunk.js.map": "/archive-frontend/static/js/390.16eca49c.chunk.js.map"
+    "66.854e31c0.chunk.js.map": "/archive-frontend/static/js/66.854e31c0.chunk.js.map",
+    "917.cc8f5fc1.chunk.js.map": "/archive-frontend/static/js/917.cc8f5fc1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7acaea2f.css",
-    "static/js/main.92435887.js"
+    "static/js/main.df2752b9.js"
   ]
 }
