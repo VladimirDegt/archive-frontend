@@ -14,9 +14,13 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { useEffect, useState } from 'react';
-import { useGetAllDocumentsMutation, useGetLoadFileMutation } from 'utils/RTK-Query';
+import {
+  useGetAllDocumentsMutation,
+  useGetLoadFileMutation,
+} from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
+import { formatDateTime } from 'utils/format-date-time';
 
 export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [allDocuments, setallDocuments] = useState([]);
@@ -26,177 +30,182 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [getLoadFile] = useGetLoadFileMutation();
   const [getAllDocuments] = useGetAllDocumentsMutation();
 
-
   useEffect(() => {
     if (pageContent.length !== 0) {
       setallDocuments(pageContent);
     }
   }, [pageContent]);
 
-  useEffect(()=>{
-    if(!searchDocumentDB){
-      return
+  useEffect(() => {
+    if (!searchDocumentDB) {
+      return;
     }
-    setallDocuments(searchDocumentDB)
-  }, [searchDocumentDB])
+    setallDocuments(searchDocumentDB);
+  }, [searchDocumentDB]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
     // window.open(pathFile, '_blank', `title=${typeDocument}`);
     setViewURLFile(fileURL);
-    if(!fileURL){
-      return
+    if (!fileURL) {
+      return;
     }
-    setIsOpenCopyURL(true)
+    setIsOpenCopyURL(true);
   };
 
   const handleLoadFile = async idDocument => {
     setIsLoading(true);
     await getLoadFile(idDocument);
     setIsLoading(false);
-    Notify.success("Файлы завантажені у базу", {
+    Notify.success('Файлы завантажені у базу', {
       position: 'center-top',
       distance: '10px',
     });
     const response = await getAllDocuments(1);
-    setallDocuments(response.data.getFiles)
+    setallDocuments(response.data.getFiles);
   };
 
   const handleClose = () => {
-    setIsOpenCopyURL(false)
+    setIsOpenCopyURL(false);
   };
 
   return (
     <main style={{ flexGrow: 1 }}>
       <section>
-      {isLoading ? (
-                <SkeletonAuth totalRow={10} />
-              ) : (        <Container maxWidth="xl" sx={{ paddingTop: 10, minWidth:"100%" }}>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>
-                        Замовник
-                      </TableCell>
-                      <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>
-                        Email
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Тип документа
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Ім'я документа
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Дата створення
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Переглянути PDF
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Завантажити ZIP
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Автор
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ fontWeight: 'bold', fontSize: '20px' }}
-                      >
-                        Завантажити
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-     
-                    <TableBody>
-                      {allDocuments?.map(
-                        ({
-                          idDocument,
-                          dateCreate,
-                          nameDocument,
-                          typeDocument,
-                          emailCustomer,
-                          nameCustomer,
-                          fileURLPDF,
-                          fileURLZIP,
-                          owner,
-                        }) => {
-                          return (
-                            <TableRow
-                              key={idDocument}
-                              sx={{ '& > *': { borderBottom: 'unset' } }}
-                            >
-                              <TableCell component="th" scope="row">
-                                {nameCustomer}
-                              </TableCell>
-                              <TableCell align="left">{emailCustomer}</TableCell>
-                              <TableCell align="left">{typeDocument}</TableCell>
-                              <TableCell align="left">{nameDocument}</TableCell>
-                              <TableCell align="left">{dateCreate}</TableCell>
-                              <TableCell align="center"><IconButton
-                                  color={
-                                    fileURLPDF === '' ? 'disabled' : 'secondary'
-                                  }
-                                  onClick={() =>
-                                    handleOpenFile(fileURLPDF, typeDocument)
-                                  }
-                                >
-                                  <VisibilityIcon />
-                                </IconButton>
-                              </TableCell>
-                              <TableCell align="center">
-                                <IconButton
-                                  color={
-                                    fileURLZIP === '' ? 'disabled' : 'secondary'
-                                  }
-                                  onClick={() =>
-                                    handleOpenFile(fileURLZIP, typeDocument)
-                                  }
-                                >
-                                  <FileDownloadIcon />
-                                </IconButton>
-                              </TableCell>
-                              <TableCell align="left">{owner.name}</TableCell>
-                              <TableCell align="center"><IconButton
-                                  color={fileURLPDF === '' ? 'primary' : 'disabled'}
-                                  disabled={fileURLPDF !== ''}
-                                  onClick={() => handleLoadFile(idDocument)}
-                                >
-                                  <CloudDownloadIcon />
-                                </IconButton>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        }
-                      )}
-                    </TableBody>
-                  
-                </Table>
-              </TableContainer>
-            </Container>)}
+        {isLoading ? (
+          <SkeletonAuth totalRow={10} />
+        ) : (
+          <Container maxWidth="xl" sx={{ paddingTop: 10, minWidth: '100%' }}>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                      Замовник
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Тип документа
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Ім'я документа
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Договір
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Дата
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Переглянути PDF
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Переглянути ZIP
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Завантажити до архіву
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
 
+                <TableBody>
+                  {allDocuments?.map(
+                    ({
+                      idDocument,
+                      dateCreate,
+                      nameDocument,
+                      typeDocument,
+                      emailCustomer,
+                      nameCustomer,
+                      fileURLPDF,
+                      fileURLZIP,
+                      numberDogovir,
+                      contractStartDate,
+                      owner,
+                    }) => {
+                      return (
+                        <TableRow
+                          key={idDocument}
+                          sx={{ '& > *': { borderBottom: 'unset' } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {nameCustomer}
+                          </TableCell>
+                          <TableCell align="left">{typeDocument}</TableCell>
+                          <TableCell align="left">{nameDocument}</TableCell>
+                          <TableCell align="center">{numberDogovir}</TableCell>
+                          <TableCell align="center">
+                            {formatDateTime(contractStartDate)}
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              color={
+                                fileURLPDF === '' ? 'disabled' : 'secondary'
+                              }
+                              onClick={() =>
+                                handleOpenFile(fileURLPDF, typeDocument)
+                              }
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              color={
+                                fileURLZIP === '' ? 'disabled' : 'secondary'
+                              }
+                              onClick={() =>
+                                handleOpenFile(fileURLZIP, typeDocument)
+                              }
+                            >
+                              <FileDownloadIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              color={fileURLPDF === '' ? 'primary' : 'disabled'}
+                              disabled={fileURLPDF !== ''}
+                              onClick={() => handleLoadFile(idDocument)}
+                            >
+                              <CloudDownloadIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Container>
+        )}
       </section>
       {isOpenCopyURL && (
-        <CopyURLFile handleClose={handleClose} isOpen={isOpenCopyURL} viewURLFile={viewURLFile}/>
+        <CopyURLFile
+          handleClose={handleClose}
+          isOpen={isOpenCopyURL}
+          viewURLFile={viewURLFile}
+        />
       )}
     </main>
   );

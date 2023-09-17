@@ -19,14 +19,11 @@ export const App = () => {
         minHeight: '100vh',
       }}
     >
-      <Suspense fallback={<SkeletonLoading>Loading...</SkeletonLoading>}>
+      <Suspense
+        fallback={<SkeletonLoading totalRow={10}>Loading...</SkeletonLoading>}
+      >
         <Routes>
-          <Route
-            path="/"
-            element={
-                <Home />
-            }
-          />
+          <Route path="/" element={<Home />} />
           <Route
             path="/archive"
             element={

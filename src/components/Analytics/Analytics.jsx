@@ -32,7 +32,15 @@ export const Analytics = ({ handleClose, isOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="copyURL">
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="copyURL"
+      sx={{
+        position: 'absolute',
+        top: '-45%',
+      }}
+    >
       {isLoading ? (
         <SkeletonAuth totalRow={3} sx={{ minWidth: 400 }} />
       ) : (

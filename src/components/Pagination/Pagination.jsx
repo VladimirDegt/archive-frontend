@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useGetAllDocumentsMutation } from 'utils/RTK-Query';
 
 export const PaginationPage = ({ getDocumentCurrentPage, isFilterOn }) => {
-  const limit = 10;
+  const limit = 12;
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [allDocuments, setallDocuments] = useState([]);
@@ -24,27 +24,27 @@ export const PaginationPage = ({ getDocumentCurrentPage, isFilterOn }) => {
     async function fetchData() {
       try {
         const response = await getAllDocuments(page, limit);
-        setIsError(false)
+        setIsError(false);
         setallDocuments(response.data.getFiles);
-        setTotalDocuments(response.data.total)
+        setTotalDocuments(response.data.total);
       } catch (error) {
-        setIsError(true)
+        setIsError(true);
       }
     }
     fetchData();
   }, [page, getAllDocuments]);
 
   useEffect(() => {
-    getDocumentCurrentPage(allDocuments)
+    getDocumentCurrentPage(allDocuments);
   }, [allDocuments, getDocumentCurrentPage]);
 
-  useEffect(()=>{
-    if(isFilterOn){
-      setMaxPage(1)
+  useEffect(() => {
+    if (isFilterOn) {
+      setMaxPage(1);
     }
-  },[isFilterOn])
+  }, [isFilterOn]);
 
-  const handleChange =  async (_, value) => {
+  const handleChange = async (_, value) => {
     setPage(value);
   };
 

@@ -67,57 +67,63 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
       // const avatarURL = `https://archive-men6.onrender.com/${response.data}`;
       const avatarURL = `http://localhost:3001/${response.data}`;
       dispatch(addAvatar(avatarURL));
-
     } catch (error) {
       console.log('error', error.message);
     }
-   
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
-            {isLoading ? (
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="registration"
+      sx={{
+        position: 'absolute',
+        top: '-50%',
+      }}
+    >
+      {isLoading ? (
         <SkeletonAvatar totalRow={1} />
       ) : (
-      <form onSubmit={handleSubmit}>
-        <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
-          Змінити аватарку
-        </DialogTitle>
-        <Avatar
-          alt="avatar"
-          src={avatar}
-          sx={{
-            width: 56,
-            height: 56,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginBottom: 2,
-            marginTop: 2,
-          }}
-        />
-        <DialogContent>
-          <InputLabel htmlFor="file-upload">Вибірить аватарку</InputLabel>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="avatar"
-            id="file-upload"
-            type="file"
-            fullWidth
-            onChange={handleFileChange}
+        <form onSubmit={handleSubmit}>
+          <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
+            Змінити аватарку
+          </DialogTitle>
+          <Avatar
+            alt="avatar"
+            src={avatar}
+            sx={{
+              width: 56,
+              height: 56,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginBottom: 2,
+              marginTop: 2,
+            }}
           />
-        </DialogContent>
-        <DialogActions
-          sx={{
-            paddingRight: 3,
-            paddingLeft: 3,
-            justifyContent: 'center',
-          }}
-        >
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">відправити</Button>
-        </DialogActions>
-      </form>
+          <DialogContent>
+            <InputLabel htmlFor="file-upload">Вибірить аватарку</InputLabel>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="avatar"
+              id="file-upload"
+              type="file"
+              fullWidth
+              onChange={handleFileChange}
+            />
+          </DialogContent>
+          <DialogActions
+            sx={{
+              paddingRight: 3,
+              paddingLeft: 3,
+              justifyContent: 'center',
+            }}
+          >
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">відправити</Button>
+          </DialogActions>
+        </form>
       )}
     </Dialog>
   );

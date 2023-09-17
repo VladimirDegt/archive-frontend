@@ -95,7 +95,7 @@ export const contactApi = createApi({
       invalidatesTags: ['Files'],
     }),
     getAllDocuments: builder.mutation({
-      query: (page, limit=10 ) => ({
+      query: (page, limit = 12) => ({
         url: `/api/archive?page=${page}&limit=${limit}`,
         method: 'POST',
       }),
@@ -106,21 +106,21 @@ export const contactApi = createApi({
       providesTags: ['multiDataStore'],
     }),
     getCustomerFromDB: builder.mutation({
-      query: (name ) => ({
+      query: name => ({
         url: `/api/archive/customer/${name}`,
         method: 'POST',
       }),
       invalidatesTags: ['Archive'],
     }),
     getDogovirFromDB: builder.mutation({
-      query: (number) => ({
+      query: number => ({
         url: `/api/archive/customer/dogovir/${number}`,
         method: 'POST',
       }),
       invalidatesTags: ['Archive'],
     }),
     getActFromDB: builder.mutation({
-      query: (number) => ({
+      query: number => ({
         url: `/api/archive/customer/act/${number}`,
         method: 'POST',
       }),

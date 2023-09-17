@@ -18,11 +18,16 @@ import {
   useGetCustomerFromDBMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
-  useGetSearchMutation,
+  // useGetSearchMutation,
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
-export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxPageAfterFilter }) => {
+export const LoadSearchForm = ({
+  isOpen,
+  handleClose,
+  searchDocument,
+  changeMaxPageAfterFilter,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldSearch, setFieldSearch] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
@@ -30,7 +35,7 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxP
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
   const [nameCustomerFromDB, setNameCustomerFromDB] = useState('');
   const [numberDogovirFromDB, setNumberDogovirFromDB] = useState('');
-  const [getSearch] = useGetSearchMutation();
+  // const [getSearch] = useGetSearchMutation();
   const [getCustomerFromDB] = useGetCustomerFromDBMutation();
   const [getDogovirFromDB] = useGetDogovirFromDBMutation();
   const [getActFromDB] = useGetActFromDBMutation();
@@ -41,12 +46,14 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxP
       return;
     }
     setNameCustomerFromDB([...data.allNames, '']);
-    const updateNumbers = [...data.allNumbers]
-    const index = updateNumbers.findIndex(item => item === "null");
-    if(index !== -1) {
+    const updateNumbers = [...data.allNumbers];
+    const index = updateNumbers.findIndex(item => item === 'null');
+    if (index !== -1) {
       updateNumbers[index] = 0;
     }
-    const sortUpdateNumbers = updateNumbers.sort((a, b) => a - b).map(number => String(number));
+    const sortUpdateNumbers = updateNumbers
+      .sort((a, b) => a - b)
+      .map(number => String(number));
     setNumberDogovirFromDB([...sortUpdateNumbers, '']);
   }, [data]);
 
@@ -79,13 +86,13 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxP
   const handleSubmit = async e => {
     e.preventDefault();
     if (fieldSearch === 'name') {
-          if (!nameCustomer) {
-      Notify.failure('Виберіть замовника', {
-        position: 'center-right',
-        distance: '10px',
-      });
-      return;
-    }
+      if (!nameCustomer) {
+        Notify.failure('Виберіть замовника', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
       setIsLoading(true);
       const responce = await getCustomerFromDB(nameCustomer);
       setIsLoading(false);
@@ -177,7 +184,15 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxP
   // };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="search">
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="search"
+      sx={{
+        position: 'absolute',
+        top: '-50%',
+      }}
+    >
       {isLoading ? (
         <SkeletonAuth totalRow={2} />
       ) : (
@@ -185,7 +200,11 @@ export const LoadSearchForm = ({ isOpen, handleClose, searchDocument, changeMaxP
           <DialogTitle id="search" sx={{ textAlign: 'center', minWidth: 380 }}>
             Пошук
           </DialogTitle>
-          <DialogContent sx={{ height: isAutocompleteFocused ? 400 : 'auto' }}>
+          <DialogContent
+            sx={{
+              height: isAutocompleteFocused ? 400 : 'auto',
+            }}
+          >
             <InputLabel id="option-search">Що шукаємо</InputLabel>
             <Select
               labelId="option-search"

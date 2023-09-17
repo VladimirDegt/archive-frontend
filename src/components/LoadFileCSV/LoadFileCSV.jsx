@@ -10,9 +10,16 @@ import {
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
-import { useGetAllDocumentsMutation, useLoadFileCSVMutation } from 'utils/RTK-Query';
+import {
+  useGetAllDocumentsMutation,
+  useLoadFileCSVMutation,
+} from 'utils/RTK-Query';
 
-export const LoadFileCSV = ({ isOpen, handleClose, getDocumentAfterLoadCSV }) => {
+export const LoadFileCSV = ({
+  isOpen,
+  handleClose,
+  getDocumentAfterLoadCSV,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
   const [loadFileCSV] = useLoadFileCSVMutation();
@@ -64,7 +71,6 @@ export const LoadFileCSV = ({ isOpen, handleClose, getDocumentAfterLoadCSV }) =>
 
       const result = await getAllDocuments();
       getDocumentAfterLoadCSV(result.data.getFiles);
-
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -74,7 +80,15 @@ export const LoadFileCSV = ({ isOpen, handleClose, getDocumentAfterLoadCSV }) =>
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration">
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="registration"
+      sx={{
+        position: 'absolute',
+        top: '-50%',
+      }}
+    >
       {isLoading ? (
         <SkeletonAuth totalRow={1} />
       ) : (
