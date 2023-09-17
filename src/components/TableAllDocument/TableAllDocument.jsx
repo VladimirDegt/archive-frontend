@@ -46,7 +46,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const handleOpenFile = (fileURL, typeDocument) => {
     const pathFile = `${fileURL}`;
     window.open(pathFile, '_blank', `title=${typeDocument}`);
-    setViewURLFile(fileURL);
+    // setViewURLFile(fileURL);
     if (!fileURL) {
       return;
     }
@@ -65,9 +65,9 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
     setallDocuments(response.data.getFiles);
   };
 
-  const handleClose = () => {
-    setIsOpenCopyURL(false);
-  };
+  // const handleClose = () => {
+  //   setIsOpenCopyURL(false);
+  // };
 
   return (
     <main style={{ flexGrow: 1 }}>
