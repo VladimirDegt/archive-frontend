@@ -20,7 +20,7 @@ import {
 import { deleteToken } from 'redux/users/reducer';
 import logo from '../../img/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+// import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -30,8 +30,11 @@ import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 import { Analytics } from 'components/Analytics/Analytics';
 
-
-export const Header = ({ getDocumentAfterLoadCSV, searchDocument, changeMaxPageAfterFilter }) => {
+export const Header = ({
+  getDocumentAfterLoadCSV,
+  searchDocument,
+  changeMaxPageAfterFilter,
+}) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
   const [isOpenLoadFile, setIsOpenLoadFile] = useState(false);
@@ -71,9 +74,9 @@ export const Header = ({ getDocumentAfterLoadCSV, searchDocument, changeMaxPageA
     setIsOpenChangeAvatar(true);
   };
 
-  const handleClickLoadFile = () => {
-    setIsOpenLoadFile(true);
-  };
+  // const handleClickLoadFile = () => {
+  //   setIsOpenLoadFile(true);
+  // };
 
   const handleClickLoadCSV = () => {
     setIsOpenLoadCSV(true);
@@ -219,10 +222,7 @@ export const Header = ({ getDocumentAfterLoadCSV, searchDocument, changeMaxPageA
         />
       )}
       {isOpenAnalytics && (
-        <Analytics
-          handleClose={handleClose}
-          isOpen={isOpenAnalytics}
-        />
+        <Analytics handleClose={handleClose} isOpen={isOpenAnalytics} />
       )}
     </>
   );
