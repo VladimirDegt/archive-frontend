@@ -19,14 +19,14 @@ import {
   useGetLoadFileMutation,
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
-import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
+// import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 import { formatDateTime } from 'utils/format-date-time';
 
 export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [viewURLFile, setViewURLFile] = useState('');
-  const [isOpenCopyURL, setIsOpenCopyURL] = useState(false);
+  // const [viewURLFile, setViewURLFile] = useState('');
+  // const [isOpenCopyURL, setIsOpenCopyURL] = useState(false);
   const [getLoadFile] = useGetLoadFileMutation();
   const [getAllDocuments] = useGetAllDocumentsMutation();
 
@@ -44,13 +44,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   }, [searchDocumentDB]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
-    // const pathFile = `${fileURL}`;
-    // window.open(pathFile, '_blank', `title=${typeDocument}`);
+    const pathFile = `${fileURL}`;
+    window.open(pathFile, '_blank', `title=${typeDocument}`);
     setViewURLFile(fileURL);
     if (!fileURL) {
       return;
     }
-    setIsOpenCopyURL(true);
+    // setIsOpenCopyURL(true);
   };
 
   const handleLoadFile = async idDocument => {
@@ -132,16 +132,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                   {allDocuments?.map(
                     ({
                       idDocument,
-                      dateCreate,
                       nameDocument,
                       typeDocument,
-                      emailCustomer,
                       nameCustomer,
                       fileURLPDF,
                       fileURLZIP,
                       numberDogovir,
                       contractStartDate,
-                      owner,
                     }) => {
                       return (
                         <TableRow
@@ -200,13 +197,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
           </Container>
         )}
       </section>
-      {isOpenCopyURL && (
+      {/* {isOpenCopyURL && (
         <CopyURLFile
           handleClose={handleClose}
           isOpen={isOpenCopyURL}
           viewURLFile={viewURLFile}
         />
-      )}
+      )} */}
     </main>
   );
 };
