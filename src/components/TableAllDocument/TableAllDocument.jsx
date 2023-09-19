@@ -19,14 +19,14 @@ import {
   useGetLoadFileMutation,
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
-// import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
+import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 import { formatDateTime } from 'utils/format-date-time';
 
 export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [viewURLFile, setViewURLFile] = useState('');
-  // const [isOpenCopyURL, setIsOpenCopyURL] = useState(false);
+  const [viewURLFile, setViewURLFile] = useState('');
+  const [isOpenCopyURL, setIsOpenCopyURL] = useState(false);
   const [getLoadFile] = useGetLoadFileMutation();
   const [getAllDocuments] = useGetAllDocumentsMutation();
 
@@ -44,13 +44,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
   }, [searchDocumentDB]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
-    const pathFile = `${fileURL}`;
-    window.open(pathFile, '_blank', `title=${typeDocument}`);
-    // setViewURLFile(fileURL);
+    // const pathFile = `${fileURL}`;
+    // window.open(pathFile, '_blank', `title=${typeDocument}`);
+    setViewURLFile(fileURL);
     if (!fileURL) {
       return;
     }
-    // setIsOpenCopyURL(true);
+    setIsOpenCopyURL(true);
   };
 
   const handleLoadFile = async idDocument => {
@@ -65,9 +65,9 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
     setallDocuments(response.data.getFiles);
   };
 
-  // const handleClose = () => {
-  //   setIsOpenCopyURL(false);
-  // };
+  const handleClose = () => {
+    setIsOpenCopyURL(false);
+  };
 
   return (
     <main style={{ flexGrow: 1 }}>
@@ -96,10 +96,16 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                       Ім'я документа
                     </TableCell>
                     <TableCell
-                      align="left"
+                      align="center"
                       style={{ fontWeight: 'bold', fontSize: '20px' }}
                     >
                       Договір
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                    >
+                      Рахунок
                     </TableCell>
                     <TableCell
                       align="center"
@@ -139,6 +145,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                       fileURLZIP,
                       numberDogovir,
                       contractStartDate,
+                      numberRachunok
                     }) => {
                       return (
                         <TableRow
@@ -151,6 +158,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
                           <TableCell align="left">{typeDocument}</TableCell>
                           <TableCell align="left">{nameDocument}</TableCell>
                           <TableCell align="center">{numberDogovir}</TableCell>
+                          <TableCell align="left">{numberRachunok}</TableCell>
                           <TableCell align="center">
                             {formatDateTime(contractStartDate)}
                           </TableCell>
@@ -197,13 +205,13 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
           </Container>
         )}
       </section>
-      {/* {isOpenCopyURL && (
+      {isOpenCopyURL && (
         <CopyURLFile
           handleClose={handleClose}
           isOpen={isOpenCopyURL}
           viewURLFile={viewURLFile}
         />
-      )} */}
+      )}
     </main>
   );
 };

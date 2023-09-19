@@ -64,7 +64,6 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
       setSelectedFile('');
       handleClose();
 
-      // const avatarURL = `https://archive-men6.onrender.com/${response.data}`;
       const avatarURL = `http://localhost:3001/${response.data}`;
       dispatch(addAvatar(avatarURL));
     } catch (error) {

@@ -7,7 +7,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ChangeAvatar } from 'components/ChangeAvatar/ChangeAvatar';
@@ -29,6 +29,8 @@ import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 import { Analytics } from 'components/Analytics/Analytics';
+import { fetchCurrentWeather } from 'utils/fetch-current-weather';
+import { CurrentWeather } from 'components/CurrentWeather/CurrentWeather';
 
 export const Header = ({
   getDocumentAfterLoadCSV,
@@ -41,12 +43,21 @@ export const Header = ({
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [isOpenLoadCSV, setIsOpenLoadCSV] = useState(false);
   const [isOpenAnalytics, setIsOpenAnalytics] = useState(false);
+  const [currentWeather, setCurrentWeather] = useState('');
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
+
+  useEffect(() => {
+    async function fetchData() {
+      const weahter = await fetchCurrentWeather()
+      setCurrentWeather(weahter)
+    }
+    fetchData();
+  }, []);
 
   const handleClose = () => {
     setIsOpenChangeAvatar(false);
@@ -89,7 +100,7 @@ export const Header = ({
   const handleClickAnalytics = () => {
     setIsOpenAnalytics(true);
   };
-
+ 
   return (
     <>
       <AppBar>
@@ -186,6 +197,8 @@ export const Header = ({
               </IconButton>
             )}
           </Box>
+          <Box sx={{display: "flex", gap: 10}}>
+          {currentWeather && <CurrentWeather currentWeather={currentWeather}/>}
           {token && (
             <IconButton
               color="inherit"
@@ -195,6 +208,7 @@ export const Header = ({
               <LogoutIcon fontSize="large" />
             </IconButton>
           )}
+          </Box>
         </Toolbar>
       </AppBar>
 

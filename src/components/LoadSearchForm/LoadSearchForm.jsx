@@ -10,7 +10,6 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-// import { contacts } from 'db/contacts';
 import { Notify } from 'notiflix';
 import { useEffect, useState } from 'react';
 import {
@@ -18,7 +17,6 @@ import {
   useGetCustomerFromDBMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
-  // useGetSearchMutation,
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
@@ -35,7 +33,6 @@ export const LoadSearchForm = ({
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
   const [nameCustomerFromDB, setNameCustomerFromDB] = useState('');
   const [numberDogovirFromDB, setNumberDogovirFromDB] = useState('');
-  // const [getSearch] = useGetSearchMutation();
   const [getCustomerFromDB] = useGetCustomerFromDBMutation();
   const [getDogovirFromDB] = useGetDogovirFromDBMutation();
   const [getActFromDB] = useGetActFromDBMutation();
@@ -145,44 +142,6 @@ export const LoadSearchForm = ({
     handleClose();
   };
 
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
-
-  //   if (!nameCustomer && !numberDocument) {
-  //     Notify.warning('Виберіть замовника', {
-  //       position: 'center-top',
-  //       distance: '10px',
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-  //     setIsLoading(true);
-  //     const response = await getSearch({
-  //       nameCustomer,
-  //       numberDocument,
-  //     });
-  //     setIsLoading(false);
-
-  //     if (response.error) {
-  //       Notify.failure(response.error.data.message, {
-  //         position: 'center-top',
-  //         distance: '10px',
-  //       });
-  //       return;
-  //     }
-
-  //     searchDocument([response.data]);
-
-  //     setFieldSearch('');
-  //     setNameCustomer('');
-  //     setNumberDocument('');
-  //     handleClose();
-  //   } catch (error) {
-  //     console.log('error', error.message);
-  //   }
-  // };
-
   return (
     <Dialog
       open={isOpen}
@@ -235,6 +194,9 @@ export const LoadSearchForm = ({
                 onBlur={handleAutocompleteBlur}
                 sx={{ marginTop: 3 }}
                 required
+                ListboxProps={{
+                  style: { fontSize: '14px' }, 
+                }}
               />
             )}
 
@@ -251,28 +213,10 @@ export const LoadSearchForm = ({
                 onBlur={handleAutocompleteBlur}
                 sx={{ marginTop: 3 }}
                 required
+                ListboxProps={{
+                  style: { fontSize: '14px' }, 
+                }}
               />
-              // <>
-              //   <InputLabel id="number" sx={{ marginTop: 3 }}>
-              //     Номер
-              //   </InputLabel>
-              //   <Select
-              //     labelId="number"
-              //     value={numberDocument}
-              //     margin="dense"
-              //     name="number"
-              //     type="text"
-              //     fullWidth
-              //     onChange={handleNumberDocument}
-              //     required
-              //   >
-              //     {numberDogovir.map((item, index) => (
-              //       <MenuItem value={item} key={index}>
-              //         {item}
-              //       </MenuItem>
-              //     ))}
-              //   </Select>
-              // </>
             )}
           </DialogContent>
           <DialogActions
