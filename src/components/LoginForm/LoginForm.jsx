@@ -34,7 +34,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
       dispatch(getNameUser(response.data.name));
       navigate('/archive', { replace: true });
     } catch (error) {
-      Notify.failure('Login not success!', {
+      Notify.failure('Будь ласка зареєструйтеся', {
         position: 'center-top',
         distance: '10px',
       });

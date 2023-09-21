@@ -27,7 +27,7 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
       setIsLoading(false);
       
       if (response.data) {
-        Notify.success('Registration success!', {
+        Notify.success('Ви зареєструвалися та вхід розблоковано', {
           position: 'center-top',
           distance: '10px',
         });
