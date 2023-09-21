@@ -5,7 +5,7 @@ export const CurrentWeather = ({ currentWeather }) => {
   return (
     <Box sx={{ position: 'relative', display: "flex", gap: 1 }}>
       <Box>
-      <img src={`https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`} alt="Logo" width="30" height="30" />
+      <img src={`https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`} alt="weather" width="30" height="30" />
       </Box>
       <Box>
       <Typography sx={{ fontSize: '20px' }}>
@@ -27,3 +27,5 @@ export const CurrentWeather = ({ currentWeather }) => {
     </Box>
   );
 };
+
+
