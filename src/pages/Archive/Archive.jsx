@@ -8,6 +8,7 @@ const Archive = () => {
   const [pageContent, setPageContent] = useState([]);
   const [searchDocumentDB, setSearchDocumentDB] = useState();
   const [isFilterOn, setIsFilterOn] = useState(false);
+  const [closeFilter, setCloseFilter] = useState(false)
 
   const searchDocument = search => {
     setSearchDocumentDB(search);
@@ -22,16 +23,23 @@ const Archive = () => {
     setIsFilterOn(true)
   }
 
+  const reloadTable = (bool) => {
+    setCloseFilter(bool)
+  }
+
   return (
     <>
       <Header
       getDocumentAfterLoadCSV={getDocumentAfterLoadCSV}
        searchDocument={searchDocument}
        changeMaxPageAfterFilter={changeMaxPageAfterFilter}
+       reloadTable={reloadTable}
         />
       <TableAllDocument
         pageContent={pageContent}
         searchDocumentDB={searchDocumentDB}
+        closeFilter={closeFilter}
+        reloadTable={reloadTable}
         />
         <PaginationPage getDocumentCurrentPage={getDocumentCurrentPage} isFilterOn={isFilterOn}/>
       <Footer />

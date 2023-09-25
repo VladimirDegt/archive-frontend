@@ -22,7 +22,7 @@ import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 import { formatDateTime } from 'utils/format-date-time';
 
-export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
+export const TableAllDocument = ({ searchDocumentDB, pageContent, closeFilter, reloadTable }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [viewURLFile, setViewURLFile] = useState('');
@@ -42,6 +42,18 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent }) => {
     }
     setallDocuments(searchDocumentDB);
   }, [searchDocumentDB]);
+
+  useEffect(()=>{
+    async function fetchData() {
+      if(!closeFilter){
+        return
+      }
+      const response = await getAllDocuments(1);
+      setallDocuments(response.data.getFiles);
+      reloadTable(false)
+    }
+    fetchData();
+  },[closeFilter, getAllDocuments, reloadTable])
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;

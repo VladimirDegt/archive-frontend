@@ -36,6 +36,7 @@ export const Header = ({
   getDocumentAfterLoadCSV,
   searchDocument,
   changeMaxPageAfterFilter,
+  reloadTable,
 }) => {
   const dispatch = useDispatch();
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
@@ -94,7 +95,8 @@ export const Header = ({
   };
 
   const handleClickReload = () => {
-    window.location.reload();
+    // window.location.reload();
+    reloadTable(true);
   };
 
   const handleClickAnalytics = () => {
