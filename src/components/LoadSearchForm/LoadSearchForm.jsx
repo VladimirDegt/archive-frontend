@@ -15,10 +15,12 @@ import { useEffect, useState } from 'react';
 import {
   useGetActFromDBMutation,
   useGetCustomerFromDBMutation,
+  useGetDocumentByDateMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
 } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
+import { Calendar } from 'components/Calendar/Calendar';
 
 export const LoadSearchForm = ({
   isOpen,
@@ -33,9 +35,11 @@ export const LoadSearchForm = ({
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
   const [nameCustomerFromDB, setNameCustomerFromDB] = useState('');
   const [numberDogovirFromDB, setNumberDogovirFromDB] = useState('');
+  const [rangeDate, setRangeDate] = useState('');
   const [getCustomerFromDB] = useGetCustomerFromDBMutation();
   const [getDogovirFromDB] = useGetDogovirFromDBMutation();
   const [getActFromDB] = useGetActFromDBMutation();
+  const [getDocumentByDate] = useGetDocumentByDateMutation();
   const { data } = useGetNameCustomerFromDBQuery();
 
   useEffect(() => {
@@ -80,6 +84,10 @@ export const LoadSearchForm = ({
     setIsAutocompleteFocused(false);
   };
 
+  const getRangeDate = (date) => {
+    setRangeDate(date)
+  }
+
   const handleSubmit = async e => {
     e.preventDefault();
     if (fieldSearch === 'name') {
@@ -95,6 +103,7 @@ export const LoadSearchForm = ({
       setIsLoading(false);
       searchDocument(responce.data);
     }
+
     if (fieldSearch === 'numberDog') {
       if (!numberDocument) {
         Notify.failure('Виберіть номер', {
@@ -135,6 +144,28 @@ export const LoadSearchForm = ({
       searchDocument(responce.data);
     }
 
+    if (fieldSearch === 'dateDocument') {
+      if(!rangeDate) {
+        Notify.failure('Виберіть вірні дати', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
+
+      setIsLoading(true);
+      const responce = await getDocumentByDate(rangeDate);
+      setIsLoading(false);
+
+      if (responce.data.length === 0) {
+        Notify.failure('Документи за цей період не знайдено', {
+          position: 'center-right',
+          distance: '10px',
+        });
+      }
+      searchDocument(responce.data);
+    }
+
     setFieldSearch('');
     setNameCustomer('');
     setNumberDocument('');
@@ -164,7 +195,7 @@ export const LoadSearchForm = ({
               height: isAutocompleteFocused ? 400 : 'auto',
             }}
           >
-            <InputLabel id="option-search">Що шукаємо</InputLabel>
+            <InputLabel id="option-search">Знайти:</InputLabel>
             <Select
               labelId="option-search"
               value={fieldSearch}
@@ -178,6 +209,7 @@ export const LoadSearchForm = ({
               <MenuItem value="name">Замовника</MenuItem>
               <MenuItem value="numberDog">Договір</MenuItem>
               <MenuItem value="numberAct">Акт до договору</MenuItem>
+              <MenuItem value="dateDocument">Документ по даті</MenuItem>
             </Select>
             {fieldSearch === 'name' && (
               <Autocomplete
@@ -195,7 +227,7 @@ export const LoadSearchForm = ({
                 sx={{ marginTop: 3 }}
                 required
                 ListboxProps={{
-                  style: { fontSize: '14px' }, 
+                  style: { fontSize: '14px' },
                 }}
               />
             )}
@@ -214,10 +246,12 @@ export const LoadSearchForm = ({
                 sx={{ marginTop: 3 }}
                 required
                 ListboxProps={{
-                  style: { fontSize: '14px' }, 
+                  style: { fontSize: '14px' },
                 }}
               />
             )}
+
+            {fieldSearch === 'dateDocument' && <Calendar getRangeDate={getRangeDate}/>}
           </DialogContent>
           <DialogActions
             sx={{

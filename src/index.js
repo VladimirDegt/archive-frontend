@@ -6,13 +6,18 @@ import { App } from 'components/App';
 import './index.css';
 import { store, persistor } from 'redux/store';
 import { BrowserRouter } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/uk';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter basename="/">
-        <App />
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uk">
+          <App />
+        </LocalizationProvider>
       </BrowserRouter>
     </PersistGate>
   </Provider>

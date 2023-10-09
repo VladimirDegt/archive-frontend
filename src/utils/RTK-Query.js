@@ -62,14 +62,6 @@ export const contactApi = createApi({
       query: () => `/api/file/document`,
       providesTags: ['Files'],
     }),
-    // parsePDF: builder.mutation({
-    //   query: file => ({
-    //     url: '/api/file/pdf',
-    //     method: 'POST',
-    //     body: file,
-    //   }),
-    //   invalidatesTags: ['Files'],
-    // }),
     getSearch: builder.mutation({
       query: fieldSearch => ({
         url: '/api/file/search',
@@ -132,6 +124,14 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Archive'],
     }),
+    getDocumentByDate: builder.mutation({
+      query: rangeDate => ({
+        url: '/api/archive/rangeDate',
+        method: 'POST',
+        body: rangeDate
+      }),
+      invalidatesTags: ['Archive'],
+    }),
   }),
 });
 
@@ -153,4 +153,5 @@ export const {
   useGetDogovirFromDBMutation,
   useGetActFromDBMutation,
   useCountAllDocumentsMutation,
+  useGetDocumentByDateMutation,
 } = contactApi;

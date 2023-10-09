@@ -54,8 +54,8 @@ export const Header = ({
 
   useEffect(() => {
     async function fetchData() {
-      const weahter = await fetchCurrentWeather()
-      setCurrentWeather(weahter)
+      const weahter = await fetchCurrentWeather();
+      setCurrentWeather(weahter);
     }
     fetchData();
   }, []);
@@ -86,23 +86,18 @@ export const Header = ({
     setIsOpenChangeAvatar(true);
   };
 
-  // const handleClickLoadFile = () => {
-  //   setIsOpenLoadFile(true);
-  // };
-
   const handleClickLoadCSV = () => {
     setIsOpenLoadCSV(true);
   };
 
   const handleClickReload = () => {
-    // window.location.reload();
     reloadTable(true);
   };
 
   const handleClickAnalytics = () => {
     setIsOpenAnalytics(true);
   };
- 
+
   return (
     <>
       <AppBar>
@@ -138,26 +133,6 @@ export const Header = ({
             </Button>
           )}
           <Box sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            {/* {token && (
-              <IconButton
-                color="inherit"
-                aria-label="add file"
-                onClick={handleClickLoadFileOld}
-              >
-                <CloudUploadIcon fontSize="large" />
-              </IconButton>
-            )} */}
-
-            {/* {token && (
-              <IconButton
-                color="inherit"
-                aria-label="vchasno"
-                onClick={handleClickLoadFile}
-                sx={{ marginLeft: 2 }}
-              >
-                <CloudUploadIcon fontSize="large" />
-              </IconButton>
-            )} */}
             {token && (
               <IconButton
                 color="inherit"
@@ -199,17 +174,19 @@ export const Header = ({
               </IconButton>
             )}
           </Box>
-          <Box sx={{display: "flex", gap: 10}}>
-          {currentWeather && <CurrentWeather currentWeather={currentWeather}/>}
-          {token && (
-            <IconButton
-              color="inherit"
-              onClick={handleClickLogout}
-              sx={{ marginLeft: 'auto' }}
-            >
-              <LogoutIcon fontSize="large" />
-            </IconButton>
-          )}
+          <Box sx={{ display: 'flex', gap: 10 }}>
+            {currentWeather && (
+              <CurrentWeather currentWeather={currentWeather} />
+            )}
+            {token && (
+              <IconButton
+                color="inherit"
+                onClick={handleClickLogout}
+                sx={{ marginLeft: 'auto' }}
+              >
+                <LogoutIcon fontSize="large" />
+              </IconButton>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
