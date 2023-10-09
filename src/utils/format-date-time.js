@@ -16,10 +16,5 @@ export const formatDateTime = inputDateTime => {
     dtObject.getFullYear();
   const desiredFormat = formattedDate;
 
-  // const formattedTime = addLeadingZero(dtObject.getHours()) + ":" +
-  //                     addLeadingZero(dtObject.getMinutes()) + ":" +
-  //                     addLeadingZero(dtObject.getSeconds());
-  // const desiredFormat = formattedDate + " " + formattedTime;
-
   return desiredFormat;
 };

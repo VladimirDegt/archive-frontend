@@ -13,6 +13,7 @@ import {
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import SortIcon from '@mui/icons-material/Sort';
 import { useEffect, useState } from 'react';
 import {
   useGetAllDocumentsMutation,
@@ -22,7 +23,12 @@ import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 import { formatDateTime } from 'utils/format-date-time';
 
-export const TableAllDocument = ({ searchDocumentDB, pageContent, closeFilter, reloadTable }) => {
+export const TableAllDocument = ({
+  searchDocumentDB,
+  pageContent,
+  closeFilter,
+  reloadTable,
+}) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [viewURLFile, setViewURLFile] = useState('');
@@ -43,17 +49,17 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent, closeFilter, r
     setallDocuments(searchDocumentDB);
   }, [searchDocumentDB]);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function fetchData() {
-      if(!closeFilter){
-        return
+      if (!closeFilter) {
+        return;
       }
       const response = await getAllDocuments(1);
       setallDocuments(response.data.getFiles);
-      reloadTable(false)
+      reloadTable(false);
     }
     fetchData();
-  },[closeFilter, getAllDocuments, reloadTable])
+  }, [closeFilter, getAllDocuments, reloadTable]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
@@ -81,6 +87,40 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent, closeFilter, r
     setIsOpenCopyURL(false);
   };
 
+  const handleSort = fieldSort => {
+    if(fieldSort === "numberDogovir") {
+      const sortAllDocuments = [...allDocuments].sort((a, b) => {
+        return a[fieldSort] - b[fieldSort]
+      });
+      setallDocuments(sortAllDocuments);
+      return
+    }
+    if(fieldSort === "contractStartDate") {
+
+      const sortDate = allDocuments.map(item => {
+        if(!item.contractStartDate){
+          return (
+            {...item,
+            contractStartDate: new Date('01-01-1970')
+        }
+        )
+        }
+        return item
+      })
+      const sortAllDocuments = sortDate.sort((a, b) => {
+        return new Date(a[fieldSort]) - new Date(b[fieldSort])
+      });
+      setallDocuments(sortAllDocuments);
+      return
+    }
+    const sortAllDocuments = [...allDocuments].sort((a, b) => {
+      const nameA = a[fieldSort].toLowerCase();
+      const nameB = b[fieldSort].toLowerCase();
+      return nameA.localeCompare(nameB, 'uk');
+    });
+    setallDocuments(sortAllDocuments);
+  };
+
   return (
     <main style={{ flexGrow: 1 }}>
       <section>
@@ -92,56 +132,104 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent, closeFilter, r
               <Table sx={{ minWidth: 650 }} size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                    <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
                       Замовник
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                        onClick={() => handleSort('nameCustomer')}
+                      >
+                        <SortIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
                       Тип документа
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                        onClick={() => handleSort('typeDocument')}
+                      >
+                        <SortIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
                       Ім'я документа
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                        onClick={() => handleSort('typeDocument')}
+                      >
+                        <SortIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
                       Договір
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                        onClick={() => handleSort('numberDogovir')}
+                      >
+                        <SortIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
                       Рахунок
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                        onClick={() => handleSort('numberRachunok')}
+                      >
+                        <SortIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
                       Дата
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                        onClick={() => handleSort('contractStartDate')}
+                      >
+                        <SortIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
-                      Переглянути PDF
+                      PDF
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
-                      Переглянути ZIP
+                      Контейнер
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '20px' }}
+                      style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
-                      Завантажити до архіву
+                      Додати в архів
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -157,7 +245,7 @@ export const TableAllDocument = ({ searchDocumentDB, pageContent, closeFilter, r
                       fileURLZIP,
                       numberDogovir,
                       contractStartDate,
-                      numberRachunok
+                      numberRachunok,
                     }) => {
                       return (
                         <TableRow
