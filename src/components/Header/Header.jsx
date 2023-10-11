@@ -31,6 +31,7 @@ import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 import { Analytics } from 'components/Analytics/Analytics';
 import { fetchCurrentWeather } from 'utils/fetch-current-weather';
 import { CurrentWeather } from 'components/CurrentWeather/CurrentWeather';
+import WeatherWidget from 'components/WeatherWidget/WeatherWidget';
 
 export const Header = ({
   getDocumentAfterLoadCSV,
@@ -188,6 +189,7 @@ export const Header = ({
               </IconButton>
             )}
           </Box>
+          {/* <WeatherWidget/> */}
         </Toolbar>
       </AppBar>
 
