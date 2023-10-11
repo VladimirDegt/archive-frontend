@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 export const CurrentWeather = ({ currentWeather }) => {
+  
   return (
     <Box sx={{ position: 'relative', display: "flex", gap: 1 }}>
       <Box>

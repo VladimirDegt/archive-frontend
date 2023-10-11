@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { SkeletonAvatar } from 'components/Skeletons/SkeletonAvatar';
 import { Notify } from 'notiflix';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAvatar } from 'redux/users/reducer';
 import { selectAvatar } from 'redux/users/selectors';
@@ -18,14 +18,30 @@ import { useChangeAvatarMutation } from 'utils/RTK-Query';
 
 export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState('');
+  const [avatarNew, setAvatar] = useState('');
   const avatar = useSelector(selectAvatar);
   const dispatch = useDispatch();
   const [changeAvatar] = useChangeAvatarMutation();
-  const [selectedFile, setSelectedFile] = useState('');
+
+  useEffect(() => {
+    if (avatarNew) {
+      setAvatar(avatarNew);
+    }
+  }, [avatarNew]);
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
+    if (!file.name.endsWith('.jpg')) {
+      Notify.warning('Вибрати файл з розширенням .jpg', {
+        position: 'center-top',
+        distance: '10px',
+      });
+      return;
+    }
     setSelectedFile(file);
+    const objectURL = URL.createObjectURL(file);
+    setAvatar(objectURL);
   };
 
   const handleSubmit = async e => {
@@ -90,7 +106,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
           </DialogTitle>
           <Avatar
             alt="avatar"
-            src={avatar}
+            src={avatarNew || avatar}
             sx={{
               width: 56,
               height: 56,

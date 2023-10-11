@@ -132,6 +132,12 @@ export const TableAllDocument = ({
               <Table sx={{ minWidth: 650 }} size="small">
                 <TableHead>
                   <TableRow>
+                  <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
+                      Інв. №
+                    </TableCell>
+                  <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
+                      Дата підписання 
+                    </TableCell>
                     <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
                       Замовник
                       <IconButton
@@ -147,7 +153,7 @@ export const TableAllDocument = ({
                       align="left"
                       style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
-                      Тип документа
+                      Документ
                       <IconButton
                         color="secondary"
                         size="small"
@@ -161,7 +167,7 @@ export const TableAllDocument = ({
                       align="left"
                       style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
-                      Ім'я документа
+                      Назва
                       <IconButton
                         color="secondary"
                         size="small"
@@ -203,7 +209,7 @@ export const TableAllDocument = ({
                       align="center"
                       style={{ fontWeight: 'bold', fontSize: '18px' }}
                     >
-                      Дата
+                      Дата початку дії
                       <IconButton
                         color="secondary"
                         size="small"
@@ -246,12 +252,16 @@ export const TableAllDocument = ({
                       numberDogovir,
                       contractStartDate,
                       numberRachunok,
+                      inventarNumber,
+                      dateSigning
                     }) => {
                       return (
                         <TableRow
                           key={idDocument}
                           sx={{ '& > *': { borderBottom: 'unset' } }}
                         >
+                          <TableCell align="left">{inventarNumber}</TableCell>
+                          <TableCell align="left">{formatDateTime(dateSigning)}</TableCell>
                           <TableCell component="th" scope="row">
                             {nameCustomer}
                           </TableCell>

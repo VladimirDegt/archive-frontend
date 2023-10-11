@@ -207,9 +207,9 @@ export const LoadSearchForm = ({
               required
             >
               <MenuItem value="name">Замовника</MenuItem>
-              <MenuItem value="numberDog">Договір</MenuItem>
+              <MenuItem value="numberDog">Номер договору</MenuItem>
               <MenuItem value="numberAct">Акт до договору</MenuItem>
-              <MenuItem value="dateDocument">Документ по даті</MenuItem>
+              <MenuItem value="dateDocument">Дату початку дії</MenuItem>
             </Select>
             {fieldSearch === 'name' && (
               <Autocomplete
