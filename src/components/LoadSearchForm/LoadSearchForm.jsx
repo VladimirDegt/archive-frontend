@@ -13,9 +13,11 @@ import {
 import { Notify } from 'notiflix';
 import { useEffect, useState } from 'react';
 import {
+  useCountAllDocumentsMutation,
   useGetActFromDBMutation,
   useGetCustomerFromDBMutation,
   useGetDocumentByDateMutation,
+  useGetDocumentByTypeDocumentMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
 } from 'utils/RTK-Query';
@@ -32,15 +34,19 @@ export const LoadSearchForm = ({
   const [fieldSearch, setFieldSearch] = useState('');
   const [nameCustomer, setNameCustomer] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
+  const [typeDocument, setTypeDocument] = useState('');
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
   const [nameCustomerFromDB, setNameCustomerFromDB] = useState('');
   const [numberDogovirFromDB, setNumberDogovirFromDB] = useState('');
+  const [typeDocumentFromDB, setTypeDocumentFromDB] = useState('');
   const [rangeDate, setRangeDate] = useState('');
   const [getCustomerFromDB] = useGetCustomerFromDBMutation();
   const [getDogovirFromDB] = useGetDogovirFromDBMutation();
   const [getActFromDB] = useGetActFromDBMutation();
   const [getDocumentByDate] = useGetDocumentByDateMutation();
+  const [getDocumentByTypeDocument] = useGetDocumentByTypeDocumentMutation();
   const { data } = useGetNameCustomerFromDBQuery();
+  const [countAllDocuments] = useCountAllDocumentsMutation();
 
   useEffect(() => {
     if (!data) {
@@ -58,6 +64,22 @@ export const LoadSearchForm = ({
     setNumberDogovirFromDB([...sortUpdateNumbers, '']);
   }, [data]);
 
+  useEffect(() => {
+    async function fetchData() {
+      if (fieldSearch === 'document') {
+        const result = await countAllDocuments();
+        const arr = result.data.map(item=>{
+          if(!item._id){
+            return 'Тип документа не вказано'
+          }
+          return item._id
+        })
+        setTypeDocumentFromDB([...arr, ''])
+      }
+    }
+    fetchData();
+  }, [fieldSearch, countAllDocuments])
+
   const handleFieldSearch = ({ target }) => {
     setFieldSearch(target.value);
   };
@@ -65,6 +87,13 @@ export const LoadSearchForm = ({
   const handleNameCustomer = (_, newValue) => {
     if (newValue) {
       setNameCustomer(newValue);
+      setIsAutocompleteFocused(false);
+    }
+  };
+
+  const handleTypeDocument = (_, newValue) => {
+    if (newValue) {
+      setTypeDocument(newValue);
       setIsAutocompleteFocused(false);
     }
   };
@@ -145,7 +174,7 @@ export const LoadSearchForm = ({
     }
 
     if (fieldSearch === 'dateDocument') {
-      if(!rangeDate) {
+      if (!rangeDate) {
         Notify.failure('Виберіть вірні дати', {
           position: 'center-right',
           distance: '10px',
@@ -166,9 +195,32 @@ export const LoadSearchForm = ({
       searchDocument(responce.data);
     }
 
+    if (fieldSearch === 'document') {
+      if (!typeDocument) {
+        Notify.failure('Виберіть документ', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
+
+      setIsLoading(true);
+      const responce = await getDocumentByTypeDocument(typeDocument);
+      setIsLoading(false);
+
+      if (responce.data.length === 0) {
+        Notify.failure('Документи не знайдені', {
+          position: 'center-right',
+          distance: '10px',
+        });
+      }
+     searchDocument(responce.data);
+    }
+
     setFieldSearch('');
     setNameCustomer('');
     setNumberDocument('');
+    setTypeDocument('');
     changeMaxPageAfterFilter();
     handleClose();
   };
@@ -210,6 +262,7 @@ export const LoadSearchForm = ({
               <MenuItem value="numberDog">Номер договору</MenuItem>
               <MenuItem value="numberAct">Акт до договору</MenuItem>
               <MenuItem value="dateDocument">Дату початку дії</MenuItem>
+              <MenuItem value="document">Документ</MenuItem>
             </Select>
             {fieldSearch === 'name' && (
               <Autocomplete
@@ -251,7 +304,27 @@ export const LoadSearchForm = ({
               />
             )}
 
-            {fieldSearch === 'dateDocument' && <Calendar getRangeDate={getRangeDate}/>}
+            {fieldSearch === 'dateDocument' && <Calendar getRangeDate={getRangeDate} />}
+            {fieldSearch === 'document' && (
+              <Autocomplete
+                disablePortal
+                value={typeDocument}
+                options={typeDocumentFromDB}
+                margin="dense"
+                fullWidth
+                renderInput={params => (
+                  <TextField {...params} label="Документ" />
+                )}
+                onChange={handleTypeDocument}
+                onFocus={handleAutocompleteFocus}
+                onBlur={handleAutocompleteBlur}
+                sx={{ marginTop: 3 }}
+                required
+                ListboxProps={{
+                  style: { fontSize: '14px' },
+                }}
+              />
+            )}
           </DialogContent>
           <DialogActions
             sx={{
@@ -263,6 +336,8 @@ export const LoadSearchForm = ({
             <Button onClick={handleClose}>Cancel</Button>
             <Button type="submit">Search</Button>
           </DialogActions>
+
+
         </form>
       )}
     </Dialog>

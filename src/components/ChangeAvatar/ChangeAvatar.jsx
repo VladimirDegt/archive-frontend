@@ -72,7 +72,7 @@ export const ChangeAvatar = ({ isOpen, handleClose, user }) => {
         return;
       }
 
-      Notify.success('Avatar is update', {
+      Notify.success('Аватарка оновилася, перезавантажте сторінку', {
         position: 'center-top',
         distance: '10px',
       });

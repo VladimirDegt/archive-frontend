@@ -132,6 +132,14 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Archive'],
     }),
+    getDocumentByTypeDocument: builder.mutation({
+      query: type => ({
+        url: '/api/archive/typeDocument',
+        method: 'POST',
+        body: {typeDocument: type}
+      }),
+      invalidatesTags: ['Archive'],
+    }),
   }),
 });
 
@@ -154,4 +162,5 @@ export const {
   useGetActFromDBMutation,
   useCountAllDocumentsMutation,
   useGetDocumentByDateMutation,
+  useGetDocumentByTypeDocumentMutation,
 } = contactApi;
