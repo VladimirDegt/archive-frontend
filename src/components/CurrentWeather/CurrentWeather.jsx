@@ -34,20 +34,9 @@ export const CurrentWeather = ({ currentWeather }) => {
           </Box>
           <Box align="left">
             <Typography sx={{ fontSize: '20px' }}>
-              {Math.floor(currentWeather.main.temp)}
-            </Typography>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 8,
-                left: 62,
-                width: '5px',
-                height: '5px',
-                borderRadius: '50%',
-                border: '2px solid',
-              }}
-            ></Box>
-            <Typography>{currentWeather.name}</Typography>
+              {Math.floor(currentWeather.main.temp)}{'\u00B0'}
+            </Typography>       
+           <Typography>{currentWeather.name}</Typography>
           </Box>
         </Box>
       </Button>
