@@ -8,6 +8,9 @@ import {
   DialogTitle,
   TextField,
   Typography,
+  InputLabel,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import { useRegisterMutation } from 'utils/RTK-Query';
 import { SignupSchema } from 'schemas/validate-register';
@@ -17,13 +20,17 @@ import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
 export const RegisterForm = ({ handleClose, isOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [fieldStatus, setFieldStatus] = useState('');
   const [register] = useRegisterMutation();
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleFieldStatus = ({ target }) => {
+    setFieldStatus(target.value);
+  };
 
+  const handleSubmit = async (values, { resetForm }) => {
     try {
       setIsLoading(true);
-      const response = await register(values);
+      const response = await register({...values, status: fieldStatus});
       setIsLoading(false);
       
       if (response.data) {
@@ -74,7 +81,7 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
                   as={TextField}
                   margin="dense"
                   name="name"
-                  label="name"
+                  label="Name"
                   type="text"
                   fullWidth
                 />
@@ -109,6 +116,20 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
                     {errors.password}
                   </Typography>
                 ) : null}
+                <InputLabel id="status-search">Статус:</InputLabel>
+            <Select
+              labelId="status-search"
+              value={fieldStatus}
+              margin="dense"
+              name="fieldStatus"
+              type="text"
+              fullWidth
+              onChange={handleFieldStatus}
+              required
+            >
+              <MenuItem value="moderator">Модератор</MenuItem>
+              <MenuItem value="user">Користувач</MenuItem>
+            </Select>
               </DialogContent>
               <DialogActions
                 sx={{
