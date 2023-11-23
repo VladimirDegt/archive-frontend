@@ -14,7 +14,7 @@ import { red } from '@mui/material/colors';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SigninSchema } from 'schemas/validate-login';
-import { addToken, getNameUser } from 'redux/users/reducer';
+import { addToken, getNameUser, getStatusUser } from 'redux/users/reducer';
 import { useLoginMutation } from 'utils/RTK-Query';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 
@@ -32,6 +32,7 @@ export const LoginForm = ({ handleClose, isOpen }) => {
 
       dispatch(addToken(response.data.token));
       dispatch(getNameUser(response.data.name));
+      dispatch(getStatusUser(response.data.status))
       navigate('/archive', { replace: true });
     } catch (error) {
       Notify.failure('Будь ласка зареєструйтеся', {

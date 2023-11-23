@@ -6,6 +6,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  Tooltip
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import { useLogoutMutation } from 'utils/RTK-Query';
 import {
   selectAvatar,
   selectNameUser,
+  selectStatusUser,
   selectToken,
 } from 'redux/users/selectors';
 import { deleteToken } from 'redux/users/reducer';
@@ -25,6 +27,7 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
@@ -48,6 +51,7 @@ export const Header = ({
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
+  const statusUser = useSelector(selectStatusUser);
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
@@ -81,6 +85,10 @@ export const Header = ({
   const handleClickSearch = () => {
     setIsOpenSearch(true);
   };
+
+  const handleClickRegister = () => {
+    console.log('click register');
+  }
 
   const handleClickChangeAvatar = () => {
     setIsOpenChangeAvatar(true);
@@ -124,6 +132,7 @@ export const Header = ({
             <Typography variant="h6">Hi and welcome, {nameUser}!</Typography>
           )}
           {token && (
+            <Tooltip title="Змінити аватарку" >
             <Button color="inherit" onClick={handleClickChangeAvatar}>
               <Avatar
                 alt="avatar"
@@ -131,9 +140,23 @@ export const Header = ({
                 sx={{ width: 30, height: 30 }}
               />
             </Button>
+            </Tooltip>
           )}
           <Box sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
+          {statusUser === 'admin' && (
+            <Tooltip title="Реєстрація">
+              <IconButton
+                color="inherit"
+                aria-label="register"
+                onClick={handleClickRegister}
+                sx={{ marginLeft: 2 }}
+              >
+                <HowToRegIcon fontSize="large" />
+              </IconButton>
+              </Tooltip>
+            )}
             {token && (
+              <Tooltip title="Завантаження .csv" >
               <IconButton
                 color="inherit"
                 aria-label=".csv"
@@ -142,8 +165,10 @@ export const Header = ({
               >
                 <SaveAltIcon fontSize="large" />
               </IconButton>
+              </Tooltip>
             )}
             {token && (
+              <Tooltip title="Фільтр" >
               <IconButton
                 color="inherit"
                 aria-label="add file"
@@ -152,8 +177,10 @@ export const Header = ({
               >
                 <FilterAltIcon fontSize="large" />
               </IconButton>
+              </Tooltip>
             )}
             {token && (
+              <Tooltip title="Відмінити фільтр" >
               <IconButton
                 color="inherit"
                 aria-label="reload"
@@ -162,8 +189,10 @@ export const Header = ({
               >
                 <FilterAltOffIcon fontSize="large" />
               </IconButton>
+              </Tooltip>
             )}
             {token && (
+              <Tooltip title="Статистика" >
               <IconButton
                 color="inherit"
                 aria-label="reload"
@@ -172,6 +201,7 @@ export const Header = ({
               >
                 <AnalyticsIcon fontSize="large" />
               </IconButton>
+              </Tooltip>
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 10 }}>
@@ -180,6 +210,7 @@ export const Header = ({
             )}
             
             {token && (
+              <Tooltip title="Вихід" >
               <IconButton
                 color="inherit"
                 onClick={handleClickLogout}
@@ -187,6 +218,7 @@ export const Header = ({
               >
                 <LogoutIcon fontSize="large" />
               </IconButton>
+              </Tooltip>
             )}
           </Box>
         </Toolbar>
