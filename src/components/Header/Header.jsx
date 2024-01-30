@@ -87,7 +87,7 @@ export const Header = ({
   };
 
   const handleClickRegister = () => {
-    console.log('click register');
+    navigate('/admin');
   }
 
   const handleClickChangeAvatar = () => {

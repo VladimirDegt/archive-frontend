@@ -8,6 +8,7 @@ import { SkeletonLoading } from './Skeletons/SkeletonLoading';
 const Home = lazy(() => import('pages/Home/Home'));
 const NotFound = lazy(() => import('pages/NotFound/NotFound'));
 const Archive = lazy(() => import('pages/Archive/Archive'));
+const Admin = lazy(() => import('pages/Admin/Admin'));
 
 export const App = () => {
   return (
@@ -32,6 +33,13 @@ export const App = () => {
               </PrivateRoute>
             }
           />
+          <Route 
+            path = "/admin"
+            element={
+            <PrivateRoute>
+              <Admin/>
+            </PrivateRoute>}
+            />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

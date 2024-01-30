@@ -2,24 +2,24 @@ import { useState } from 'react';
 import { Box, Button, Paper } from '@mui/material';
 import { Footer } from 'components/Footer/Footer';
 import { LoginForm } from 'components/LoginForm/LoginForm';
-import { RegisterForm } from 'components/RegistrForm/RegistrForm';
+// import { RegisterForm } from 'components/RegistrForm/RegistrForm';
 import backgroundImage from '../../img/backgroundimage-full.jpg';
 import { StyledContainer, StyledTypography } from './Home.styled';
 
 const Home = () => {
-  const [isOpenRegister, setIsOpenRegister] = useState(false);
+  // const [isOpenRegister, setIsOpenRegister] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
 
-  const handleOpenRegistration = () => {
-    setIsOpenRegister(true);
-  };
+  // const handleOpenRegistration = () => {
+  //   setIsOpenRegister(true);
+  // };
 
   const handleOpenLogin = () => {
     setIsOpenLogin(true);
   };
 
   const handleClose = () => {
-    setIsOpenRegister(false);
+    // setIsOpenRegister(false);
     setIsOpenLogin(false);
   };
 
@@ -71,20 +71,20 @@ const Home = () => {
                 >
                   вхід
                 </Button>
-                <Button
+                {/* <Button
                   variant="contained"
                   color="secondary"
                   sx={{ minWidth: 200, minHeight: 40 }}
                   onClick={handleOpenRegistration}
                 >
                   реєстрація
-                </Button>
+                </Button> */}
               </Box>
             </StyledContainer>
           </Paper>
-          {isOpenRegister && (
+          {/* {isOpenRegister && (
             <RegisterForm handleClose={handleClose} isOpen={isOpenRegister} />
-          )}
+          )} */}
           {isOpenLogin && (
             <LoginForm handleClose={handleClose} isOpen={isOpenLogin} />
           )}

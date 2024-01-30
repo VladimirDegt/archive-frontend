@@ -17,15 +17,21 @@ import { SignupSchema } from 'schemas/validate-register';
 import { red } from '@mui/material/colors';
 import { useState } from 'react';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
+import { useNavigate } from 'react-router-dom';
 
-export const RegisterForm = ({ handleClose, isOpen }) => {
+export const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldStatus, setFieldStatus] = useState('');
   const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
   const handleFieldStatus = ({ target }) => {
     setFieldStatus(target.value);
   };
+
+  const handleClose = () => {
+    navigate('/archive', { replace: true });
+  }
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
@@ -34,12 +40,13 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
       setIsLoading(false);
       
       if (response.data) {
-        Notify.success('Ви зареєструвалися та вхід розблоковано', {
+        Notify.success('Користувач зареєстрован', {
           position: 'center-top',
           distance: '10px',
         });
         resetForm();
-        handleClose();
+        // handleClose();
+        navigate('/archive', { replace: true });
         return;
       }
       Notify.failure(`${response.error.data.message}`, {
@@ -61,7 +68,7 @@ export const RegisterForm = ({ handleClose, isOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} aria-labelledby="registration" >
+    <Dialog open={true}  aria-labelledby="registration" >
       {isLoading ? (
         <SkeletonAuth totalRow={3} sx={{ minWidth: 552 }}/>
       ) : (

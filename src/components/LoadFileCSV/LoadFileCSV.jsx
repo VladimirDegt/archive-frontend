@@ -4,7 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  InputLabel,
+  InputLabel, MenuItem, Select,
   TextField,
 } from '@mui/material';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
@@ -24,6 +24,7 @@ export const LoadFileCSV = ({
   const [selectedFile, setSelectedFile] = useState('');
   const [loadFileCSV] = useLoadFileCSVMutation();
   const [getAllDocuments] = useGetAllDocumentsMutation();
+  const [nomenclature, setNomenclature] = useState('');
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
@@ -37,11 +38,15 @@ export const LoadFileCSV = ({
     setSelectedFile(file);
   };
 
+  const handleFieldStatus = ({ target }) => {
+    setNomenclature(target.value);
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!selectedFile) {
-      Notify.warning('Please choose a file', {
+    if (!selectedFile || !nomenclature) {
+      Notify.warning('Виберіть файл та номер по номенклатурі', {
         position: 'center-top',
         distance: '10px',
       });
@@ -51,6 +56,7 @@ export const LoadFileCSV = ({
     const formData = new FormData();
 
     formData.append('csv', selectedFile);
+    formData.append('nomenclature', nomenclature)
 
     try {
       setIsLoading(true);
@@ -97,7 +103,7 @@ export const LoadFileCSV = ({
             Завантажити файл .csv
           </DialogTitle>
           <DialogContent>
-            <InputLabel htmlFor="file-upload">Вибірить файл .csv</InputLabel>
+            <InputLabel htmlFor="file-upload">Виберіть файл .csv</InputLabel>
             <TextField
               autoFocus
               margin="dense"
@@ -106,7 +112,22 @@ export const LoadFileCSV = ({
               type="file"
               fullWidth
               onChange={handleFileChange}
+              sx={{marginBottom: 2}}
             />
+            <InputLabel htmlFor="invNumber">Виберіть номер номенклатури</InputLabel>
+            <Select
+              id="invNumber"
+              value={nomenclature}
+              margin="dense"
+              name="fieldStatus"
+              type="text"
+              fullWidth
+              onChange={handleFieldStatus}
+              required
+            >
+              <MenuItem value="10.1-01">10.1-01</MenuItem>
+              <MenuItem value="E08-29">E08-29</MenuItem>
+            </Select>
           </DialogContent>
           <DialogActions
             sx={{
