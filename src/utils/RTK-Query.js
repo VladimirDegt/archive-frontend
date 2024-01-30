@@ -140,6 +140,14 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Archive'],
     }),
+    getDocumentByNomenclature: builder.mutation({
+      query: nomenclature => ({
+        url: '/api/archive/nomenclature',
+        method: 'POST',
+        body: {nomenclature}
+      }),
+      invalidatesTags: ['Archive'],
+    }),
   }),
 });
 
@@ -163,4 +171,5 @@ export const {
   useCountAllDocumentsMutation,
   useGetDocumentByDateMutation,
   useGetDocumentByTypeDocumentMutation,
+  useGetDocumentByNomenclatureMutation
 } = contactApi;

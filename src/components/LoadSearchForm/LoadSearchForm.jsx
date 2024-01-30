@@ -17,6 +17,7 @@ import {
   useGetActFromDBMutation,
   useGetCustomerFromDBMutation,
   useGetDocumentByDateMutation,
+  useGetDocumentByNomenclatureMutation,
   useGetDocumentByTypeDocumentMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
@@ -35,6 +36,7 @@ export const LoadSearchForm = ({
   const [nameCustomer, setNameCustomer] = useState('');
   const [numberDocument, setNumberDocument] = useState('');
   const [typeDocument, setTypeDocument] = useState('');
+  const [nomenclature, setNomenclature] = useState('');
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false);
   const [nameCustomerFromDB, setNameCustomerFromDB] = useState('');
   const [numberDogovirFromDB, setNumberDogovirFromDB] = useState('');
@@ -45,6 +47,7 @@ export const LoadSearchForm = ({
   const [getActFromDB] = useGetActFromDBMutation();
   const [getDocumentByDate] = useGetDocumentByDateMutation();
   const [getDocumentByTypeDocument] = useGetDocumentByTypeDocumentMutation();
+  const [getDocumentByNomenclature] = useGetDocumentByNomenclatureMutation();
   const { data } = useGetNameCustomerFromDBQuery();
   const [countAllDocuments] = useCountAllDocumentsMutation();
 
@@ -94,6 +97,15 @@ export const LoadSearchForm = ({
   const handleTypeDocument = (_, newValue) => {
     if (newValue) {
       setTypeDocument(newValue);
+      setIsAutocompleteFocused(false);
+    }
+  };
+
+  const [nomenclatureOptions] = useState(["10.1-01", "E08-29"]);
+
+  const handleNomenclature = (_, newValue) => {
+    if (newValue) {
+      setNomenclature(newValue);
       setIsAutocompleteFocused(false);
     }
   };
@@ -217,10 +229,33 @@ export const LoadSearchForm = ({
      searchDocument(responce.data);
     }
 
+    if (fieldSearch === 'nomenclature') {
+      if (!nomenclature) {
+        Notify.failure('Виберіть номер номенклатури', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
+
+      setIsLoading(true);
+      const responce = await getDocumentByNomenclature(nomenclature);
+      setIsLoading(false);
+
+      if (responce.data.length === 0) {
+        Notify.failure('Документи не знайдені', {
+          position: 'center-right',
+          distance: '10px',
+        });
+      }
+      searchDocument(responce.data);
+    }
+
     setFieldSearch('');
     setNameCustomer('');
     setNumberDocument('');
     setTypeDocument('');
+    setNomenclature('');
     changeMaxPageAfterFilter();
     handleClose();
   };
@@ -258,11 +293,12 @@ export const LoadSearchForm = ({
               onChange={handleFieldSearch}
               required
             >
-              <MenuItem value="name">Замовника</MenuItem>
+              <MenuItem value="name">Замовник</MenuItem>
               <MenuItem value="numberDog">Номер договору</MenuItem>
               <MenuItem value="numberAct">Акт до договору</MenuItem>
-              <MenuItem value="dateDocument">Дату початку дії</MenuItem>
-              <MenuItem value="document">Документ</MenuItem>
+              <MenuItem value="dateDocument">Дата початку дії</MenuItem>
+              <MenuItem value="document">Тип документу</MenuItem>
+              <MenuItem value="nomenclature">Номер номенклатури</MenuItem>
             </Select>
             {fieldSearch === 'name' && (
               <Autocomplete
@@ -316,6 +352,26 @@ export const LoadSearchForm = ({
                   <TextField {...params} label="Документ" />
                 )}
                 onChange={handleTypeDocument}
+                onFocus={handleAutocompleteFocus}
+                onBlur={handleAutocompleteBlur}
+                sx={{ marginTop: 3 }}
+                required
+                ListboxProps={{
+                  style: { fontSize: '14px' },
+                }}
+              />
+            )}
+            {fieldSearch === 'nomenclature' && (
+              <Autocomplete
+                disablePortal
+                value={nomenclature}
+                options={nomenclatureOptions}
+                margin="dense"
+                fullWidth
+                renderInput={params => (
+                  <TextField {...params} label="Номенклатура" />
+                )}
+                onChange={handleNomenclature}
                 onFocus={handleAutocompleteFocus}
                 onBlur={handleAutocompleteBlur}
                 sx={{ marginTop: 3 }}
