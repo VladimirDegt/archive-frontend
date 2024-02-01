@@ -28,12 +28,15 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
 import { Analytics } from 'components/Analytics/Analytics';
 import { fetchCurrentWeather } from 'utils/fetch-current-weather';
 import { CurrentWeather } from 'components/CurrentWeather/CurrentWeather';
+import {selectDocuments} from "redux/documents/selectors";
+import {exportExel} from "../../utils/export-to-exel";
 
 export const Header = ({
   getDocumentAfterLoadCSV,
@@ -52,6 +55,7 @@ export const Header = ({
   const avatarURL = useSelector(selectAvatar);
   const nameUser = useSelector(selectNameUser);
   const statusUser = useSelector(selectStatusUser);
+  const saveExelData = useSelector(selectDocuments);
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
@@ -105,6 +109,10 @@ export const Header = ({
   const handleClickAnalytics = () => {
     setIsOpenAnalytics(true);
   };
+
+  const handleClickExel = () => {
+    exportExel(saveExelData);
+  }
 
   return (
     <>
@@ -203,12 +211,24 @@ export const Header = ({
               </IconButton>
               </Tooltip>
             )}
+            {token && (
+              <Tooltip title="Експорт to exel" >
+                <IconButton
+                  color="inherit"
+                  aria-label="reload"
+                  onClick={handleClickExel}
+                  sx={{ marginLeft: 2 }}
+                >
+                  <DriveFolderUploadIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
           <Box sx={{ display: 'flex', gap: 10 }}>
             {currentWeather && (
               <CurrentWeather currentWeather={currentWeather} />
             )}
-            
+
             {token && (
               <Tooltip title="Вихід" >
               <IconButton

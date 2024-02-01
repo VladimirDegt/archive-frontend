@@ -22,6 +22,8 @@ import {
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
 import { formatDateTime } from 'utils/format-date-time';
+import {useDispatch} from "react-redux";
+import {addDocuments} from "../../redux/documents/reducer";
 
 export const TableAllDocument = ({
   searchDocumentDB,
@@ -36,18 +38,22 @@ export const TableAllDocument = ({
   const [getLoadFile] = useGetLoadFileMutation();
   const [getAllDocuments] = useGetAllDocumentsMutation();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (pageContent.length !== 0) {
       setallDocuments(pageContent);
+      dispatch(addDocuments(pageContent));
     }
-  }, [pageContent]);
+  }, [pageContent, dispatch]);
 
   useEffect(() => {
     if (!searchDocumentDB) {
       return;
     }
     setallDocuments(searchDocumentDB);
-  }, [searchDocumentDB]);
+    dispatch(addDocuments(searchDocumentDB));
+  }, [searchDocumentDB, dispatch]);
 
   useEffect(() => {
     async function fetchData() {
@@ -56,10 +62,11 @@ export const TableAllDocument = ({
       }
       const response = await getAllDocuments(1);
       setallDocuments(response.data.getFiles);
+      dispatch(addDocuments(response.data.getFiles));
       reloadTable(false);
     }
     fetchData();
-  }, [closeFilter, getAllDocuments, reloadTable]);
+  }, [closeFilter, getAllDocuments, reloadTable, dispatch]);
 
   const handleOpenFile = (fileURL, typeDocument) => {
     // const pathFile = `${fileURL}`;
@@ -81,6 +88,7 @@ export const TableAllDocument = ({
     });
     const response = await getAllDocuments(1);
     setallDocuments(response.data.getFiles);
+    dispatch(addDocuments(response.data.getFiles));
   };
 
   const handleClose = () => {
@@ -93,6 +101,7 @@ export const TableAllDocument = ({
         return a[fieldSort] - b[fieldSort]
       });
       setallDocuments(sortAllDocuments);
+      dispatch(addDocuments(sortAllDocuments));
       return
     }
     if(fieldSort === "contractStartDate") {
@@ -111,6 +120,7 @@ export const TableAllDocument = ({
         return new Date(a[fieldSort]) - new Date(b[fieldSort])
       });
       setallDocuments(sortAllDocuments);
+      dispatch(addDocuments(sortAllDocuments));
       return
     }
     const sortAllDocuments = [...allDocuments].sort((a, b) => {
@@ -119,6 +129,7 @@ export const TableAllDocument = ({
       return nameA.localeCompare(nameB, 'uk');
     });
     setallDocuments(sortAllDocuments);
+    dispatch(addDocuments(sortAllDocuments));
   };
 
   return (
@@ -136,7 +147,7 @@ export const TableAllDocument = ({
                       Інв. №
                     </TableCell>
                   <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
-                      Дата підписання 
+                      Дата підписання
                     </TableCell>
                     <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
                       Замовник
