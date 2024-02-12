@@ -18,7 +18,7 @@ import {
   useGetCustomerFromDBMutation,
   useGetDocumentByDateMutation,
   useGetDocumentByNomenclatureMutation,
-  useGetDocumentByTypeDocumentMutation,
+  useGetDocumentByTypeDocumentMutation, useGetDocumentSigningByDateMutation,
   useGetDogovirFromDBMutation,
   useGetNameCustomerFromDBQuery,
 } from 'utils/RTK-Query';
@@ -42,12 +42,14 @@ export const LoadSearchForm = ({
   const [numberDogovirFromDB, setNumberDogovirFromDB] = useState('');
   const [typeDocumentFromDB, setTypeDocumentFromDB] = useState([]);
   const [rangeDate, setRangeDate] = useState('');
+  const [dateSigning, setDateSigning] = useState('');
   const [getCustomerFromDB] = useGetCustomerFromDBMutation();
   const [getDogovirFromDB] = useGetDogovirFromDBMutation();
   const [getActFromDB] = useGetActFromDBMutation();
   const [getDocumentByDate] = useGetDocumentByDateMutation();
   const [getDocumentByTypeDocument] = useGetDocumentByTypeDocumentMutation();
   const [getDocumentByNomenclature] = useGetDocumentByNomenclatureMutation();
+  const [getDocumentSigningByDate] = useGetDocumentSigningByDateMutation();
   const { data } = useGetNameCustomerFromDBQuery();
   const [countAllDocuments] = useCountAllDocumentsMutation();
 
@@ -127,6 +129,10 @@ export const LoadSearchForm = ({
 
   const getRangeDate = (date) => {
     setRangeDate(date)
+  }
+
+  const getDateSigning = (date) => {
+    setDateSigning(date)
   }
 
   const handleSubmit = async e => {
@@ -251,6 +257,28 @@ export const LoadSearchForm = ({
       searchDocument(responce.data);
     }
 
+    if (fieldSearch === 'dateSigning') {
+      if (!dateSigning) {
+        Notify.failure('Виберіть вірні дати', {
+          position: 'center-right',
+          distance: '10px',
+        });
+        return;
+      }
+
+      setIsLoading(true);
+      const response = await getDocumentSigningByDate(dateSigning);
+      setIsLoading(false);
+
+      if (response.data.length === 0) {
+        Notify.failure('Документи за цей період не знайдено', {
+          position: 'center-right',
+          distance: '10px',
+        });
+      }
+      searchDocument(response.data);
+    }
+
     setFieldSearch('');
     setNameCustomer('');
     setNumberDocument('');
@@ -293,12 +321,13 @@ export const LoadSearchForm = ({
               onChange={handleFieldSearch}
               required
             >
+              <MenuItem value="nomenclature">Номер номенклатури</MenuItem>
+              <MenuItem value="dateSigning">Дата підписання</MenuItem>
               <MenuItem value="name">Замовник</MenuItem>
+              <MenuItem value="document">Тип документу</MenuItem>
               <MenuItem value="numberDog">Номер договору</MenuItem>
               <MenuItem value="numberAct">Акт до договору</MenuItem>
               <MenuItem value="dateDocument">Дата початку дії</MenuItem>
-              <MenuItem value="document">Тип документу</MenuItem>
-              <MenuItem value="nomenclature">Номер номенклатури</MenuItem>
             </Select>
             {fieldSearch === 'name' && (
               <Autocomplete
@@ -341,6 +370,7 @@ export const LoadSearchForm = ({
             )}
 
             {fieldSearch === 'dateDocument' && <Calendar getRangeDate={getRangeDate} />}
+            {fieldSearch === 'dateSigning' && <Calendar getRangeDate={getDateSigning} />}
             {fieldSearch === 'document' && (
               <Autocomplete
                 disablePortal

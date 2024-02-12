@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useCountAllDocumentsMutation } from 'utils/RTK-Query';
 
 export const Analytics = ({ handleClose, isOpen }) => {
@@ -17,15 +17,21 @@ export const Analytics = ({ handleClose, isOpen }) => {
   const [totalDocument, setTotalDocument] = useState('');
   const [countAllDocuments] = useCountAllDocumentsMutation();
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    const response = await countAllDocuments();
-    setIsLoading(false);
+  useEffect(() => {
 
-    setCountTypeDocument(response.data);
-    const total = response.data.reduce((acc, item) => acc + item.count, 0);
-    setTotalDocument(total);
-  };
+    async function fetchData() {
+      setIsLoading(true);
+      const response = await countAllDocuments();
+      setIsLoading(false);
+
+      setCountTypeDocument(response.data);
+      const total = response.data.reduce((acc, item) => acc + item.count, 0);
+      setTotalDocument(total);
+    }
+    fetchData();
+
+  }, [countAllDocuments, totalDocument]);
+
 
   const handleCloseForm = () => {
     handleClose();
@@ -76,10 +82,7 @@ export const Analytics = ({ handleClose, isOpen }) => {
             })}
           </Container>
           <Button onClick={handleCloseForm} sx={{ marginTop: 2 }}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} sx={{ marginTop: 2 }}>
-            Отримати
+            Закрити
           </Button>
         </DialogContent>
       )}

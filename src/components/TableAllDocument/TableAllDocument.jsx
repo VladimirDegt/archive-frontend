@@ -1,5 +1,5 @@
-import { Container } from '@mui/system';
-import { Notify } from 'notiflix';
+import {Container} from '@mui/system';
+import {Notify} from 'notiflix';
 import {
   IconButton,
   Table,
@@ -14,23 +14,23 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SortIcon from '@mui/icons-material/Sort';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
   useGetAllDocumentsMutation,
   useGetLoadFileMutation,
 } from 'utils/RTK-Query';
-import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
-import { CopyURLFile } from 'components/formCopyURLFile/formCopyURLFile';
-import { formatDateTime } from 'utils/format-date-time';
+import {SkeletonAuth} from 'components/Skeletons/SkeletonAuth';
+import {CopyURLFile} from 'components/formCopyURLFile/formCopyURLFile';
+import {formatDateTime} from 'utils/format-date-time';
 import {useDispatch} from "react-redux";
 import {addDocuments} from "../../redux/documents/reducer";
 
 export const TableAllDocument = ({
-  searchDocumentDB,
-  pageContent,
-  closeFilter,
-  reloadTable,
-}) => {
+                                   searchDocumentDB,
+                                   pageContent,
+                                   closeFilter,
+                                   reloadTable,
+                                 }) => {
   const [allDocuments, setallDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [viewURLFile, setViewURLFile] = useState('');
@@ -65,6 +65,7 @@ export const TableAllDocument = ({
       dispatch(addDocuments(response.data.getFiles));
       reloadTable(false);
     }
+
     fetchData();
   }, [closeFilter, getAllDocuments, reloadTable, dispatch]);
 
@@ -96,7 +97,7 @@ export const TableAllDocument = ({
   };
 
   const handleSort = fieldSort => {
-    if(fieldSort === "numberDogovir") {
+    if (fieldSort === "numberDogovir") {
       const sortAllDocuments = [...allDocuments].sort((a, b) => {
         return a[fieldSort] - b[fieldSort]
       });
@@ -104,15 +105,16 @@ export const TableAllDocument = ({
       dispatch(addDocuments(sortAllDocuments));
       return
     }
-    if(fieldSort === "contractStartDate") {
 
+    if (fieldSort === "contractStartDate") {
       const sortDate = allDocuments.map(item => {
-        if(!item.contractStartDate){
+        if (!item.contractStartDate) {
           return (
-            {...item,
-            contractStartDate: new Date('01-01-1970')
-        }
-        )
+            {
+              ...item,
+              contractStartDate: "1970-01-01T00:00:00.000Z"
+            }
+          )
         }
         return item
       })
@@ -123,6 +125,27 @@ export const TableAllDocument = ({
       dispatch(addDocuments(sortAllDocuments));
       return
     }
+
+    if (fieldSort === "dateSigning") {
+      const sortDate = allDocuments.map(item => {
+        if (!item.dateSigning) {
+          return (
+            {
+              ...item,
+              dateSigning: "1970-01-01T00:00:00.000Z"
+            }
+          )
+        }
+        return item
+      })
+      const sortAllDocuments = sortDate.sort((a, b) => {
+        return new Date(a[fieldSort]) - new Date(b[fieldSort])
+      });
+      setallDocuments(sortAllDocuments);
+      dispatch(addDocuments(sortAllDocuments));
+      return
+    }
+
     const sortAllDocuments = [...allDocuments].sort((a, b) => {
       const nameA = a[fieldSort].toLowerCase();
       const nameB = b[fieldSort].toLowerCase();
@@ -133,118 +156,126 @@ export const TableAllDocument = ({
   };
 
   return (
-    <main style={{ flexGrow: 1 }}>
+    <main style={{flexGrow: 1}}>
       <section>
         {isLoading ? (
-          <SkeletonAuth totalRow={10} />
+          <SkeletonAuth totalRow={10}/>
         ) : (
-          <Container maxWidth="xl" sx={{ paddingTop: 10, minWidth: '100%' }}>
+          <Container maxWidth="xl" sx={{paddingTop: 10, minWidth: '100%'}}>
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} size="small">
+              <Table sx={{minWidth: 650}} size="small">
                 <TableHead>
                   <TableRow>
-                  <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
-                      Інв. №
+                    <TableCell style={{fontWeight: 'bold', fontSize: '18px'}}>
+                      Номенклатура
                     </TableCell>
-                  <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
+                    <TableCell style={{fontWeight: 'bold', fontSize: '18px'}}>
                       Дата підписання
+                      <IconButton
+                        color="secondary"
+                        size="small"
+                        sx={{marginLeft: 1}}
+                        onClick={() => handleSort('dateSigning')}
+                      >
+                        <SortIcon fontSize="small"/>
+                      </IconButton>
                     </TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: '18px' }}>
+                    <TableCell style={{fontWeight: 'bold', fontSize: '18px'}}>
                       Замовник
                       <IconButton
                         color="secondary"
                         size="small"
-                        sx={{ marginLeft: 1 }}
+                        sx={{marginLeft: 1}}
                         onClick={() => handleSort('nameCustomer')}
                       >
-                        <SortIcon fontSize="small" />
+                        <SortIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
-                      Документ
+                      Тип документу
                       <IconButton
                         color="secondary"
                         size="small"
-                        sx={{ marginLeft: 1 }}
+                        sx={{marginLeft: 1}}
                         onClick={() => handleSort('typeDocument')}
                       >
-                        <SortIcon fontSize="small" />
+                        <SortIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
                       Назва
                       <IconButton
                         color="secondary"
                         size="small"
-                        sx={{ marginLeft: 1 }}
+                        sx={{marginLeft: 1}}
                         onClick={() => handleSort('typeDocument')}
                       >
-                        <SortIcon fontSize="small" />
+                        <SortIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
                       Договір
                       <IconButton
                         color="secondary"
                         size="small"
-                        sx={{ marginLeft: 1 }}
+                        sx={{marginLeft: 1}}
                         onClick={() => handleSort('numberDogovir')}
                       >
-                        <SortIcon fontSize="small" />
+                        <SortIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
                       Рахунок
                       <IconButton
                         color="secondary"
                         size="small"
-                        sx={{ marginLeft: 1 }}
+                        sx={{marginLeft: 1}}
                         onClick={() => handleSort('numberRachunok')}
                       >
-                        <SortIcon fontSize="small" />
+                        <SortIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
-                      Дата початку дії
+                      Початок дії
                       <IconButton
                         color="secondary"
                         size="small"
-                        sx={{ marginLeft: 1 }}
+                        sx={{marginLeft: 1}}
                         onClick={() => handleSort('contractStartDate')}
                       >
-                        <SortIcon fontSize="small" />
+                        <SortIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
-                      PDF
+                      Перегляд
                     </TableCell>
                     <TableCell
                       align="center"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
-                      Контейнер
+                      Вивантеження
                     </TableCell>
                     <TableCell
                       align="left"
-                      style={{ fontWeight: 'bold', fontSize: '18px' }}
+                      style={{fontWeight: 'bold', fontSize: '18px'}}
                     >
                       Додати в архів
                     </TableCell>
@@ -254,34 +285,49 @@ export const TableAllDocument = ({
                 <TableBody>
                   {allDocuments?.map(
                     ({
-                      idDocument,
-                      nameDocument,
-                      typeDocument,
-                      nameCustomer,
-                      fileURLPDF,
-                      fileURLZIP,
-                      numberDogovir,
-                      contractStartDate,
-                      numberRachunok,
-                      inventarNumber,
-                      dateSigning
-                    }) => {
+                       idDocument,
+                       nameDocument,
+                       typeDocument,
+                       nameCustomer,
+                       fileURLPDF,
+                       fileURLZIP,
+                       numberDogovir,
+                       contractStartDate,
+                       numberRachunok,
+                       inventarNumber,
+                       dateSigning
+                     }) => {
                       return (
                         <TableRow
                           key={idDocument}
-                          sx={{ '& > *': { borderBottom: 'unset' } }}
+                          sx={{'& > *': {borderBottom: 'unset'}}}
                         >
                           <TableCell align="left">{inventarNumber}</TableCell>
-                          <TableCell align="left">{formatDateTime(dateSigning)}</TableCell>
+                          <TableCell align="left">
+                            {
+                              formatDateTime(dateSigning) === '01-01-1970'
+                                ? false
+                                : formatDateTime(dateSigning)
+                            }
+                          </TableCell>
                           <TableCell component="th" scope="row">
                             {nameCustomer}
                           </TableCell>
                           <TableCell align="left">{typeDocument}</TableCell>
-                          <TableCell align="left">{nameDocument}</TableCell>
+                          <TableCell align="left">
+                            {nameDocument.length > 50
+                              ? nameDocument.slice(0, 50) + '...'
+                              : nameDocument
+                            }
+                          </TableCell>
                           <TableCell align="center">{numberDogovir}</TableCell>
                           <TableCell align="left">{numberRachunok}</TableCell>
                           <TableCell align="center">
-                            {formatDateTime(contractStartDate)}
+                            {
+                              formatDateTime(contractStartDate) === '01-01-1970'
+                                ? false
+                                : formatDateTime(contractStartDate)
+                            }
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
@@ -292,7 +338,7 @@ export const TableAllDocument = ({
                                 handleOpenFile(fileURLPDF, typeDocument)
                               }
                             >
-                              <VisibilityIcon />
+                              <VisibilityIcon/>
                             </IconButton>
                           </TableCell>
                           <TableCell align="center">
@@ -304,7 +350,7 @@ export const TableAllDocument = ({
                                 handleOpenFile(fileURLZIP, typeDocument)
                               }
                             >
-                              <FileDownloadIcon />
+                              <FileDownloadIcon/>
                             </IconButton>
                           </TableCell>
                           <TableCell align="center">
@@ -313,7 +359,7 @@ export const TableAllDocument = ({
                               disabled={fileURLPDF !== ''}
                               onClick={() => handleLoadFile(idDocument)}
                             >
-                              <CloudDownloadIcon />
+                              <CloudDownloadIcon/>
                             </IconButton>
                           </TableCell>
                         </TableRow>

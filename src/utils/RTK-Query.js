@@ -132,6 +132,14 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Archive'],
     }),
+    getDocumentSigningByDate: builder.mutation({
+      query: dateSigning => ({
+        url: '/api/archive/dateSigning',
+        method: 'POST',
+        body: dateSigning
+      }),
+      invalidatesTags: ['Archive'],
+    }),
     getDocumentByTypeDocument: builder.mutation({
       query: type => ({
         url: '/api/archive/typeDocument',
@@ -171,5 +179,6 @@ export const {
   useCountAllDocumentsMutation,
   useGetDocumentByDateMutation,
   useGetDocumentByTypeDocumentMutation,
-  useGetDocumentByNomenclatureMutation
+  useGetDocumentByNomenclatureMutation,
+  useGetDocumentSigningByDateMutation
 } = contactApi;
