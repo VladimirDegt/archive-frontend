@@ -125,8 +125,8 @@ export const LoadFileCSV = ({
               onChange={handleFieldStatus}
               required
             >
-              <MenuItem value="10.1-01">10.1-01</MenuItem>
-              <MenuItem value="E08-29">E08-29</MenuItem>
+              <MenuItem value="10.1-01">10.1-01 (договірний відділ)</MenuItem>
+              <MenuItem value="E08-29">E08-29 (бухгалтерія)</MenuItem>
             </Select>
           </DialogContent>
           <DialogActions

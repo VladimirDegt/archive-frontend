@@ -20,7 +20,7 @@ const initialValues = {
   idFile: '',
 };
 
-export const FileUploadForm = ({ handleClose, isOpen }) => {
+export const  FileUploadForm = ({ handleClose, isOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [getLoadFile] = useGetLoadFileMutation();
 
