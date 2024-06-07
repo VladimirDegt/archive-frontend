@@ -83,7 +83,7 @@ export const TableAllDocument = ({
     setIsLoading(true);
     await getLoadFile(idDocument);
     setIsLoading(false);
-    Notify.success('Файлы завантажені у базу', {
+    Notify.success('Документ додано в архив', {
       position: 'center-top',
       distance: '10px',
     });
