@@ -10,26 +10,21 @@ import {
 import { SkeletonAuth } from 'components/Skeletons/SkeletonAuth';
 import { Notify } from 'notiflix';
 import { useState } from 'react';
-import {
-  useGetAllDocumentsMutation,
-  useLoadFileCSVMutation,
-} from 'utils/RTK-Query';
+import { useLoadFilePDFMutation } from 'utils/RTK-Query';
 
-export const LoadFileCSV = ({
+export const LoadFilePDF = ({
   isOpen,
   handleClose,
-  getDocumentAfterLoadCSV,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
-  const [loadFileCSV] = useLoadFileCSVMutation();
-  const [getAllDocuments] = useGetAllDocumentsMutation();
   const [nomenclature, setNomenclature] = useState('');
+  const [loadFilePDF] = useLoadFilePDFMutation();
 
   const handleFileChange = ({ target }) => {
     const file = target.files[0];
-    if (!file.name.endsWith('.csv')) {
-      Notify.warning('Вибрати файл з розширенням .csv', {
+    if (!file.name.endsWith('.pdf')) {
+      Notify.warning('Вибрати файл з розширенням .pdf', {
         position: 'center-top',
         distance: '10px',
       });
@@ -55,12 +50,12 @@ export const LoadFileCSV = ({
 
     const formData = new FormData();
 
-    formData.append('csv', selectedFile);
+    formData.append('pdf', selectedFile);
     formData.append('nomenclature', nomenclature)
 
     try {
       setIsLoading(true);
-      const response = await loadFileCSV(formData);
+      const response = await loadFilePDF(formData);
       setIsLoading(false);
 
       if (response.error) {
@@ -70,13 +65,11 @@ export const LoadFileCSV = ({
         });
         return;
       }
-      Notify.success('Дані з файлу .csv додані до БД', {
+      Notify.success('Дані з файлу .pdf додані до БД', {
         position: 'center-top',
         distance: '10px',
       });
 
-      const result = await getAllDocuments();
-      getDocumentAfterLoadCSV(result.data.getFiles);
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -100,10 +93,10 @@ export const LoadFileCSV = ({
       ) : (
         <form onSubmit={handleSubmit}>
           <DialogTitle id="registration" sx={{ textAlign: 'center' }}>
-            Завантажити файл .csv
+            Завантажити файл .pdf
           </DialogTitle>
           <DialogContent>
-            <InputLabel htmlFor="file-upload">Виберіть файл .csv</InputLabel>
+            <InputLabel htmlFor="file-upload">Виберіть файл .pdf</InputLabel>
             <TextField
               autoFocus
               margin="dense"
