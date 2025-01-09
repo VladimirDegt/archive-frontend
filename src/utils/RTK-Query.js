@@ -85,6 +85,14 @@ export const contactApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
+    loadFilePDF: builder.mutation({
+      query: file => ({
+        url: '/api/file/pdf',
+        method: 'POST',
+        body: file,
+      }),
+      invalidatesTags: ['Files'],
+    }),
     getAllDocuments: builder.mutation({
       query: (page, limit = 12) => ({
         url: `/api/archive?page=${page}&limit=${limit}`,
@@ -171,6 +179,7 @@ export const {
   useGetSearchMutation,
   useGetLoadFileMutation,
   useLoadFileCSVMutation,
+  useLoadFilePDFMutation,
   useGetAllDocumentsMutation,
   useGetNameCustomerFromDBQuery,
   useGetCustomerFromDBMutation,

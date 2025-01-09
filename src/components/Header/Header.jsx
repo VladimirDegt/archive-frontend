@@ -29,6 +29,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { LoadSearchForm } from 'components/LoadSearchForm/LoadSearchForm';
 import { FileUploadForm } from 'components/FileUploadForm/FileUploadForm';
 import { LoadFileCSV } from 'components/LoadFileCSV/LoadFileCSV';
@@ -37,6 +38,7 @@ import { fetchCurrentWeather } from 'utils/fetch-current-weather';
 import { CurrentWeather } from 'components/CurrentWeather/CurrentWeather';
 import {selectDocuments} from "redux/documents/selectors";
 import {exportExel} from "../../utils/export-to-exel";
+import {LoadFilePDF} from "../LoadFilePDF/LoadFilePDF";
 
 export const Header = ({
   getDocumentAfterLoadCSV,
@@ -50,6 +52,7 @@ export const Header = ({
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [isOpenLoadCSV, setIsOpenLoadCSV] = useState(false);
   const [isOpenAnalytics, setIsOpenAnalytics] = useState(false);
+  const [isOpenLoadPDF, setIsOpenLoadPDF] = useState(false);
   const [currentWeather, setCurrentWeather] = useState('');
   const { token } = useSelector(selectToken);
   const avatarURL = useSelector(selectAvatar);
@@ -74,6 +77,7 @@ export const Header = ({
     setIsOpenSearch(false);
     setIsOpenLoadCSV(false);
     setIsOpenAnalytics(false);
+    setIsOpenLoadPDF(false);
   };
 
   const handleClickLogout = async () => {
@@ -113,6 +117,8 @@ export const Header = ({
   const handleClickExel = () => {
     exportExel(saveExelData);
   }
+
+  const handleClickLoadPDF = () => setIsOpenLoadPDF(true);
 
   return (
     <>
@@ -223,6 +229,18 @@ export const Header = ({
                 </IconButton>
               </Tooltip>
             )}
+            {token && (
+              <Tooltip title="Завантаження .pdf" >
+                <IconButton
+                  color="inherit"
+                  aria-label=".pdf"
+                  onClick={handleClickLoadPDF}
+                  sx={{ marginLeft: 2 }}
+                >
+                  <PictureAsPdfIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
           <Box sx={{ display: 'flex', gap: 10 }}>
             {currentWeather && (
@@ -269,6 +287,12 @@ export const Header = ({
       )}
       {isOpenAnalytics && (
         <Analytics handleClose={handleClose} isOpen={isOpenAnalytics} />
+      )}
+      {isOpenLoadPDF && (
+        <LoadFilePDF
+          handleClose={handleClose}
+          isOpen={isOpenLoadPDF}
+        />
       )}
     </>
   );
