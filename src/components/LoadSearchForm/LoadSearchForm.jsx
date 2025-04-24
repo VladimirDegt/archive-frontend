@@ -103,7 +103,7 @@ export const LoadSearchForm = ({
     }
   };
 
-  const [nomenclatureOptions] = useState(["10.1-01", "E08-29"]);
+  const [nomenclatureOptions] = useState(["10.1-01", "E08-29", "E09.1-01", "E07-21"]);
 
   const handleNomenclature = (_, newValue) => {
     if (newValue) {
